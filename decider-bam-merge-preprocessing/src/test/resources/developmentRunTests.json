@@ -1,0 +1,44 @@
+{
+    "defaultDescription": "BAM filter merge collapse decider test",
+    "defaultMetricsResources": "/expected_output/development/",
+    "defaultParameters": {
+    },
+    "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
+        "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "input_files"],
+    "tests": [
+        {
+            "id": "CPCG sample test",
+            "parameters": {
+                "--root-sample-name": "CPCG_0235",
+                "--parent-wf-accessions": "375928,23341",
+                "--before-date": "2013-11-19"
+            }
+
+        },
+        {
+            "id": "OBC sample test",
+            "parameters": {
+                "--root-sample-name": "OBC_0001",
+                "--parent-wf-accessions": "375928,23341",
+                "--before-date": "2013-11-19"
+            }
+        },
+        {
+            "id": "POP sample test",
+            "parameters": {
+                "--root-sample-name": "POP_066",
+                "--parent-wf-accessions": "375928,23341",
+                "--before-date": "2013-11-19"
+            }
+        },
+        {
+            "id": "min map quality",
+            "parameters": {
+                "--root-sample-name": "POP_066",
+                "--parent-wf-accessions": "375928,23341",
+                "--before-date": "2013-11-19",
+                "--min-map-quality": "30"
+            }
+        }
+    ]
+}
