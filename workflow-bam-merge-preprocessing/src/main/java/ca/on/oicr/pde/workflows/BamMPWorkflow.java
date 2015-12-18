@@ -336,7 +336,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
         //deduplicate BAM file
         if (doDedup) {
-            operationsOnMergedFile += "dedup.";
+            operationsOnMergedFile += "deduped.";
             outputFile = dir + operationsOnMergedFile;
             Job jobDedup = picard.markDuplicates(this.java,
                     markDuplicatesJar,
@@ -348,7 +348,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                     dedupOtherParams);
             jobDedup.getCommand().addArgument(REMOVE_DUPLICATES + Boolean.toString(this.doRemoveDups));
             jobDedup.setQueue(getOptionalProperty("queue", ""));
-            SqwFile metricFile = this.createOutputFile(dir + identifier + operationsOnMergedFile + "metrics", TXT_METATYPE, this.manualOutput);
+            SqwFile metricFile = this.createOutputFile(dir + operationsOnMergedFile + "metrics", TXT_METATYPE, this.manualOutput);
 
             this.attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
             jobDedup.addFile(metricFile);
@@ -359,13 +359,13 @@ public class BamMPWorkflow extends SemanticWorkflow {
             inputFile = outputFile;
         }
 
-        Job jobIdx = this.indexBamJob(inputFile);
+         Job jobIdx = this.indexBamJob(inputFile);
         
         if (null != upstreamJob) {
             jobIdx.addParent(upstreamJob);
         }
         
-        operationsOnMergedFile += "indel_realign.";
+        operationsOnMergedFile += "realigned.";
 
         // Indel Realignment Job
         LinkedList<String> inputs = new LinkedList();
@@ -381,8 +381,8 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
         if (doBQSR) {
           //Conditional Recalibration job
-          operationsOnMergedFile += "recalbrate.";
-          this.baseQRecalibrateJob();
+          operationsOnMergedFile += "recal.";
+          this.baseQRecalibrateJob(operationsOnMergedFile);
           inputBams = this.recalibratedBams;
           
         } else {
@@ -390,7 +390,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         }
 
         // Use picard for indexing
-        this.finalOutput = this.dataDir + identifier + operationsOnMergedFile;
+        this.finalOutput = this.dataDir + operationsOnMergedFile;
         Object[] finalInputs = this.getLeftCollection(inputBams.values()).toArray();
         String[] inputBamsArray = new String[finalInputs.length];
         for (int s = 0; s < finalInputs.length; s++) {
@@ -512,7 +512,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
     }
 
-    protected void baseQRecalibrateJob() {
+    protected void baseQRecalibrateJob(String OperationOnFile) {
 
         //GATK Base Recalibrator ( https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_bqsr_BaseRecalibrator.php )
         BaseRecalibrator baseRecalibratorCommand = new BaseRecalibrator.Builder(java, gatkBaseRecalibratorXmx + "m", tmpDir, gatk, gatkKey, dataDir)
@@ -537,10 +537,11 @@ public class BamMPWorkflow extends SemanticWorkflow {
         baseRecalibratorJob.addFile(recalibrationData);
 
         //GATK Analyze Covariates ( https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_bqsr_AnalyzeCovariates.php )
+        String outputName = OperationOnFile.endsWith(".") ? OperationOnFile.substring(0, OperationOnFile.lastIndexOf(".")) : OperationOnFile;
         AnalyzeCovariates analyzeCovariatesCommand = new AnalyzeCovariates.Builder(java, "4g", tmpDir, gatk, gatkKey, rDir, dataDir)
                 .setReferenceSequence(refFasta)
                 .setRecalibrationTable(baseRecalibratorCommand.getOutputFile())
-                .setOutputFileName(identifier)
+                .setOutputFileName(outputName)
                 .setExtraParameters(analyzeCovariatesParams)
                 .build();
         Job analyzeCovariatesJob = getWorkflow().createBashJob("GATKAnalyzeCovariates")

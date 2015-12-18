@@ -34,24 +34,26 @@ public class BamMPDecider extends OicrDecider {
     private String ltt = null;
     private List<String> tissueTypes = null;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-    private Boolean doFilter   = true, doDedup = true, doRemoveDups = true;
-    private Boolean useTPrep   = true;
+    private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
+    private Boolean useTPrep = true;
     private Boolean useTRegion = true;
     private Boolean groupByAligner = true;
-    
-    private String  chrSizes = null;
+
+    private String chrSizes = null;
     private Integer intervalPadding = null;
-    private double  standCallConf = 30;
-    private double  standEmitConf = 1;
-    private String  downsamplingType = null;
-    private String  dbSNPfile = null;
-    private String  currentTemplate;
-    private Boolean doBQSR = true;    
-    
+    private double standCallConf = 30;
+    private double standEmitConf = 1;
+    private String downsamplingType = null;
+    private String dbSNPfile = null;
+    private String currentTemplate;
+    private Boolean doBQSR = true;
+
     private Integer filterFlag = 260;
     private Integer minMapQuality = null;
     private final static String[] GATK_DT = {"NONE", "ALL_READS", "BY_SAMPLE"};
     private final static String BAM_METATYPE = "application/bam";
+    private String outputPrefix;
+    private String outputDir;
 
     public BamMPDecider() {
         super();
@@ -67,15 +69,20 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("do-mark-duplicates", "Whether to mark duplicates in the BAM file. Default: true", false);
         defineArgument("do-remove-duplicates", "Whether to remove duplicates in the BAM file. Default: true", false);
         defineArgument("group-by-aligner", "Flag to enable/disable grouping by aligner. Default: true", false);
+
+        defineArgument("output-path", "Optional: the path where the files should be copied to "
+                + "after analysis. Corresponds to output-prefix in INI file. Default: ./", false);
+        defineArgument("output-folder", "Optional: the name of the folder to put the output into relative to "
+                + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results", false);
         
         defineArgument("chr-sizes", "Comma separated list of chromosome intervals used to parallelize indel realigning and variant calling. Default: By chromosome", false);
         defineArgument("interval-padding", "Amount of padding to add to each interval (chr-sizes and interval-file determined by decider) in bp. Default: 100", false);
         defineArgument("stand-emit-conf", "Emission confidence threshold to pass to GATK. Default 1", false);
-        defineArgument("stand-call-conf", "Calling confidence threshold to pass to GATK. Default 30.", false);       
+        defineArgument("stand-call-conf", "Calling confidence threshold to pass to GATK. Default 30.", false);
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
-        parser.accepts("debug", "Turn on debug mode");
+        parser.accepts("verbose", "Optional: Enable verbose Logging").withRequiredArg();
     }
 
     @Override
@@ -90,45 +97,47 @@ public class BamMPDecider extends OicrDecider {
         if (options.has("do-filter")) {
             doFilter = Boolean.valueOf(getArgument("do-filter"));
         }
-        
+
         if (options.has("do-remove-duplicates")) {
             doRemoveDups = Boolean.valueOf(getArgument("do-remove-duplicates"));
         }
-        
+
         if (!doRemoveDups && options.has("do-mark-duplicates")) {
-            doDedup = Boolean.valueOf(getArgument("do-mark-duplicates"));            
+            doDedup = Boolean.valueOf(getArgument("do-mark-duplicates"));
         }
-        
+
         if (options.has("sam-filter-flag")) {
             filterFlag = Integer.valueOf(getArgument("sam-filter-flag"));
         }
-        if(options.has("min-map-quality")){
+        if (options.has("min-map-quality")) {
             minMapQuality = Integer.parseInt(getArgument("min-map-quality"));
         }
-        if(options.has("group-by-aligner")) {
+        if (options.has("group-by-aligner")) {
             groupByAligner = Boolean.valueOf(getArgument("group-by-aligner"));
         }
-        
+
         // GP-597 ==== Tissue prep and Tissue region flags
-        if (options.has("use-tissue-prep")) {      
+        if (options.has("use-tissue-prep")) {
             this.useTPrep = Boolean.valueOf(getArgument("use-tissue-prep"));
-        }       
-            
-        if (options.has("use-tissue-region")) {      
+        }
+
+        if (options.has("use-tissue-region")) {
             this.useTRegion = Boolean.valueOf(getArgument("use-tissue-region"));
-        }        
+        }
         // GP-597 ends
-        
+
         if (options.has("do-remove-duplicates")) {
             doRemoveDups = Boolean.valueOf(getArgument("do-remove-duplicates"));
         }
-        
+
         if (options.has("chr-sizes")) {
             this.chrSizes = getArgument("chr-sizes");
         }
 
         if (options.has("interval-padding")) {
             this.intervalPadding = Integer.valueOf(getArgument("interval-padding"));
+        } else {
+            this.intervalPadding = 100;
         }
 
         if (options.has("stand-emit-conf")) {
@@ -136,7 +145,7 @@ public class BamMPDecider extends OicrDecider {
         } else {
             this.standEmitConf = 1;
         }
-        
+
         if (options.has("stand-call-conf")) {
             this.standCallConf = Double.valueOf(getArgument("stand-call-conf"));
         } else {
@@ -144,53 +153,56 @@ public class BamMPDecider extends OicrDecider {
         }
 
         if (options.has("disable-bqsr")) {
-           this.doBQSR = !Boolean.parseBoolean(getArgument("disable-bqsr"));
-        }
-        
-         if (options.has("dbsnp")) {
-           this.dbSNPfile = getArgument("dbsnp");
+            this.doBQSR = !Boolean.parseBoolean(getArgument("disable-bqsr"));
         }
 
-         //TODO make sure it's correct
+        if (this.options.has("output-path")) {
+            this.outputPrefix = options.valueOf("output-path").toString();
+            if (!this.outputPrefix.endsWith("/")) {
+                this.outputPrefix += "/";
+            }
+        }
+
+        if (this.options.has("output-folder")) {
+            this.outputDir = options.valueOf("output-folder").toString();
+        }
+        
+        if (options.has("dbsnp")) {
+            this.dbSNPfile = getArgument("dbsnp");
+        }
+
+        //TODO make sure it's correct
         if (options.has("downsampling")) {
             if (getArgument("downsampling").equalsIgnoreCase("false")) {
-                this.downsamplingType =  "NONE";
+                this.downsamplingType = "NONE";
             } else if (getArgument("downsampling").equalsIgnoreCase("true")) {
                 //do nothing, downsampling is performed by default
             } else {
                 throw new RuntimeException("--downsampling parameter expects true/false.");
             }
         }
-        
-        
-        Log.setVerbose(options.has("debug"));
+
+        Log.setVerbose(options.has("verbose"));
         return super.init();
     }
 
-   
     /**
      * Final check
+     *
      * @param commaSeparatedFilePaths
      * @param commaSeparatedParentAccessions
-     * @return 
+     * @return
      */
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
-        String[] filePaths = commaSeparatedFilePaths.split(",");
 
+        if (this.currentTemplate.equals("TS")) {
+            this.downsamplingType = GATK_DT[0];
+        }
 
-            if (this.downsamplingType != null) {
-                if (this.currentTemplate.equals("TS")) {  
-                    this.downsamplingType = GATK_DT[0];
-                }
-            }
-            
-            return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
-
-
-        //return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+        return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
-    
+
     @Override
     protected boolean checkFileDetails(FileAttributes attributes) {
         boolean rv = super.checkFileDetails(attributes);
@@ -205,12 +217,11 @@ public class BamMPDecider extends OicrDecider {
         } else {
             return false;
         }
-        
+
         this.currentTemplate = currentTemplateType;
         return rv;
     }
 
-    
     /**
      * This method is extended in the GATK decider so that only the most recent
      * file for each sequencer run, lane, barcode and filetype is kept.
@@ -223,19 +234,20 @@ public class BamMPDecider extends OicrDecider {
         for (ReturnValue currentRV : vals) {
             //set aside information needed for subsequent processing
             boolean metatypeOK = false;
-            
+
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
-               try {
-                 if (currentRV.getFiles().get(f).getMetaType().equals(BAM_METATYPE))
-                     metatypeOK = true;
-               } catch (Exception e) {
-                 Log.stderr("Error checking a file");
-                 continue;
-               }
+                try {
+                    if (currentRV.getFiles().get(f).getMetaType().equals(BAM_METATYPE)) {
+                        metatypeOK = true;
+                    }
+                } catch (Exception e) {
+                    Log.stderr("Error checking a file");
+                    continue;
+                }
             }
-            if (!metatypeOK)
+            if (!metatypeOK) {
                 continue; // Go to the next value
-            
+            }
             BeSmall currentSmall = new BeSmall(currentRV);
             fileSwaToSmall.put(currentRV.getAttribute(groupBy), currentSmall);
 
@@ -293,7 +305,7 @@ public class BamMPDecider extends OicrDecider {
             }
             inputFiles += atts.getPath();
         }
-        
+
         //Use aligner name, if available
         String[] filePaths = inputFiles.split(",");
         if (filePaths.length > 0) {
@@ -301,23 +313,23 @@ public class BamMPDecider extends OicrDecider {
                 if (!bs.getPath().equals(filePaths[0])) {
                     continue;
                 }
-            String alignerName = bs.getParentWf();
-            if (!alignerName.isEmpty() && this.groupByAligner) {
-                run.addProperty("aligner_name", alignerName);
-            }
-            break;
+                String alignerName = bs.getParentWf();
+                if (!alignerName.isEmpty() && this.groupByAligner) {
+                    run.addProperty("aligner_name", alignerName);
+                }
+                break;
             }
         }
-        
+
         run.addProperty("input_files", inputFiles);
-        
+
         // Get read of _ius addition when dealing with single file
         String idRaw = getCombinedFileName(run.getFiles());
         String[] tokens = idRaw.split("_");
-        if (tokens.length > 5 && tokens[tokens.length -1].contains("ius")) {
+        if (tokens.length > 5 && tokens[tokens.length - 1].contains("ius")) {
             idRaw = idRaw.substring(0, idRaw.lastIndexOf("_"));
         }
-        
+
         run.addProperty("identifier", idRaw);
         run.addProperty("do_mark_duplicates", doDedup.toString());
         run.addProperty("do_remove_duplicates", doRemoveDups.toString());
@@ -326,31 +338,37 @@ public class BamMPDecider extends OicrDecider {
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
         run.addProperty("stand-call-conf", String.valueOf(this.standCallConf));
         run.addProperty("do_bqsr", String.valueOf(this.doBQSR));
-        
+        run.addProperty("output_prefix",this.outputPrefix);
+        run.addProperty("output_dir", this.outputDir);
+
         if (this.chrSizes != null && !this.chrSizes.isEmpty()) {
             run.addProperty("chr-sizes", this.chrSizes);
         }
-        
+
         if (this.intervalPadding != null) {
             run.addProperty("interval-padding", String.valueOf(this.intervalPadding));
         }
-        
+
         if (this.dbSNPfile != null) {
             run.addProperty("gatk_dbsnp_vcf", this.dbSNPfile);
         }
-        
+
         if (minMapQuality != null) {
             run.addProperty("samtools_min_map_quality", minMapQuality.toString());
+        }
+        
+        if (downsamplingType != null && !downsamplingType.isEmpty()) {
+            run.addProperty("downsampling_type", downsamplingType);
         }
 
         return new ReturnValue();
     }
-    
+
     private class BeSmall {
 
         private Date date = null;
         private String iusDetails = null;
-        private String parentWf   = "";
+        private String parentWf = "";
         private String groupByAttribute = null;
         private String path = null;
 
@@ -362,32 +380,36 @@ public class BamMPDecider extends OicrDecider {
                 ex.printStackTrace();
             }
             FileAttributes fa = new FileAttributes(rv, rv.getFiles().get(0));
-            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode(); 
+            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode();
             String wfName = rv.getAttribute(Header.WORKFLOW_NAME.getTitle());
-            groupByAttribute = fa.getDonor() + ":"  + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
-            
+            groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
+
             if (null != wfName && !wfName.isEmpty() && groupByAligner) {
-                 this.parentWf = wfName;
-                 groupByAttribute.concat(":" + this.parentWf);
+                this.parentWf = wfName;
+                groupByAttribute.concat(":" + this.parentWf);
             }
 
-            if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_TYPE));
+            if (null != fa.getLimsValue(Lims.TISSUE_TYPE)) {
+                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_TYPE));
+            }
 
-            if (null != fa.getLimsValue(Lims.TISSUE_PREP) && useTPrep)
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_PREP));
+            if (null != fa.getLimsValue(Lims.TISSUE_PREP) && useTPrep) {
+                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_PREP));
+            }
 
-            if (null != fa.getLimsValue(Lims.TISSUE_REGION) && useTRegion)
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_REGION));
+            if (null != fa.getLimsValue(Lims.TISSUE_REGION) && useTRegion) {
+                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_REGION));
+            }
 
-            if (null != fa.getLimsValue(Lims.GROUP_ID))
+            if (null != fa.getLimsValue(Lims.GROUP_ID)) {
                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.GROUP_ID));
-            
-            if (null != fa.getLimsValue(Lims.TARGETED_RESEQUENCING))
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TARGETED_RESEQUENCING));
-            
-            //Grouping by workflow name (we don't care about version)
+            }
 
+            if (null != fa.getLimsValue(Lims.TARGETED_RESEQUENCING)) {
+                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TARGETED_RESEQUENCING));
+            }
+
+            //Grouping by workflow name (we don't care about version)
             path = rv.getFiles().get(0).getFilePath() + "";
         }
 

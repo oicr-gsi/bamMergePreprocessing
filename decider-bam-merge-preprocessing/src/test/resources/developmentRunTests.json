@@ -1,5 +1,5 @@
 {
-    "defaultDescription": "BAM filter merge collapse decider test",
+    "defaultDescription": "BAM Merge Preprocessing decider test",
     "defaultMetricsResources": "/expected_output/development/",
     "defaultParameters": {
     },
@@ -16,17 +16,10 @@
 
         },
         {
-            "id": "OBC sample test",
-            "parameters": {
-                "--root-sample-name": "OBC_0001",
-                "--parent-wf-accessions": "375928,23341",
-                "--before-date": "2013-11-19"
-            }
-        },
-        {
             "id": "POP sample test",
             "parameters": {
                 "--root-sample-name": "POP_066",
+                "--disable-bqsr" : "true",
                 "--parent-wf-accessions": "375928,23341",
                 "--before-date": "2013-11-19"
             }
