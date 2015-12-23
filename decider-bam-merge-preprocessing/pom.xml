@@ -47,7 +47,7 @@
                                     <maxsize>63963136</maxsize>
                                     <minsize>52428800</minsize>
                                     <files>
-                                        <file>/home/pruzanov/pde-dev2/bam-merge-preprocessing/decider-bam-merge-preprocessing/target/Decider_1.0_BamMergePreprocessing_1.0_SeqWare_1.1.0.jar</file>
+                                        <file>${project.build.directory}/${final-name}.jar</file>
                                     </files>
                                     <message>Unexpected final decider jar file size</message>
                                 </requireFilesSize>
