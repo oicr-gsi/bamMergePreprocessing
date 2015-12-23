@@ -11,6 +11,7 @@
             "id": "Test1",
             "parameters": {
                 "identifier": "PCSI0022",
+                "gatk_base_recalibrator_smp": "10",
                 "input_files": "/.mounts/labs/PDE/data/GATK/PCSI0022C.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022P.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022R.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022X.val.bam"
             }
         }, {
@@ -18,6 +19,7 @@
             "parameters": {
                 "identifier": "PCSI0022",
                 "samtools_min_map_quality": "60",
+                "gatk_base_recalibrator_smp": "10",
                 "input_files": "/.mounts/labs/PDE/data/GATK/PCSI0022C.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022P.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022R.val.bam,/.mounts/labs/PDE/data/GATK/PCSI0022X.val.bam"
             }
         } , {
