@@ -339,7 +339,7 @@ public class BamMPDecider extends OicrDecider {
         run.addProperty("identifier", idRaw);
         run.addProperty("do_mark_duplicates", doDedup.toString());
         run.addProperty("do_remove_duplicates", doRemoveDups.toString());
-        run.addProperty("do_filter", doFilter.toString());
+        run.addProperty("do_sam_filter", doFilter.toString());
         run.addProperty("samtools_filter_flag", filterFlag.toString());
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
         run.addProperty("stand-call-conf", String.valueOf(this.standCallConf));
