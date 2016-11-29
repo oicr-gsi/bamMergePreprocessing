@@ -62,26 +62,33 @@
     "files" : [ {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Ly_R_PE_765_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
-        "sample.geo_template_id" : [ [ "31885" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30268", "30304", "30364", "31332", "31885" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_preparation" : [ [ "Blood" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+        "geo_instrument_run_id" : [ [ "1420" ] ]
       },
       "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_7" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -94,26 +101,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Ly_R_PE_765_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
-        "sample.geo_template_id" : [ [ "31885" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30268", "30304", "30364", "31332", "31885" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_preparation" : [ [ "Blood" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "130531_SN804_0118_BC0J20ACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1456" ] ]
+        "geo_instrument_run_id" : [ [ "1456" ] ]
       },
       "laneName" : [ "130531_SN804_0118_BC0J20ACXX_lane_7" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -126,26 +140,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Ly_R_PE_788_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
-        "sample.geo_template_id" : [ [ "31884" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30268", "30304", "30364", "31331", "31884" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_preparation" : [ [ "Blood" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+        "geo_instrument_run_id" : [ [ "1420" ] ]
       },
       "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_8" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -158,26 +179,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Ly_R_PE_788_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
-        "sample.geo_template_id" : [ [ "31884" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30268", "30304", "30364", "31331", "31884" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_preparation" : [ [ "Blood" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+        "geo_instrument_run_id" : [ [ "1433" ] ]
       },
       "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_5" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
+        "geo_lane" : [ [ "5" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -240,26 +268,33 @@
     "files" : [ {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_675_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
-        "sample.geo_template_id" : [ [ "31345" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31330", "31345" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+        "geo_instrument_run_id" : [ [ "1420" ] ]
       },
       "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_4" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
+        "geo_lane" : [ [ "4" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -272,26 +307,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_675_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
-        "sample.geo_template_id" : [ [ "31345" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31330", "31345" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+        "geo_instrument_run_id" : [ [ "1433" ] ]
       },
       "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_6" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
+        "geo_lane" : [ [ "6" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -304,26 +346,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_729_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
-        "sample.geo_template_id" : [ [ "31344" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31329", "31344" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+        "geo_instrument_run_id" : [ [ "1420" ] ]
       },
       "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_5" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
+        "geo_lane" : [ [ "5" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -336,26 +385,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_729_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
-        "sample.geo_template_id" : [ [ "31344" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31329", "31344" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+        "geo_instrument_run_id" : [ [ "1433" ] ]
       },
       "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_7" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -368,26 +424,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_810_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
-        "sample.geo_template_id" : [ [ "31343" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31328", "31343" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+        "geo_instrument_run_id" : [ [ "1420" ] ]
       },
       "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_6" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
+        "geo_lane" : [ [ "6" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -400,26 +463,33 @@
     }, {
       "studyTitle" : [ "CPC-GENE" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "112" ] ]
+        "geo_lab_group_id" : [ [ "112" ] ]
       },
-      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0235_Pr_P_PE_810_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
-        "sample.geo_template_id" : [ [ "31343" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0235" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2013-02-14" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "30267", "30303", "30364", "31328", "31343" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "1" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+        "geo_instrument_run_id" : [ [ "1433" ] ]
       },
       "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_8" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
