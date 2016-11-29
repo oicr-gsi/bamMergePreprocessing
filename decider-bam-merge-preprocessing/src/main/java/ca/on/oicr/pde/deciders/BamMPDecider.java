@@ -336,8 +336,6 @@ public class BamMPDecider extends OicrDecider {
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
         run.addProperty("stand-call-conf", String.valueOf(this.standCallConf));
         run.addProperty("do_bqsr", String.valueOf(this.doBQSR));
-        run.addProperty("output_prefix",this.outputPrefix);
-        run.addProperty("output_dir", this.outputDir);
 
         if (this.chrSizes != null && !this.chrSizes.isEmpty()) {
             run.addProperty("chr-sizes", this.chrSizes);
