@@ -551,7 +551,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         analyzeCovariatesJob.getCommand().setArguments(analyzeCovariatesCommand.getCommand());
 
         SqwFile recalibrationReport = createOutputFile(analyzeCovariatesCommand.getPlotsReportFile(), PDF_METATYPE, manualOutput);
-        this.attachCVterms(recalibrationData, EDAM, "Read pre-processing,Sequence alignment refinement");
+        this.attachCVterms(recalibrationReport, EDAM, "Read pre-processing,Sequence alignment refinement");
         analyzeCovariatesJob.addFile(recalibrationReport);
         
         for (Map.Entry<String, Pair<String, Job>> e : realignedBams.entries()) {

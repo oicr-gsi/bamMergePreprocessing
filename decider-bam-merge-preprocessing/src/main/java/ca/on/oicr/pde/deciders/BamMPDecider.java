@@ -31,13 +31,14 @@ import net.sourceforge.seqware.common.util.Log;
 public class BamMPDecider extends OicrDecider {
 
     private Map<String, BeSmall> fileSwaToSmall;
-    private String ltt = null;
+    private String ltt = "";
     private List<String> tissueTypes = null;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
     private Boolean useTPrep = true;
     private Boolean useTRegion = true;
     private Boolean groupByAligner = true;
+    private String queue = null;
 
     private String chrSizes = null;
     private Integer intervalPadding = null;
@@ -69,12 +70,11 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("do-mark-duplicates", "Whether to mark duplicates in the BAM file. Default: true", false);
         defineArgument("do-remove-duplicates", "Whether to remove duplicates in the BAM file. Default: true", false);
         defineArgument("group-by-aligner", "Flag to enable/disable grouping by aligner. Default: true", false);
-
         defineArgument("output-path", "Optional: the path where the files should be copied to "
                 + "after analysis. Corresponds to output-prefix in INI file. Default: ./", false);
         defineArgument("output-folder", "Optional: the name of the folder to put the output into relative to "
                 + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results", false);
-        
+        parser.accepts("queue", "Optional: Override the default queue setting (production) setting it to something else").withRequiredArg();
         defineArgument("chr-sizes", "Comma separated list of chromosome intervals used to parallelize indel realigning and variant calling. Default: By chromosome", false);
         defineArgument("interval-padding", "Amount of padding to add to each interval (chr-sizes and interval-file determined by decider) in bp. Default: 100", false);
         defineArgument("stand-emit-conf", "Emission confidence threshold to pass to GATK. Default 1", false);
@@ -87,7 +87,6 @@ public class BamMPDecider extends OicrDecider {
     @Override
     public ReturnValue init() {
         setMetaType(Arrays.asList("application/bam"));
-        setGroupBy(Group.FILE, false);
         ltt = getArgument("library-template-type");
         String tt = getArgument("tissue-type");
         if (!tt.isEmpty()) {
@@ -99,6 +98,10 @@ public class BamMPDecider extends OicrDecider {
 
         if (options.has("do-remove-duplicates")) {
             doRemoveDups = Boolean.valueOf(getArgument("do-remove-duplicates"));
+        }
+        
+        if (this.options.has("queue")) {
+            this.queue = options.valueOf("queue").toString();
         }
 
         if (!doRemoveDups && options.has("do-mark-duplicates")) {
@@ -160,11 +163,11 @@ public class BamMPDecider extends OicrDecider {
             if (!this.outputPrefix.endsWith("/")) {
                 this.outputPrefix += "/";
             }
-        }
+        } else { this.outputPrefix = "./";}
 
         if (this.options.has("output-folder")) {
             this.outputDir = options.valueOf("output-folder").toString();
-        }
+        } else { this.outputDir = "seqware-results"; }
         
         if (options.has("dbsnp")) {
             this.dbSNPfile = getArgument("dbsnp");
@@ -194,7 +197,7 @@ public class BamMPDecider extends OicrDecider {
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
 
-        if (this.currentTemplate.equals("TS")) {
+        if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
             this.downsamplingType = GATK_DT[0];
         }
 
@@ -281,17 +284,20 @@ public class BamMPDecider extends OicrDecider {
         //only use those files that entered into the iusDeetsToRV
         //since it's a map, only the most recent values
         List<ReturnValue> newValues = new ArrayList<ReturnValue>(iusDeetsToRV.values());
-        return super.separateFiles(newValues, groupBy);
-    }
+        Map<String, List<ReturnValue>> map = new HashMap<String, List<ReturnValue>>();
+        //group files according to the designated header (e.g. sample SWID)
+        for (ReturnValue r : newValues) {
+            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute();
 
-    @Override
-    protected String handleGroupByAttribute(String attribute) {
-        String a = super.handleGroupByAttribute(attribute);
-        BeSmall small = fileSwaToSmall.get(a);
-        if (small != null) {
-            return small.getGroupByAttribute();
+            List<ReturnValue> vs = map.get(currVal);
+            if (vs == null) {
+                vs = new ArrayList<ReturnValue>();
+            }
+            vs.add(r);
+            map.put(currVal, vs);
         }
-        return attribute;
+
+        return map;
     }
 
     @Override
@@ -331,21 +337,18 @@ public class BamMPDecider extends OicrDecider {
         run.addProperty("identifier", idRaw);
         run.addProperty("do_mark_duplicates", doDedup.toString());
         run.addProperty("do_remove_duplicates", doRemoveDups.toString());
-        run.addProperty("do_filter", doFilter.toString());
+        run.addProperty("do_sam_filter", doFilter.toString());
         run.addProperty("samtools_filter_flag", filterFlag.toString());
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
         run.addProperty("stand-call-conf", String.valueOf(this.standCallConf));
         run.addProperty("do_bqsr", String.valueOf(this.doBQSR));
+        run.addProperty("interval-padding", String.valueOf(this.intervalPadding));
 
         if (this.chrSizes != null && !this.chrSizes.isEmpty()) {
             run.addProperty("chr-sizes", this.chrSizes);
-        }
+        }     
 
-        if (this.intervalPadding != null) {
-            run.addProperty("interval-padding", String.valueOf(this.intervalPadding));
-        }
-
-        if (this.dbSNPfile != null) {
+        if (this.dbSNPfile != null && !dbSNPfile.isEmpty()) {
             run.addProperty("gatk_dbsnp_vcf", this.dbSNPfile);
         }
 
@@ -355,6 +358,12 @@ public class BamMPDecider extends OicrDecider {
         
         if (downsamplingType != null && !downsamplingType.isEmpty()) {
             run.addProperty("downsampling_type", downsamplingType);
+        }
+        
+        if (this.queue != null) {
+            run.addProperty("queue", this.queue);
+        } else {
+            run.addProperty("queue", " ");
         }
 
         return new ReturnValue();
