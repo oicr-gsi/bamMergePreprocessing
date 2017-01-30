@@ -70,6 +70,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -109,6 +110,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -148,6 +150,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -187,6 +190,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -276,6 +280,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -315,6 +320,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -354,6 +360,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -393,6 +400,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -432,6 +440,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
@@ -471,6 +480,7 @@
       "sampleAttributes" : {
         "geo_external_name" : [ [ "CPCG_0235" ] ],
         "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_PE" ] ],
         "geo_purpose" : [ [ "Library", "Stock" ] ],
         "geo_receive_date" : [ [ "2013-02-14" ] ],
