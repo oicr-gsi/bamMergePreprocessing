@@ -4,7 +4,10 @@
         "metrics_calculate": "calculate.sh",
         "metrics_compare": "compare.sh",
         "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/Bam-Merge-Preprocessing/workflow/input_config/",
-        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/Bam-Merge-Preprocessing/workflow/expected_output/"
+        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/Bam-Merge-Preprocessing/workflow/expected_output/",
+	"parameters": {
+	   "r_dir": "/.mounts/labs/PDE/Modules/sw/R/R-3.3.0/"
+	}
     },
     "tests": [
         {
