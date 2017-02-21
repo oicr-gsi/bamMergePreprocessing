@@ -1,10 +1,12 @@
 {
-    "defaultDescription": "BAM Merge Preprocessing decider test",
-    "defaultMetricsResources": "/expected_output/development/",
-    "defaultParameters": {
+    "defaults": {
+        "description": "BAM Merge Preprocessing decider test",
+        "metricsResources": "/expected_output/development/",
+        "parameters": {
+        },
+        "iniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
+            "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "input_files"]
     },
-    "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
-        "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "input_files"],
     "tests": [
         {
             "id": "CPCG sample test",

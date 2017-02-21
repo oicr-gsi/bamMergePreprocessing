@@ -82,7 +82,6 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
-        parser.accepts("verbose", "Optional: Enable verbose Logging").withRequiredArg();
     }
 
     @Override
@@ -185,7 +184,6 @@ public class BamMPDecider extends OicrDecider {
             }
         }
 
-        Log.setVerbose(options.has("verbose"));
         return super.init();
     }
 
@@ -344,8 +342,6 @@ public class BamMPDecider extends OicrDecider {
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
         run.addProperty("stand-call-conf", String.valueOf(this.standCallConf));
         run.addProperty("do_bqsr", String.valueOf(this.doBQSR));
-        run.addProperty("output_prefix",this.outputPrefix);
-        run.addProperty("output_dir", this.outputDir);
         run.addProperty("interval-padding", String.valueOf(this.intervalPadding));
 
         if (this.chrSizes != null && !this.chrSizes.isEmpty()) {
