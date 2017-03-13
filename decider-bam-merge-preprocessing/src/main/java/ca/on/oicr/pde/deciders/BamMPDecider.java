@@ -53,6 +53,7 @@ public class BamMPDecider extends OicrDecider {
     private Integer minMapQuality = null;
     private final static String[] GATK_DT = {"NONE", "ALL_READS", "BY_SAMPLE"};
     private final static String BAM_METATYPE = "application/bam";
+    private final static String TRANSCRIPTOME_SUFFIX = "Aligned.toTranscriptome.out";
     private String outputPrefix;
     private String outputDir;
 
@@ -173,7 +174,6 @@ public class BamMPDecider extends OicrDecider {
             this.dbSNPfile = getArgument("dbsnp");
         }
 
-        //TODO make sure it's correct
         if (options.has("downsampling")) {
             if (getArgument("downsampling").equalsIgnoreCase("false")) {
                 this.downsamplingType = "NONE";
@@ -200,6 +200,25 @@ public class BamMPDecider extends OicrDecider {
         if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
             this.downsamplingType = GATK_DT[0];
         }
+        
+        boolean haveRefAlignedBam = false; 
+        String[] filePaths = commaSeparatedFilePaths.split(",");
+        for (String p : filePaths) {
+            for (BeSmall bs : fileSwaToSmall.values()) {
+                if (!bs.getPath().equals(p)) {
+                    continue;
+                }
+                if (!haveRefAlignedBam) {
+                    haveRefAlignedBam = !p.contains(TRANSCRIPTOME_SUFFIX);}                   
+                }
+
+        }
+        
+        if (!haveRefAlignedBam) {
+            Log.error("The Decider was not able to find Reference-aligned reads (bam file), WON'T RUN");
+            return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+        }
+
 
         return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
@@ -307,7 +326,9 @@ public class BamMPDecider extends OicrDecider {
             if (!inputFiles.isEmpty()) {
                 inputFiles += ",";
             }
-            inputFiles += atts.getPath();
+            String filePath = atts.getPath();
+            if (!filePath.contains(TRANSCRIPTOME_SUFFIX))
+                inputFiles += filePath;
         }
 
         //Use aligner name, if available
