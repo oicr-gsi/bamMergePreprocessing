@@ -200,33 +200,15 @@ public class BamMPDecider extends OicrDecider {
         if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
             this.downsamplingType = GATK_DT[0];
         }
-        
-        boolean haveRefAlignedBam = false; 
-        String[] filePaths = commaSeparatedFilePaths.split(",");
-        for (String p : filePaths) {
-            for (BeSmall bs : fileSwaToSmall.values()) {
-                if (!bs.getPath().equals(p)) {
-                    continue;
-                }
-                if (!haveRefAlignedBam) {
-                    haveRefAlignedBam = !p.contains(TRANSCRIPTOME_SUFFIX);}                   
-                }
-
-        }
-        
-        if (!haveRefAlignedBam) {
-            Log.error("The Decider was not able to find Reference-aligned reads (bam file), WON'T RUN");
-            return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
-        }
-
-
+            
         return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
 
     @Override
     protected boolean checkFileDetails(FileAttributes attributes) {
         boolean rv = super.checkFileDetails(attributes);
-
+        if (attributes.basename().toString().contains(TRANSCRIPTOME_SUFFIX)) {return false;}
+        
         String currentTemplateType = attributes.getOtherAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
         if (tissueTypes == null || tissueTypes.contains(attributes.getLimsValue(Lims.TISSUE_TYPE))) {
             if (!ltt.isEmpty()) {
