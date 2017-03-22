@@ -207,7 +207,10 @@ public class BamMPDecider extends OicrDecider {
     @Override
     protected boolean checkFileDetails(FileAttributes attributes) {
         boolean rv = super.checkFileDetails(attributes);
-        if (attributes.basename().toString().contains(TRANSCRIPTOME_SUFFIX)) {return false;}
+        if (attributes.basename().toString().contains(TRANSCRIPTOME_SUFFIX)) {
+            Log.debug("Found Transcriptome-aligned reads");
+            return false;
+        }
         
         String currentTemplateType = attributes.getOtherAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
         if (tissueTypes == null || tissueTypes.contains(attributes.getLimsValue(Lims.TISSUE_TYPE))) {
@@ -236,20 +239,22 @@ public class BamMPDecider extends OicrDecider {
         for (ReturnValue currentRV : vals) {
             //set aside information needed for subsequent processing
             boolean metatypeOK = false;
+            boolean bamtypeOK  = false;
 
             for (int f = 0; f < currentRV.getFiles().size(); f++) {
                 try {
-                    if (currentRV.getFiles().get(f).getMetaType().equals(BAM_METATYPE)) {
+                    if (currentRV.getFiles().get(f).getMetaType().equals(BAM_METATYPE))
                         metatypeOK = true;
-                    }
+                    if (!currentRV.getFiles().get(f).getFilePath().contains(TRANSCRIPTOME_SUFFIX))
+                        bamtypeOK  = true;
                 } catch (Exception e) {
                     Log.stderr("Error checking a file");
                     continue;
                 }
             }
-            if (!metatypeOK) {
+            if (!metatypeOK || !bamtypeOK)
                 continue; // Go to the next value
-            }
+
             BeSmall currentSmall = new BeSmall(currentRV);
             fileSwaToSmall.put(currentRV.getAttribute(groupBy), currentSmall);
 
@@ -263,8 +268,8 @@ public class BamMPDecider extends OicrDecider {
                 Log.debug("Adding file " + fileDeets + " -> \n\t" + currentSmall.getPath());
                 iusDeetsToRV.put(fileDeets, currentRV);
             } //if there is an entry, compare the current value to the 'old' one in
-            //the map. if the current date is newer than the 'old' date, replace
-            //it in the map
+            //the groupedFiles. if the current date is newer than the 'old' date, replace
+            //it in the groupedFiles
             else {
                 ReturnValue oldRV = iusDeetsToRV.get(fileDeets);
                 BeSmall oldSmall = fileSwaToSmall.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
@@ -283,22 +288,22 @@ public class BamMPDecider extends OicrDecider {
             }
         }
         //only use those files that entered into the iusDeetsToRV
-        //since it's a map, only the most recent values
+        //since it's a groupedFiles, only the most recent values
         List<ReturnValue> newValues = new ArrayList<ReturnValue>(iusDeetsToRV.values());
-        Map<String, List<ReturnValue>> map = new HashMap<String, List<ReturnValue>>();
+        Map<String, List<ReturnValue>> groupedFiles = new HashMap<String, List<ReturnValue>>();
         //group files according to the designated header (e.g. sample SWID)
         for (ReturnValue r : newValues) {
             String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute();
 
-            List<ReturnValue> vs = map.get(currVal);
+            List<ReturnValue> vs = groupedFiles.get(currVal);
             if (vs == null) {
                 vs = new ArrayList<ReturnValue>();
             }
             vs.add(r);
-            map.put(currVal, vs);
+            groupedFiles.put(currVal, vs);
         }
 
-        return map;
+        return groupedFiles;
     }
 
     @Override
@@ -309,8 +314,7 @@ public class BamMPDecider extends OicrDecider {
                 inputFiles += ",";
             }
             String filePath = atts.getPath();
-            if (!filePath.contains(TRANSCRIPTOME_SUFFIX))
-                inputFiles += filePath;
+            inputFiles += filePath;
         }
 
         //Use aligner name, if available
