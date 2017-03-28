@@ -4,6 +4,7 @@ import ca.on.oicr.pde.tools.gatk3.AnalyzeCovariates;
 import ca.on.oicr.pde.tools.gatk3.BaseRecalibrator;
 import ca.on.oicr.pde.tools.gatk3.IndelRealigner;
 import ca.on.oicr.pde.tools.gatk3.PrintReads;
+import ca.on.oicr.pde.tools.gatk3.PrintReadsUnmapped;
 import ca.on.oicr.pde.tools.gatk3.RealignerTargetCreator;
 import ca.on.oicr.pde.utilities.workflows.SemanticWorkflow;
 import ca.on.oicr.pde.utilities.workflows.jobfactory.PicardTools;
@@ -376,7 +377,12 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
         // We split by chromosome here
         for (String chrSize : chrSizes) {
-             this.indelRealignJob(inputs, chrSize, jobIdx);           
+            if ("unmapped".equals(chrSize)) {
+                Pair<String, Job> unmappedBamJob = getUnmappedBamJob(jobIdx, inputs);
+                realignedBams.put(chrSize, unmappedBamJob);
+            } else {
+                this.indelRealignJob(inputs, chrSize, jobIdx);
+            }
         }
 
         if (doBQSR) {
@@ -559,16 +565,23 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String chrSize = e.getKey();
                 String inputBam = e.getValue().getLeft();
                 
-        PrintReads printReadsCommand;
-        printReadsCommand = new PrintReads.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+        PrintReads.Builder printReadsCommandBuilder;
+        printReadsCommandBuilder = new PrintReads.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
                 .setReferenceSequence(refFasta)
                 .setPreserveQscoresLessThan(preserveQscoresLessThan)
                 .setCovariatesTablesFile(baseRecalibratorCommand.getOutputFile())
                 .addInputFile(inputBam)
-                .addInterval(chrSize)
                 .setIntervalPadding(intervalPadding)
-                .setExtraParameters(printReadsParams)
-                .build();
+                .setExtraParameters(printReadsParams);
+        
+        //workaround for GATK error when -L unmapped and an empty input bam is provided
+        if("unmapped".equals(chrSize)){
+            // do not set -L/--intervals for "unmapped"
+        } else {
+            printReadsCommandBuilder.addInterval(chrSize);
+        }
+        
+        PrintReads printReadsCommand = printReadsCommandBuilder.build();
 
         Job printReadsJob = getWorkflow().createBashJob("GATKTableRecalibration")
                 .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
@@ -578,6 +591,24 @@ public class BamMPWorkflow extends SemanticWorkflow {
         printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
         recalibratedBams.put(chrSize, Pair.of(printReadsCommand.getOutputFile(), printReadsJob));
         }
+    }
+    
+    protected Pair<String, Job> getUnmappedBamJob(Job parent, List<String> inputBams) {
+        PrintReadsUnmapped printReadsCommand;
+        printReadsCommand = new PrintReadsUnmapped.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+                .setReferenceSequence(refFasta)
+                .addInputFiles(inputBams)
+                .addInterval("unmapped")
+                .setExtraParameters(printReadsParams)
+                .build();
+
+        Job printReadsJob = getWorkflow().createBashJob("GATKPrintReadsUnmapped")
+                .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
+                .setQueue(queue);
+
+        printReadsJob.addParent(parent);
+        printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
+        return Pair.of(printReadsCommand.getOutputFile(), printReadsJob);
     }
    
     /**

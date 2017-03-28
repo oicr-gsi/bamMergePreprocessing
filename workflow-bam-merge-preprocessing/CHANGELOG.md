@@ -1,3 +1,5 @@
+## 1.0.3 - 2017-03-28
+- [GP-1117](https://jira.oicr.on.ca/browse/GP-1117) - support for "unmapped" input
 ## 1.0.2 - 2017-03-13
 - Update to Seqware 1.1.1-gsi
 ## 1.0.1 - 2016-01-27
