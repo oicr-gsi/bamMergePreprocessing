@@ -1,3 +1,5 @@
+## 1.1.2 - 2017-03-29
+- Incrementing version
 ## 1.1.1 - 2017-03-13 
 - Update which fixes Transcriptome files problem dscribed in GP-1075
 ## 1.1 - 2017-01-30
