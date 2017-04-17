@@ -1,5 +1,6 @@
 package ca.on.oicr.pde.deciders;
 
+import ca.on.oicr.pde.deciders.GroupableFileFactory.GroupableFile;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
@@ -9,8 +10,6 @@ import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
+import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,14 +41,11 @@ import org.apache.logging.log4j.Logger;
  */
 public class BamMPDecider extends OicrDecider {
 
-    private Map<String, BeSmall> fileSwaToSmall;
+    private final GroupableFileFactory groupableFileFactory;
+    private final Map<String, GroupableFile> fileSwaToFile = new HashMap<>();
     private String ltt = "";
     private List<String> tissueTypes = null;
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
-    private Boolean useTPrep = true;
-    private Boolean useTRegion = true;
-    private Boolean groupByAligner = true;
     private String queue = null;
 
     private String chrSizes = null;
@@ -65,8 +62,6 @@ public class BamMPDecider extends OicrDecider {
     private final static String[] GATK_DT = {"NONE", "ALL_READS", "BY_SAMPLE"};
     private final static String BAM_METATYPE = "application/bam";
     private final static String TRANSCRIPTOME_SUFFIX = "Aligned.toTranscriptome.out";
-    private String outputPrefix;
-    private String outputDir;
 
     private final Function<List<String>, String> listOfStringsToStringFunction = new Function<List<String>, String>() {
         @Override
@@ -84,8 +79,9 @@ public class BamMPDecider extends OicrDecider {
 
     public BamMPDecider() {
         super();
-        files = new HashMap<String, FileAttributes>();
-        fileSwaToSmall = new HashMap<String, BeSmall>();
+        files = new HashMap<>();
+        groupableFileFactory = new GroupableFileFactory();
+
         defineArgument("library-template-type", "Restrict the processing to samples of a particular template type, e.g. WG, EX, TS", false);
         defineArgument("tissue-type", "Restrict the processing to samples of particular tissue types, e.g. P, R, X, C. Multiple values can be comma-separated. Tissue types are processed individually (all R's together, all C's together)", false);
         defineArgument("use-tissue-prep", "Use tissue prep metadata for grouping", false);
@@ -96,10 +92,6 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("do-mark-duplicates", "Whether to mark duplicates in the BAM file. Default: true", false);
         defineArgument("do-remove-duplicates", "Whether to remove duplicates in the BAM file. Default: true", false);
         defineArgument("group-by-aligner", "Flag to enable/disable grouping by aligner. Default: true", false);
-        defineArgument("output-path", "Optional: the path where the files should be copied to "
-                + "after analysis. Corresponds to output-prefix in INI file. Default: ./", false);
-        defineArgument("output-folder", "Optional: the name of the folder to put the output into relative to "
-                + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results", false);
         parser.accepts("queue", "Optional: Override the default queue setting (production) setting it to something else").withRequiredArg();
         defineArgument("chr-sizes", "Comma separated list of chromosome intervals used to parallelize indel realigning and variant calling. Default: By chromosome", false);
         defineArgument("interval-padding", "Amount of padding to add to each interval (chr-sizes and interval-file determined by decider) in bp. Default: 100", false);
@@ -125,7 +117,7 @@ public class BamMPDecider extends OicrDecider {
         if (options.has("do-remove-duplicates")) {
             doRemoveDups = Boolean.valueOf(getArgument("do-remove-duplicates"));
         }
-        
+
         if (this.options.has("queue")) {
             this.queue = options.valueOf("queue").toString();
         }
@@ -141,16 +133,16 @@ public class BamMPDecider extends OicrDecider {
             minMapQuality = Integer.parseInt(getArgument("min-map-quality"));
         }
         if (options.has("group-by-aligner")) {
-            groupByAligner = Boolean.valueOf(getArgument("group-by-aligner"));
+            groupableFileFactory.setGroupByAligner(Boolean.valueOf(getArgument("group-by-aligner")));
         }
 
         // GP-597 ==== Tissue prep and Tissue region flags
         if (options.has("use-tissue-prep")) {
-            this.useTPrep = Boolean.valueOf(getArgument("use-tissue-prep"));
+            groupableFileFactory.setGroupByTissuePrep(Boolean.valueOf(getArgument("use-tissue-prep")));
         }
 
         if (options.has("use-tissue-region")) {
-            this.useTRegion = Boolean.valueOf(getArgument("use-tissue-region"));
+            groupableFileFactory.setGroupByTissueRegion(Boolean.valueOf(getArgument("use-tissue-region")));
         }
         // GP-597 ends
 
@@ -184,17 +176,6 @@ public class BamMPDecider extends OicrDecider {
             this.doBQSR = !Boolean.parseBoolean(getArgument("disable-bqsr"));
         }
 
-        if (this.options.has("output-path")) {
-            this.outputPrefix = options.valueOf("output-path").toString();
-            if (!this.outputPrefix.endsWith("/")) {
-                this.outputPrefix += "/";
-            }
-        } else { this.outputPrefix = "./";}
-
-        if (this.options.has("output-folder")) {
-            this.outputDir = options.valueOf("output-folder").toString();
-        } else { this.outputDir = "seqware-results"; }
-        
         if (options.has("dbsnp")) {
             this.dbSNPfile = getArgument("dbsnp");
         }
@@ -217,6 +198,7 @@ public class BamMPDecider extends OicrDecider {
      *
      * @param commaSeparatedFilePaths
      * @param commaSeparatedParentAccessions
+     *
      * @return
      */
     @Override
@@ -225,18 +207,18 @@ public class BamMPDecider extends OicrDecider {
         if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
             this.downsamplingType = GATK_DT[0];
         }
-            
+
         return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
 
     @Override
     protected boolean checkFileDetails(FileAttributes attributes) {
         boolean rv = super.checkFileDetails(attributes);
-        if (attributes.basename().toString().contains(TRANSCRIPTOME_SUFFIX)) {
+        if (attributes.basename().contains(TRANSCRIPTOME_SUFFIX)) {
             log.debug("Found Transcriptome-aligned reads");
             return false;
         }
-        
+
         String currentTemplateType = attributes.getOtherAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
         if (tissueTypes == null || tissueTypes.contains(attributes.getLimsValue(Lims.TISSUE_TYPE))) {
             if (!ltt.isEmpty()) {
@@ -255,61 +237,63 @@ public class BamMPDecider extends OicrDecider {
     /**
      * This method is extended in the GATK decider so that only the most recent
      * file for each sequencer run, lane, barcode and filetype is kept.
-     * 
+     *
      * @return candidate groups of files to scheduled workflow runs on
      */
     @Override
     public Map<String, List<ReturnValue>> separateFiles(List<ReturnValue> vals, String groupBy) {
-        Map<String, ReturnValue> iusDeetsToRV = new HashMap<String, ReturnValue>();
-        
+        Map<String, ReturnValue> iusDeetsToRV = new HashMap<>();
+
         //Iterate through the potential files
         for (ReturnValue currentRV : vals) {
             //set aside information needed for subsequent processing
             boolean metatypeOK = false;
-            boolean bamtypeOK  = false;
+            boolean bamtypeOK = false;
 
-            for (int f = 0; f < currentRV.getFiles().size(); f++) {
+            for(FileMetadata fm : currentRV.getFiles()) {
                 try {
-                    if (currentRV.getFiles().get(f).getMetaType().equals(BAM_METATYPE))
+                    if (fm.getMetaType().equals(BAM_METATYPE)) {
                         metatypeOK = true;
-                    if (!currentRV.getFiles().get(f).getFilePath().contains(TRANSCRIPTOME_SUFFIX))
-                        bamtypeOK  = true;
+                    }
+                    if (!fm.getFilePath().contains(TRANSCRIPTOME_SUFFIX)) {
+                        bamtypeOK = true;
+                    }
                 } catch (Exception e) {
                     log.error("Error checking a file");
                     continue;
                 }
             }
-            if (!metatypeOK || !bamtypeOK)
+            if (!metatypeOK || !bamtypeOK) {
                 continue; // Go to the next value
-
-            BeSmall currentSmall = new BeSmall(currentRV);
-            fileSwaToSmall.put(currentRV.getAttribute(Header.FILE_SWA.getTitle()), currentSmall);
+            }
+            GroupableFile currentFile = groupableFileFactory.getGroupableFile(currentRV);
+            fileSwaToFile.put(currentRV.getAttribute(Header.FILE_SWA.getTitle()), currentFile);
 
             //make sure you only have the most recent single file for each
             //sequencer run + lane + barcode + meta-type
-            String fileDeets = currentSmall.getIusDetails();
-            Date currentDate = currentSmall.getDate();
+            String fileDeets = currentFile.getIusDetails();
+            Date currentDate = currentFile.getDate();
 
             //if there is no entry yet, add it
             if (iusDeetsToRV.get(fileDeets) == null) {
-                log.debug("Adding file " + fileDeets + " -> \n\t" + currentSmall.getPath());
+                log.debug("Adding file " + fileDeets + " -> \n\t" + currentFile.getPath());
                 iusDeetsToRV.put(fileDeets, currentRV);
             } //if there is an entry, compare the current value to the 'old' one in
             //the groupedFiles. if the current date is newer than the 'old' date, replace
             //it in the groupedFiles
             else {
                 ReturnValue oldRV = iusDeetsToRV.get(fileDeets);
-                BeSmall oldSmall = fileSwaToSmall.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
-                Date oldDate = oldSmall.getDate();
+                GroupableFile oldFile = fileSwaToFile.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
+                Date oldDate = oldFile.getDate();
                 if (currentDate.after(oldDate)) {
-                    log.debug("Adding file " + fileDeets + " -> \n\t" + currentSmall.getDate()
+                    log.debug("Adding file " + fileDeets + " -> \n\t" + currentFile.getDate()
                             + "\n\t instead of file "
-                            + "\n\t" + oldSmall.getDate());
+                            + "\n\t" + oldFile.getDate());
                     iusDeetsToRV.put(fileDeets, currentRV);
                 } else {
-                    log.debug("Disregarding file " + fileDeets + " -> \n\t" + currentSmall.getDate()
+                    log.debug("Disregarding file " + fileDeets + " -> \n\t" + currentFile.getDate()
                             + "\n\tas older than duplicate sequencer run/lane/barcode in favour of "
-                            + "\n\t" + oldSmall.getDate());
+                            + "\n\t" + oldFile.getDate());
                     log.debug(currentDate + " is before " + oldDate);
                 }
             }
@@ -324,7 +308,7 @@ public class BamMPDecider extends OicrDecider {
             //use the default grouping
             ListMultimap<String, ReturnValue> hm = ArrayListMultimap.create();
             for (ReturnValue rv : iusDeetsToRV.values()) {
-                hm.put(fileSwaToSmall.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute(), rv);
+                hm.put(fileSwaToFile.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute(), rv);
             }
             groupedFiles = Multimaps.asMap(hm);
         }
@@ -339,7 +323,7 @@ public class BamMPDecider extends OicrDecider {
                 List<String> fileInfos = new ArrayList<>();
                 for (ReturnValue rv : e.getValue()) {
                     StringBuilder fileInfo = new StringBuilder();
-                    fileInfo.append(fileSwaToSmall.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute());
+                    fileInfo.append(fileSwaToFile.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute());
                     fileInfo.append(" -> ");
                     fileInfo.append(Iterables.getOnlyElement(rv.getFiles()).getFilePath());
                     fileInfos.add(fileInfo.toString());
@@ -371,9 +355,9 @@ public class BamMPDecider extends OicrDecider {
         SetMultimap<String, String> alignerByGroup = MultimapBuilder.treeKeys().hashSetValues().build();
 
         for (FileAttributes inputFile : run.getFiles()) {
-            BeSmall beSmall = fileSwaToSmall.get(inputFile.getOtherAttribute(Header.FILE_SWA.getTitle()));
+            GroupableFile file = fileSwaToFile.get(inputFile.getOtherAttribute(Header.FILE_SWA.getTitle()));
 
-            String fileGroup = beSmall.getGroupByAttribute();
+            String fileGroup = file.getGroupByAttribute();
 
             inputFilePathsByGroup.put(fileGroup, inputFile.getPath());
             iusLimsKeysByGroup.put(fileGroup,
@@ -386,14 +370,14 @@ public class BamMPDecider extends OicrDecider {
                 idRaw = idRaw.substring(0, idRaw.lastIndexOf("_"));
             }
             outputIdentifierByGroup.put(fileGroup, idRaw);
-            
-            alignerByGroup.put(fileGroup, beSmall.getParentWf());
+
+            alignerByGroup.put(fileGroup, file.getParentWf());
         }
 
         String alignerName = Iterables.getOnlyElement(Sets.newHashSet(alignerByGroup.values()));
         run.addProperty("aligner_name", alignerName);
 
-        //Build the output_identifiers, input_files, and output_ius_lims_keys ini properties for each "output group" (BeSmall).
+        //Build the output_identifiers, input_files, and output_ius_lims_keys ini properties for each "output group" (GroupableFileFactory).
         //Each group is separated by the ";" delimter. The ordering of how the ini property is constructed is important, as these ini properties 
         //are split in the workflow and associated together - this is why keys of the following multimaps are ordered by group name.
         //The following example is how these following ini properties should be constructed:
@@ -423,7 +407,7 @@ public class BamMPDecider extends OicrDecider {
 
         if (this.chrSizes != null && !this.chrSizes.isEmpty()) {
             run.addProperty("chr_sizes", this.chrSizes);
-        }     
+        }
 
         if (this.dbSNPfile != null && !dbSNPfile.isEmpty()) {
             run.addProperty("gatk_dbsnp_vcf", this.dbSNPfile);
@@ -432,11 +416,11 @@ public class BamMPDecider extends OicrDecider {
         if (minMapQuality != null) {
             run.addProperty("samtools_min_map_quality", minMapQuality.toString());
         }
-        
+
         if (downsamplingType != null && !downsamplingType.isEmpty()) {
             run.addProperty("downsampling_type", downsamplingType);
         }
-        
+
         if (this.queue != null) {
             run.addProperty("queue", this.queue);
         } else {
@@ -446,94 +430,8 @@ public class BamMPDecider extends OicrDecider {
         return new ReturnValue();
     }
 
-    private class BeSmall {
-
-        private Date date = null;
-        private String iusDetails = null;
-        private String parentWf = "";
-        private String groupByAttribute = null;
-        private String path = null;
-
-        public BeSmall(ReturnValue rv) {
-            try {
-                date = format.parse(rv.getAttribute(Header.PROCESSING_DATE.getTitle()));
-            } catch (ParseException ex) {
-                log.error("Bad date!", ex);
-                ex.printStackTrace();
-            }
-            FileAttributes fa = new FileAttributes(rv, rv.getFiles().get(0));
-            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode();
-            String wfName = rv.getAttribute(Header.WORKFLOW_NAME.getTitle());
-            groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
-
-            if (null != wfName && !wfName.isEmpty() && groupByAligner) {
-                this.parentWf = wfName;
-                groupByAttribute = groupByAttribute.concat(":" + this.parentWf);
-            }
-
-            if (null != fa.getLimsValue(Lims.TISSUE_TYPE)) {
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_TYPE));
-            }
-
-            if (null != fa.getLimsValue(Lims.TISSUE_PREP) && useTPrep) {
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_PREP));
-            }
-
-            if (null != fa.getLimsValue(Lims.TISSUE_REGION) && useTRegion) {
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_REGION));
-            }
-
-            if (null != fa.getLimsValue(Lims.GROUP_ID)) {
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.GROUP_ID));
-            }
-
-            if (null != fa.getLimsValue(Lims.TARGETED_RESEQUENCING)) {
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TARGETED_RESEQUENCING));
-            }
-
-            //Grouping by workflow name (we don't care about version)
-            path = rv.getFiles().get(0).getFilePath() + "";
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getGroupByAttribute() {
-            return groupByAttribute;
-        }
-
-        public void setGroupByAttribute(String groupByAttribute) {
-            this.groupByAttribute = groupByAttribute;
-        }
-
-        public String getIusDetails() {
-            return iusDetails;
-        }
-
-        public void setIusDetails(String iusDetails) {
-            this.iusDetails = iusDetails;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getParentWf() {
-            return parentWf;
-        }
-    }
-
     public static void main(String args[]) {
-        List<String> params = new ArrayList<String>();
+        List<String> params = new ArrayList<>();
         params.add("--plugin");
         params.add(BamMPDecider.class.getCanonicalName());
         params.add("--");
