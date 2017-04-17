@@ -1,3 +1,7 @@
+## 1.1 - 2017-04-17
+- [GP-1106](https://jira.oicr.on.ca/browse/GP-1106) 
+    - Support for performing GATK Indel Realignment together on groups of inputs, but provisioning out by the separate groups
+    - Support grouping of "chr_sizes" intervals
 ## 1.0.3 - 2017-03-28
 - [GP-1117](https://jira.oicr.on.ca/browse/GP-1117) - support for "unmapped" input
 ## 1.0.2 - 2017-03-13
