@@ -5,7 +5,8 @@
         "parameters": {
         },
         "iniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
-            "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "input_files"]
+            "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", 
+            "input_files", "output_ius_lims_keys"]
     },
     "tests": [
         {
@@ -15,13 +16,12 @@
                 "--parent-wf-accessions": "375928,23341",
                 "--before-date": "2013-11-19"
             }
-
         },
         {
             "id": "POP sample test",
             "parameters": {
                 "--root-sample-name": "POP_066",
-                "--disable-bqsr" : "true",
+                "--disable-bqsr": "true",
                 "--parent-wf-accessions": "375928,23341",
                 "--before-date": "2013-11-19"
             }
@@ -33,6 +33,32 @@
                 "--parent-wf-accessions": "375928,23341",
                 "--before-date": "2013-11-19",
                 "--min-map-quality": "30"
+            }
+        },
+        {
+            "id": "study test",
+            "parameters": {
+                "--study-name": "TGL01",
+                "--parent-wf-accessions": "2967897",
+                "--before-date": "2017-04-12"
+            }
+        },
+        {
+            "id": "sample test 1",
+            "parameters": {
+                "--root-sample-name": "TGL01_0019",
+                "--group-by": "ROOT_SAMPLE_NAME",
+                "--parent-wf-accessions": "2967897",
+                "--before-date": "2017-04-12"
+            }
+        },
+        {
+            "id": "sample test 2",
+            "parameters": {
+                "--root-sample-name": "TGL01_0025",
+                "--group-by": "ROOT_SAMPLE_NAME",
+                "--parent-wf-accessions": "2967897",
+                "--before-date": "2017-04-12"
             }
         }
     ]
