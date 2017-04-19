@@ -450,26 +450,22 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
             // Annotate and provision final bam and its index
             SqwFile finalBam = this.createOutputFile(bamOutputFilePath, BAM_METATYPE, manualOutput);
-
             if (!this.alignerName.isEmpty()) {
                 finalBam.getAnnotations().put("aligner", this.alignerName);
             }
-
             attachCVterms(finalBam, EDAM, "BAM,Sequence alignment refinement");
             jobMergeFinal.addFile(finalBam);
 
-            //link this file to its LIMS metadata (IUS-LimsKeys)
+            //link bam file to its LIMS metadata (IUS-LimsKeys)
             if (outputSwidsByGroup.containsKey(outputGroup)) {
                 finalBam.setParentAccessions(outputSwidsByGroup.get(outputGroup));
             }
 
-            Job jobIdx = getIndexBamJob(bamOutputFilePath);
-            jobIdx.addParent(jobMergeFinal);
             SqwFile finalBai = this.createOutputFile(baiOutputFilePath, BAI_METATYPE, manualOutput);
             attachCVterms(finalBai, EDAM, "BAI");
-            jobIdx.addFile(finalBai);
+            jobMergeFinal.addFile(finalBai);
 
-            //link this file to its LIMS metadata (IUS-LimsKeys)
+            //link bai file to its LIMS metadata (IUS-LimsKeys)
             if (outputSwidsByGroup.containsKey(outputGroup)) {
                 finalBai.setParentAccessions(outputSwidsByGroup.get(outputGroup));
             }
