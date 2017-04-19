@@ -235,24 +235,21 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
     }
 
-    private Map<String, Set<String>> getMapOfSets(List<String> keys, List<String> values, String valuesDelimiter) {
-        if (keys.isEmpty() || values.isEmpty() || keys.size() != values.size()) {
-            error("key size (" + keys.size() + ") != values size (" + values.size() + ")");
-        }
-        Map<String, Set<String>> map = new HashMap<>();
-        for (int i = 0; i < keys.size(); i++) {
-            List<String> valsList = Arrays.asList(values.get(i).split(valuesDelimiter));
-            Set<String> vals = new LinkedHashSet<>(valsList);
-            if (map.put(keys.get(i), vals) != null) {
-                error("Duplicate key detected = [" + keys.get(i));
+    @Override
+    public void setupDirectory() {
+        try {
+            BamMPWorkflow();
+            this.addDirectory(dataDir);
+            this.addDirectory(tmpDir);
+            if (!dataDir.endsWith("/")) {
+                dataDir += "/";
             }
+            if (!tmpDir.endsWith("/")) {
+                tmpDir += "/";
+            }
+        } catch (Exception e) {
+            error("Error in setupDirectory:\n" + e);
         }
-        return map;
-    }
-
-    private <T> boolean hasDuplicates(Collection<T> c) {
-        Set<T> s = new HashSet<>(c);
-        return c.size() != s.size();
     }
 
     @Override
@@ -276,23 +273,6 @@ public class BamMPWorkflow extends SemanticWorkflow {
         }
 
         return this.getFiles();
-    }
-
-    @Override
-    public void setupDirectory() {
-        try {
-            BamMPWorkflow();
-            this.addDirectory(dataDir);
-            this.addDirectory(tmpDir);
-            if (!dataDir.endsWith("/")) {
-                dataDir += "/";
-            }
-            if (!tmpDir.endsWith("/")) {
-                tmpDir += "/";
-            }
-        } catch (Exception e) {
-            error("Error in setupDirectory:\n" + e);
-        }
     }
 
     @Override
@@ -710,6 +690,26 @@ public class BamMPWorkflow extends SemanticWorkflow {
             ts.add(p.getRight());
         }
         return ts;
+    }
+
+    private Map<String, Set<String>> getMapOfSets(List<String> keys, List<String> values, String valuesDelimiter) {
+        if (keys.isEmpty() || values.isEmpty() || keys.size() != values.size()) {
+            error("key size (" + keys.size() + ") != values size (" + values.size() + ")");
+        }
+        Map<String, Set<String>> map = new HashMap<>();
+        for (int i = 0; i < keys.size(); i++) {
+            List<String> valsList = Arrays.asList(values.get(i).split(valuesDelimiter));
+            Set<String> vals = new LinkedHashSet<>(valsList);
+            if (map.put(keys.get(i), vals) != null) {
+                error("Duplicate key detected = [" + keys.get(i));
+            }
+        }
+        return map;
+    }
+
+    private <T> boolean hasDuplicates(Collection<T> c) {
+        Set<T> s = new HashSet<>(c);
+        return c.size() != s.size();
     }
 
     private void error(String msg) {
