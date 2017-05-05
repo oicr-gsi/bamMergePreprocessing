@@ -4,23 +4,23 @@ import ca.on.oicr.pde.tools.gatk3.AnalyzeCovariates;
 import ca.on.oicr.pde.tools.gatk3.BaseRecalibrator;
 import ca.on.oicr.pde.tools.gatk3.IndelRealigner;
 import ca.on.oicr.pde.tools.gatk3.PrintReads;
-import ca.on.oicr.pde.tools.gatk3.PrintReadsUnmapped;
 import ca.on.oicr.pde.tools.gatk3.RealignerTargetCreator;
 import ca.on.oicr.pde.utilities.workflows.SemanticWorkflow;
 import ca.on.oicr.pde.utilities.workflows.jobfactory.PicardTools;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import net.sourceforge.seqware.common.module.ReturnValue;
 import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Command;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
@@ -38,22 +38,21 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class BamMPWorkflow extends SemanticWorkflow {
 
-    private final List<String> inputBamFiles = new LinkedList<>();
-    private Multimap<String, Pair<String, Job>> realignedBams;
-    private Multimap<String, Pair<String, Job>> recalibratedBams;
-    private String finalOutput;
-
     private String dataDir, tmpDir, rDir;
     private String java, markDuplicatesJar, mergeSamFilesJar, sortSamFilesJar;
     private Integer picardMarkDupMem, picardMergeMem;
-    // we should have assumeSorted set to false ALWAYS (due to re-structuring)
-    private boolean doDedup = true, doRemoveDups = true, doFilter = true, assumeSorted = false, useThreading = true, manualOutput = false;
+    private boolean doDedup = true;
+    private boolean doRemoveDups = true;
+    private boolean doFilter = true;
+    private final boolean doIndelRealignment = true; //currently this is not an optional step
+    private final boolean assumeSorted = false; // we should have assumeSorted set to false ALWAYS (due to re-structuring)
+    private boolean useThreading = true;
+    private boolean manualOutput = false;
     private String samtools;
     private String picard_dir;
     private Integer samtoolsMem;
     private Integer samtoolsFlag;
     private String samtoolsMinMapQuality;
-    private String identifier;
     private String alignerName;
     private Workflow wf;
     private PicardTools picard;
@@ -66,7 +65,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private final static String TXT_METATYPE = "text/plain";
 
     private List<String> chrSizesList;
-    private Set<String> chrSizes;
+    private Set<Set<String>> chrSizes;
 
     //References
     private String refFasta;
@@ -99,16 +98,24 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private List<String> intervalFilesList;
     private Set<String> intervalFiles;
     private Set<String> bqsrCovariates;
+
     //Ontology-related variables
     private static final String EDAM = "EDAM";
     private static final Map<String, Set<String>> cvTerms;
-    
+
+    private List<String> outputIdentifiers;
+
+    private Map<String, Set<String>> inputFilesByGroup;
+    private Map<String, Set<String>> outputSwidsByGroup;
+    private final Map<String, Set<String>> provisionedFilesByGroup = new HashMap<>();
+
     static {
-        cvTerms = new HashMap<String, Set<String>>();
-        cvTerms.put(EDAM, new HashSet<String>(Arrays.asList("BAM", "BAI", "plain text format (unformatted)", 
-                                                            "Read pre-processing", "Sequence alignment refinement",
-                                                            "Sequence alignment metadata")));
+        cvTerms = new HashMap<>();
+        cvTerms.put(EDAM, new HashSet<>(Arrays.asList("BAM", "BAI", "plain text format (unformatted)",
+                "Read pre-processing", "Sequence alignment refinement",
+                "Sequence alignment metadata")));
     }
+
     /**
      * Here we need to register all of our CV terms for attaching to result
      * files (Formats, Data, Processes)
@@ -117,7 +124,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
      */
     @Override
     protected Map<String, Set<String>> getTerms() {
-        Map<String, Set<String>> myTerms = new HashMap<String, Set<String>>();
+        Map<String, Set<String>> myTerms = new HashMap<>();
         myTerms.putAll(cvTerms);
         return myTerms;
     }
@@ -126,27 +133,26 @@ public class BamMPWorkflow extends SemanticWorkflow {
      * Launched from setupDirectory();
      */
     private void BamMPWorkflow() {
-        identifier = getProperty("identifier");
-        java    = getProperty("java");
+        java = getProperty("java");
         dataDir = "data";
-        tmpDir  = getProperty("tmp_dir");
-        rDir    = getProperty("r_dir");
+        tmpDir = getProperty("tmp_dir");
+        rDir = getProperty("r_dir");
         manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
 
         //Flags for controlling different steps:
-        doFilter     = Boolean.parseBoolean(getProperty("do_sam_filter"));
+        doFilter = Boolean.parseBoolean(getProperty("do_sam_filter"));
         doRemoveDups = Boolean.parseBoolean(getOptionalProperty("do_remove_duplicates", "false"));
         doDedup = doRemoveDups ? true : Boolean.parseBoolean(getProperty("do_mark_duplicates"));
 
         //Picard
         markDuplicatesJar = getProperty("picard_mark_duplicates");
-        picardMarkDupMem  = Integer.parseInt(getProperty("picard_mark_duplicates_mem_mb"));
-        mergeSamFilesJar  = getProperty("picard_merge_sam");
-        sortSamFilesJar   = getProperty("picard_sort_sam");
-        picardMergeMem    = Integer.parseInt(getProperty("picard_merge_sam_mem_mb"));
+        picardMarkDupMem = Integer.parseInt(getProperty("picard_mark_duplicates_mem_mb"));
+        mergeSamFilesJar = getProperty("picard_merge_sam");
+        sortSamFilesJar = getProperty("picard_sort_sam");
+        picardMergeMem = Integer.parseInt(getProperty("picard_merge_sam_mem_mb"));
         filterOtherParams = getOptionalProperty("samtools_filter_other_params", "");
-        dedupOtherParams  = getOptionalProperty("picard_mark_duplicates_other_params", "");
-        mergeOtherParams  = getOptionalProperty("picard_merge_other_params", "");
+        dedupOtherParams = getOptionalProperty("picard_mark_duplicates_other_params", "");
+        mergeOtherParams = getOptionalProperty("picard_merge_other_params", "");
         analyzeCovariatesParams = getOptionalProperty("gatk_analyze_covariates_params", null);
         picard_dir = getProperty("picard_dir");
         wf = this.getWorkflow();
@@ -163,17 +169,6 @@ public class BamMPWorkflow extends SemanticWorkflow {
         sortOtherParams = getOptionalProperty("picard_sort_other_params", "");
         sortOrder = getProperty("sort_order");
         useThreading = Boolean.parseBoolean(getProperty("picard_merge_use_threading"));
-
-        this.chrSizesList = Arrays.asList(StringUtils.split(getProperty("chr_sizes"), ","));
-        this.chrSizes = new HashSet<>(chrSizesList);
-        if (chrSizes.size() != chrSizesList.size()) {
-            throw new RuntimeException("Duplicate chr_sizes detected.");
-        }
-
-    }
-
-    @Override
-    public Map<String, SqwFile> setupFiles() {
 
         //References
         this.refFasta = getProperty("ref_fasta");
@@ -203,44 +198,41 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
         this.intervalFilesList = Arrays.asList(StringUtils.split(getOptionalProperty("interval_files", ""), ","));
         this.intervalFiles = new HashSet<>(intervalFilesList);
+        if (intervalFiles.size() != intervalFilesList.size()) {
+            throw new RuntimeException("Duplicate interval_files detected");
+        }
+
         this.bqsrCovariates = Sets.newHashSet(StringUtils.split(getProperty("bqsr_covariates"), ","));
 
-        List<String> inputFilesList = Arrays.asList(StringUtils.split(getProperty("input_files"), ","));
-        Set<String> inputFilesSet = new HashSet<>(inputFilesList);
-
-        if (inputFilesList.size() != inputFilesSet.size()) {
-            throw new RuntimeException("Duplicate files detected in input_files");
+        this.chrSizesList = Arrays.asList(StringUtils.split(getProperty("chr_sizes"), ","));
+        this.chrSizes = new LinkedHashSet<>();
+        for (String c : chrSizesList) {
+            List<String> cc = Arrays.asList(StringUtils.split(c, "+"));
+            Set<String> cc2 = new LinkedHashSet<>(cc);
+            chrSizes.add(cc2);
         }
 
-        Map<String, String> bams = new HashMap<>();
-
-        for (String f : inputFilesSet) {
-            String fileExtension = FilenameUtils.getExtension(f);
-            String fileKey = FilenameUtils.removeExtension(f);
-            if (null != fileExtension) {
-                switch (fileExtension) {
-                    case "bam":
-                        bams.put(fileKey, f);
-                        break;
-                    default:
-                        throw new RuntimeException("Unsupported input file type");
-                }
-            }
+        if (chrSizes.size() != chrSizesList.size()) {
+            throw new RuntimeException("Duplicate chr_sizes detected.");
         }
 
-        int id = 0;
-        for (Map.Entry<String, String> e : bams.entrySet()) {
-            String bamFilePath = e.getValue();
-
-            SqwFile bam = this.createFile("file_in_" + id++);
-            bam.setSourcePath(bamFilePath);
-            bam.setType(BAM_METATYPE);
-            bam.setIsInput(true);
-
-            inputBamFiles.add(bam.getProvisionedPath());
+        //output identifiers
+        outputIdentifiers = Arrays.asList(StringUtils.split(getProperty("output_identifiers"), ";"));
+        if (hasDuplicates(outputIdentifiers)) {
+            error("Duplicates detected in output_identifiers");
         }
 
-        return this.getFiles();
+        //input files
+        inputFilesByGroup = getMapOfSets(outputIdentifiers, Arrays.asList(StringUtils.split(getProperty("input_files"), ";")), ",");
+
+        //IUS-LimsKey SWIDs to link output files to
+        String outputIusLimsKeysProperty = getOptionalProperty("output_ius_lims_keys", "");
+        if (!outputIusLimsKeysProperty.isEmpty()) {
+            outputSwidsByGroup = getMapOfSets(outputIdentifiers, Arrays.asList(StringUtils.split(outputIusLimsKeysProperty, ";")), ",");
+        } else {
+            outputSwidsByGroup = Collections.EMPTY_MAP;
+        }
+
     }
 
     @Override
@@ -256,155 +248,174 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 tmpDir += "/";
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.error("Error in setupDirectory", e);
-            ret.setReturnValue(ReturnValue.INVALIDFILE);
+            error("Error in setupDirectory:\n" + e);
         }
+    }
+
+    @Override
+    public Map<String, SqwFile> setupFiles() {
+
+        int id = 0;
+        for (Entry<String, Set<String>> e : inputFilesByGroup.entrySet()) {
+            String outputGroup = e.getKey();
+            Set<String> provisionedPaths = new HashSet<>();
+            for (String filePath : e.getValue()) {
+                if (!"bam".equals(FilenameUtils.getExtension(filePath))) {
+                    error("Unsupported input file: " + filePath);
+                }
+                SqwFile bam = this.createFile("file_in_" + id++);
+                bam.setSourcePath(filePath);
+                bam.setType(BAM_METATYPE);
+                bam.setIsInput(true);
+                provisionedPaths.add(bam.getProvisionedPath());
+            }
+            provisionedFilesByGroup.put(outputGroup, provisionedPaths);
+        }
+
+        return this.getFiles();
     }
 
     @Override
     public void buildWorkflow() {
 
-        if (intervalFiles.size() != intervalFilesList.size()) {
-            throw new RuntimeException("Duplicate interval_files detected");
-        }
-        // use these two strings to construct the file names for the intermediate
-        // files. This way the file name describes the operations performed on it
-        String operationsOnMergedFile = identifier + ".";
-        String outputFile = "";
-        String inputFile = outputFile;
-        List<Job> upstreamJobs = new ArrayList<Job>();
-        Job jobMergeSort;
-
-        // Merge + sort BAM files - move into a function
-        if (inputBamFiles.size() > 1) {
-            operationsOnMergedFile += "merged.sorted.";
-            outputFile = dataDir + "/" + operationsOnMergedFile;
-            String[] bamProvisionedPath = new String[inputBamFiles.size()];
-            for (int s = 0; s < inputBamFiles.size(); s++) {
-                bamProvisionedPath[s] = inputBamFiles.get(s).toString();
-            }
-
-            jobMergeSort = picard.mergeSamFiles(this.java,
-                    mergeSamFilesJar,
-                    picardMergeMem,
-                    tmpDir,
-                    sortOrder,
-                    assumeSorted,
-                    useThreading, //use threading
-                    mergeOtherParams,
-                    outputFile + "bam",
-                    bamProvisionedPath);
-            jobMergeSort.setQueue(getOptionalProperty("queue", ""));
-            inputFile = outputFile;
-            upstreamJobs.add(jobMergeSort);
-        } else if (inputBamFiles.size() == 0) {
-            Log.fatal("There are no BAM files to launch!");
-            ret.setExitStatus(ReturnValue.INVALIDPARAMETERS);
-        } else if (inputBamFiles.size() == 1) {
-            inputFile = inputBamFiles.get(0).toString();
-            // Sort BAM file this is mandatory
-            operationsOnMergedFile += "sorted.";
-            outputFile = dataDir + "/" + operationsOnMergedFile;
-            Job jobSort = picard.sortSamFile(this.java,
-                    sortSamFilesJar,
-                    picardMergeMem,
-                    tmpDir,
-                    sortOrder,
-                    outputFile + "bam",
-                    inputFile,
-                    sortOtherParams);
-            jobSort.setQueue(getOptionalProperty("queue", ""));
-            inputFile = outputFile;
-            upstreamJobs.add(jobSort);
+        //setup operations performed on output group map
+        Map<String, String> outputNameByOutputGroup = new HashMap<>();
+        for (String outputIdentifier : outputIdentifiers) {
+            outputNameByOutputGroup.put(outputIdentifier, outputIdentifier + ".");
         }
 
-        // Clean merged/sorted BAM
-        String dir = inputFile.substring(0, inputFile.lastIndexOf("/")) + "/";
-        Job upstreamJob = upstreamJobs.isEmpty() ? null : (Job) upstreamJobs.get(0); // There suppsed to be one!
+        //used to collect input files (and associated job) to the next step of the workflow - partitioned by the output group
+        Multimap<String, Pair<String, Job>> inputFileAndJobToNextStepByOutputGroup = null;
 
-        // Filter each BAM file
-        if (doFilter) {
-            operationsOnMergedFile += "filter.";
-            outputFile = dir + operationsOnMergedFile;
-            Job jobFilter = samtoolsFilterReads("SamtoolsFilter", inputFile + "bam", outputFile + "bam");
-            if (null != upstreamJob) {
-                jobFilter.addParent(upstreamJob);
-            }
-            upstreamJob = jobFilter;
-            inputFile = outputFile;
-        }
+        //for each output group: merge, sort, filter, dedup, index
+        Multimap<String, Pair<String, Job>> mergedBamsByGroup = HashMultimap.create();
+        for (String outputGroup : outputIdentifiers) {
 
-        //deduplicate BAM file
-        if (doDedup) {
-            operationsOnMergedFile += "deduped.";
-            outputFile = dir + operationsOnMergedFile;
-            Job jobDedup = picard.markDuplicates(this.java,
-                    markDuplicatesJar,
-                    picardMarkDupMem,
-                    tmpDir,
-                    inputFile  + "bam",
-                    outputFile + "bam",
-                    dir + operationsOnMergedFile + "metrics",
-                    dedupOtherParams);
-            jobDedup.getCommand().addArgument(REMOVE_DUPLICATES + Boolean.toString(this.doRemoveDups));
-            jobDedup.setQueue(getOptionalProperty("queue", ""));
-            SqwFile metricFile = this.createOutputFile(dir + operationsOnMergedFile + "metrics", TXT_METATYPE, this.manualOutput);
+            Job parentJob;
+            String inputFilePath;
 
-            this.attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
-            jobDedup.addFile(metricFile);
-            if (null != upstreamJob) {
-                jobDedup.addParent(upstreamJob);
-            }
-            upstreamJob = jobDedup;
-            inputFile = outputFile;
-        }
-
-         Job jobIdx = this.indexBamJob(inputFile);
-        
-        if (null != upstreamJob) {
-            jobIdx.addParent(upstreamJob);
-        }
-        
-        operationsOnMergedFile += "realigned.";
-
-        // Indel Realignment Job
-        LinkedList<String> inputs = new LinkedList();
-        inputs.add(inputFile + "bam");
-        this.recalibratedBams = HashMultimap.create();
-        this.realignedBams = HashMultimap.create();
-        Multimap<String, Pair<String, Job>> inputBams;
-
-        // We split by chromosome here
-        for (String chrSize : chrSizes) {
-            if ("unmapped".equals(chrSize)) {
-                Pair<String, Job> unmappedBamJob = getUnmappedBamJob(jobIdx, inputs);
-                realignedBams.put(chrSize, unmappedBamJob);
+            if (inputFilesByGroup.get(outputGroup).size() > 1) {
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "merged.sorted.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+                String outputFilePath = dataDir + outputName + "bam";
+                Job jobMergeSort = picard.mergeSamFiles(this.java,
+                        mergeSamFilesJar,
+                        picardMergeMem,
+                        tmpDir,
+                        sortOrder,
+                        assumeSorted,
+                        useThreading, //use threading
+                        mergeOtherParams,
+                        outputFilePath,
+                        provisionedFilesByGroup.get(outputGroup).toArray(new String[0]));
+                jobMergeSort.setQueue(getOptionalProperty("queue", ""));
+                parentJob = jobMergeSort;
+                inputFilePath = outputFilePath;
             } else {
-                this.indelRealignJob(inputs, chrSize, jobIdx);
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "sorted.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+                String outputFilePath = dataDir + outputName + "bam";
+                Job jobSort = picard.sortSamFile(this.java,
+                        sortSamFilesJar,
+                        picardMergeMem,
+                        tmpDir,
+                        sortOrder,
+                        outputFilePath,
+                        Iterables.getOnlyElement(provisionedFilesByGroup.get(outputGroup)),
+                        sortOtherParams);
+                jobSort.setQueue(getOptionalProperty("queue", ""));
+                parentJob = jobSort;
+                inputFilePath = outputFilePath;
             }
+
+            // Filter each BAM file
+            if (doFilter) {
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "filter.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+                String outputFilePath = dataDir + outputName + "bam";
+                Job jobFilter = samtoolsFilterReads("SamtoolsFilter", inputFilePath, outputFilePath);
+                jobFilter.addParent(parentJob);
+                parentJob = jobFilter;
+                inputFilePath = outputFilePath;
+            }
+
+            //deduplicate BAM file
+            if (doDedup) {
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "deduped.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+                String outputFilePath = dataDir + outputName + "bam";
+                Job jobDedup = picard.markDuplicates(this.java,
+                        markDuplicatesJar,
+                        picardMarkDupMem,
+                        tmpDir,
+                        inputFilePath,
+                        outputFilePath,
+                        dataDir + outputName + "metrics",
+                        dedupOtherParams);
+                jobDedup.getCommand().addArgument(REMOVE_DUPLICATES + Boolean.toString(this.doRemoveDups));
+                jobDedup.setQueue(getOptionalProperty("queue", ""));
+                jobDedup.addParent(parentJob);
+
+                SqwFile metricFile = this.createOutputFile(dataDir + outputName + "metrics", TXT_METATYPE, this.manualOutput);
+                this.attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
+                jobDedup.addFile(metricFile);
+
+                //link this file to its LIMS metadata (IUS-LimsKeys)
+                if (outputSwidsByGroup.containsKey(outputGroup)) {
+                    metricFile.setParentAccessions(outputSwidsByGroup.get(outputGroup));
+                }
+
+                parentJob = jobDedup;
+                inputFilePath = outputFilePath;
+            }
+
+            Job jobIdx = getIndexBamJob(inputFilePath);
+            jobIdx.addParent(parentJob);
+
+            mergedBamsByGroup.put(outputGroup, Pair.of(inputFilePath, jobIdx));
+
+            inputFileAndJobToNextStepByOutputGroup = mergedBamsByGroup;
+        }
+
+        if (doIndelRealignment) {
+            for (String outputGroup : outputIdentifiers) {
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "realign.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+            }
+
+            Multimap<String, Pair<String, Job>> realignedBamsByGroup = HashMultimap.create();
+            for (Set<String> chrSize : chrSizes) {
+                if (chrSize != null && chrSize.contains("unmapped") && chrSize.size() == 1) {
+                    realignedBamsByGroup.putAll(getUnmappedBamJob(inputFileAndJobToNextStepByOutputGroup));
+                } else {
+                    realignedBamsByGroup.putAll(indelRealignJob(inputFileAndJobToNextStepByOutputGroup, chrSize));
+                }
+            }
+
+            inputFileAndJobToNextStepByOutputGroup = realignedBamsByGroup;
         }
 
         if (doBQSR) {
-          //Conditional Recalibration job
-          operationsOnMergedFile += "recal.";
-          this.baseQRecalibrateJob(operationsOnMergedFile);
-          inputBams = this.recalibratedBams;
-          
-        } else {
-          inputBams = this.realignedBams;
+            for (String outputGroup : outputIdentifiers) {
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "recal.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+            }
+
+            Multimap<String, Pair<String, Job>> recalibratedBamsByGroup = baseQRecalibrateJob(inputFileAndJobToNextStepByOutputGroup);
+            inputFileAndJobToNextStepByOutputGroup = recalibratedBamsByGroup;
         }
 
-        // Use picard for indexing
-        this.finalOutput = this.dataDir + operationsOnMergedFile;
-        Object[] finalInputs = this.getLeftCollection(inputBams.values()).toArray();
-        String[] inputBamsArray = new String[finalInputs.length];
-        for (int s = 0; s < finalInputs.length; s++) {
-            inputBamsArray[s] = finalInputs[s].toString();
-        }
-        
         //Merge into final output bam file (Realigned or Recalibrated reads)
-        Job jobMergeFinal = picard.mergeSamFiles(this.java,
+        for (Entry<String, Collection<Pair<String, Job>>> e : inputFileAndJobToNextStepByOutputGroup.asMap().entrySet()) {
+
+            String outputGroup = e.getKey();
+            String outputFileName = outputNameByOutputGroup.get(outputGroup);
+            String bamOutputFilePath = dataDir + outputFileName + "bam";
+            String baiOutputFilePath = dataDir + outputFileName + "bai";
+
+            String[] inputBams = getLeftCollection(inputFileAndJobToNextStepByOutputGroup.get(outputGroup)).toArray(new String[0]);
+
+            Job jobMergeFinal = picard.mergeSamFiles(this.java,
                     mergeSamFilesJar,
                     picardMergeMem,
                     tmpDir,
@@ -412,31 +423,37 @@ public class BamMPWorkflow extends SemanticWorkflow {
                     assumeSorted,
                     useThreading, //use threading
                     mergeOtherParams,
-                    this.finalOutput + "bam",
-                    inputBamsArray);
-        jobMergeFinal.setQueue(getOptionalProperty("queue", ""));
-        jobMergeFinal.getParents().addAll(this.getRightCollection(inputBams.values()));
-        
-        // Annotate and provision final bam and its index
-        SqwFile finalBam = this.createOutputFile(this.finalOutput + "bam", BAM_METATYPE, manualOutput);
-        if (!this.alignerName.isEmpty()) {
-            finalBam.getAnnotations().put("aligner", this.alignerName);
+                    bamOutputFilePath,
+                    inputBams);
+            jobMergeFinal.setQueue(getOptionalProperty("queue", ""));
+            jobMergeFinal.getParents().addAll(getRightCollection(inputFileAndJobToNextStepByOutputGroup.get(outputGroup)));
+
+            // Annotate and provision final bam and its index
+            SqwFile finalBam = this.createOutputFile(bamOutputFilePath, BAM_METATYPE, manualOutput);
+            if (!this.alignerName.isEmpty()) {
+                finalBam.getAnnotations().put("aligner", this.alignerName);
+            }
+            attachCVterms(finalBam, EDAM, "BAM,Sequence alignment refinement");
+            jobMergeFinal.addFile(finalBam);
+
+            //link bam file to its LIMS metadata (IUS-LimsKeys)
+            if (outputSwidsByGroup.containsKey(outputGroup)) {
+                finalBam.setParentAccessions(outputSwidsByGroup.get(outputGroup));
+            }
+
+            SqwFile finalBai = this.createOutputFile(baiOutputFilePath, BAI_METATYPE, manualOutput);
+            attachCVterms(finalBai, EDAM, "BAI");
+            jobMergeFinal.addFile(finalBai);
+
+            //link bai file to its LIMS metadata (IUS-LimsKeys)
+            if (outputSwidsByGroup.containsKey(outputGroup)) {
+                finalBai.setParentAccessions(outputSwidsByGroup.get(outputGroup));
+            }
+
         }
-        
-        this.attachCVterms(finalBam, EDAM, "BAM,Sequence alignment refinement");
-        jobMergeFinal.addFile(finalBam);
-        
-        Job jobIdx2 = this.indexBamJob(this.finalOutput);
-        jobIdx2.addParent(jobMergeFinal);
-        
-        SqwFile finalBai = this.createOutputFile(this.finalOutput + "bai", BAI_METATYPE, manualOutput);
-        this.attachCVterms(finalBai, EDAM, "BAI");
-        jobIdx2.addFile(finalBai);
     }
 
-    
-    //=======================Jobs as functions===================
-    
+//=======================Jobs as functions===================
     /**
      * <p>
      * Filters out the reads according to the samtools flag.
@@ -447,9 +464,10 @@ public class BamMPWorkflow extends SemanticWorkflow {
      *
      * <code>samtools view -b -F 260 > output.bam</code>
      *
-     * @param jobName the name of the samtools filter job
-     * @param inputFile the input bam file
+     * @param jobName    the name of the samtools filter job
+     * @param inputFile  the input bam file
      * @param outputFile the output bam file
+     *
      * @return
      */
     protected Job samtoolsFilterReads(String jobName, String inputFile, String outputFile) {
@@ -473,59 +491,80 @@ public class BamMPWorkflow extends SemanticWorkflow {
         return job;
     }
 
-    protected void indelRealignJob(LinkedList<String> inputFile, String chrSize, Job parentJob) {
+    protected Multimap<String, Pair<String, Job>> indelRealignJob(Multimap<String, Pair<String, Job>> inputFilesByGroup, Set<String> chrSizes) {
 
-        RealignerTargetCreator realignerTargetCreatorCommand = new RealignerTargetCreator.Builder(java, gatkRealignTargetCreatorXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+        if (chrSizes != null && !chrSizes.isEmpty() && chrSizes.contains("unmapped")) {
+            error("indel realignment is not supported for \"unmapped\" - \"unmapped\" should not be grouped with other \"chr_sizes\" targets");
+        }
+
+        Multimap<String, Pair<String, Job>> realignedBamsByGroup = HashMultimap.create();
+
+        RealignerTargetCreator.Builder realignerTargetCreatorCommandBuilder = new RealignerTargetCreator.Builder(java, gatkRealignTargetCreatorXmx + "g", tmpDir, gatk, gatkKey, dataDir)
                 .setReferenceSequence(refFasta)
-                .addInputBamFiles(inputFile)
+                .addInputBamFiles(getLeftCollection(inputFilesByGroup.values()))
                 .setKnownIndels(dbsnpVcf)
-                .addInterval(chrSize)
                 .addIntervalFiles(intervalFiles)
                 .setIntervalPadding(intervalPadding)
                 .setDownsamplingCoverageThreshold(downsamplingCoverage)
                 .setDownsamplingType(downsamplingType)
-                .setOutputFileName("gatk" + (chrSize != null ? "." + chrSize.replace(":", "-") : ""))
-                .setExtraParameters(realignerTargetCreatorParams)
-                .build();
+                .setExtraParameters(realignerTargetCreatorParams);
+        for (String chrSize : chrSizes) {
+            realignerTargetCreatorCommandBuilder.addInterval(chrSize);
+        }
+
+        RealignerTargetCreator realignerTargetCreatorCommand = realignerTargetCreatorCommandBuilder.build();
+
         Job realignerTargetCreatorJob = getWorkflow().createBashJob("GATKRealignerTargetCreator")
                 .setMaxMemory(Integer.toString((gatkRealignTargetCreatorXmx + gatkOverhead) * 1024))
                 .setQueue(queue);
         realignerTargetCreatorJob.getCommand().setArguments(realignerTargetCreatorCommand.getCommand());
-        realignerTargetCreatorJob.addParent(parentJob);
+        realignerTargetCreatorJob.getParents().addAll(getRightCollection(inputFilesByGroup.values()));
 
-        IndelRealigner indelRealignerCommand = new IndelRealigner.Builder(java, gatkIndelRealignerXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+        Multimap<String, String> inputBamFilesByGroup = HashMultimap.create();
+        for (Entry<String, Collection<Pair<String, Job>>> e : inputFilesByGroup.asMap().entrySet()) {
+            for (Pair<String, Job> p : e.getValue()) {
+                inputBamFilesByGroup.put(e.getKey(), p.getLeft());
+            }
+        }
+
+        IndelRealigner.Builder indelRealignerCommandBuilder = new IndelRealigner.Builder(java, gatkIndelRealignerXmx + "g", tmpDir, gatk, gatkKey, dataDir)
                 .setReferenceSequence(refFasta)
-                .addInputBamFiles(inputFile)
+                .addInputBamFiles(inputBamFilesByGroup)
                 .addKnownIndelFile(dbsnpVcf)
-                .addInterval(chrSize)
                 .addIntervalFiles(intervalFiles)
                 .setIntervalPadding(intervalPadding)
                 .setTargetIntervalFile(realignerTargetCreatorCommand.getOutputFile())
-                .setExtraParameters(indelRealignerParams)
-                .build();
+                .setExtraParameters(indelRealignerParams);
+        for (String chrSize : chrSizes) {
+            indelRealignerCommandBuilder.addInterval(chrSize);
+        }
+
+        IndelRealigner indelRealignerCommand = indelRealignerCommandBuilder.build();
+
         Job indelRealignerJob = getWorkflow().createBashJob("GATKIndelRealigner")
                 .setMaxMemory(Integer.toString((gatkIndelRealignerXmx + gatkOverhead) * 1024))
                 .setQueue(this.queue)
                 .addParent(realignerTargetCreatorJob);
         indelRealignerJob.getCommand().setArguments(indelRealignerCommand.getCommand());
 
-        if (realignedBams.containsKey(chrSize)) {
-            throw new RuntimeException("Unexpected state: Duplicate interval key.");
-        }
-        for (String outputFile : indelRealignerCommand.getOutputFiles()) {
-            realignedBams.put(chrSize, Pair.of(outputFile, indelRealignerJob));
+        for (Entry<String, Collection<String>> e : indelRealignerCommand.getOutputFilesByGroup().entrySet()) {
+            String outputGroup = e.getKey();
+            for (String outputFile : e.getValue()) {
+                realignedBamsByGroup.put(outputGroup, Pair.of(outputFile, indelRealignerJob));
+            }
         }
 
+        return realignedBamsByGroup;
     }
 
-    protected void baseQRecalibrateJob(String OperationOnFile) {
+    protected Multimap<String, Pair<String, Job>> baseQRecalibrateJob(Multimap<String, Pair<String, Job>> realignedBamsByGroup) {
 
         //GATK Base Recalibrator ( https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_bqsr_BaseRecalibrator.php )
         BaseRecalibrator baseRecalibratorCommand = new BaseRecalibrator.Builder(java, gatkBaseRecalibratorXmx + "m", tmpDir, gatk, gatkKey, dataDir)
                 .setReferenceSequence(refFasta)
                 .setCovariates(bqsrCovariates)
                 .addKnownSite(dbsnpVcf)
-                .addInputFiles(getLeftCollection(realignedBams.values()))
+                .addInputFiles(getLeftCollection(realignedBamsByGroup.values()))
                 .addIntervalFiles(intervalFiles)
                 .setIntervalPadding(intervalPadding)
                 .setNumCpuThreadsPerDataThread(gatkBaseRecalibratorNct)
@@ -535,19 +574,18 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 .setMaxMemory(gatkBaseRecalibratorMem.toString())
                 .setThreads(gatkBaseRecalibratorSmp)
                 .setQueue(queue);
-        baseRecalibratorJob.getParents().addAll(getRightCollection(realignedBams.values()));
+        baseRecalibratorJob.getParents().addAll(getRightCollection(realignedBamsByGroup.values()));
         baseRecalibratorJob.getCommand().setArguments(baseRecalibratorCommand.getCommand());
-        
+
         SqwFile recalibrationData = createOutputFile(baseRecalibratorCommand.getOutputFile(), TXT_METATYPE, manualOutput);
         this.attachCVterms(recalibrationData, EDAM, "plain text format (unformatted),Read pre-processing,Sequence alignment refinement,Sequence alignment metadata");
         baseRecalibratorJob.addFile(recalibrationData);
 
         //GATK Analyze Covariates ( https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_bqsr_AnalyzeCovariates.php )
-        String outputName = OperationOnFile.endsWith(".") ? OperationOnFile.substring(0, OperationOnFile.lastIndexOf(".")) : OperationOnFile;
         AnalyzeCovariates analyzeCovariatesCommand = new AnalyzeCovariates.Builder(java, "4g", tmpDir, gatk, gatkKey, rDir, dataDir)
                 .setReferenceSequence(refFasta)
                 .setRecalibrationTable(baseRecalibratorCommand.getOutputFile())
-                .setOutputFileName(outputName)
+                //setOutputFileName(outputName)
                 .setExtraParameters(analyzeCovariatesParams)
                 .build();
         Job analyzeCovariatesJob = getWorkflow().createBashJob("GATKAnalyzeCovariates")
@@ -559,72 +597,82 @@ public class BamMPWorkflow extends SemanticWorkflow {
         SqwFile recalibrationReport = createOutputFile(analyzeCovariatesCommand.getPlotsReportFile(), PDF_METATYPE, manualOutput);
         this.attachCVterms(recalibrationReport, EDAM, "Read pre-processing,Sequence alignment refinement");
         analyzeCovariatesJob.addFile(recalibrationReport);
-        
-        for (Map.Entry<String, Pair<String, Job>> e : realignedBams.entries()) {
 
-                String chrSize = e.getKey();
-                String inputBam = e.getValue().getLeft();
-                
-        PrintReads.Builder printReadsCommandBuilder;
-        printReadsCommandBuilder = new PrintReads.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
-                .setReferenceSequence(refFasta)
-                .setPreserveQscoresLessThan(preserveQscoresLessThan)
-                .setCovariatesTablesFile(baseRecalibratorCommand.getOutputFile())
-                .addInputFile(inputBam)
-                .setIntervalPadding(intervalPadding)
-                .setExtraParameters(printReadsParams);
-        
-        //workaround for GATK error when -L unmapped and an empty input bam is provided
-        if("unmapped".equals(chrSize)){
-            // do not set -L/--intervals for "unmapped"
-        } else {
-            printReadsCommandBuilder.addInterval(chrSize);
+        Multimap<String, Pair<String, Job>> recalibratedBams = HashMultimap.create();
+        for (Entry<String, Collection<Pair<String, Job>>> e : realignedBamsByGroup.asMap().entrySet()) {
+
+            String outputGroup = e.getKey();
+            Collection<String> inputFiles = getLeftCollection(e.getValue());
+
+            for (String inputFile : inputFiles) {
+
+                PrintReads printReadsCommand = new PrintReads.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+                        .setReferenceSequence(refFasta)
+                        .setPreserveQscoresLessThan(preserveQscoresLessThan)
+                        .setCovariatesTablesFile(baseRecalibratorCommand.getOutputFile())
+                        .addInputFile(inputFile)
+                        .setIntervalPadding(intervalPadding)
+                        .setExtraParameters(printReadsParams).build();
+
+                Job printReadsJob = getWorkflow().createBashJob("GATKTableRecalibration")
+                        .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
+                        .setQueue(queue);
+
+                printReadsJob.addParent(baseRecalibratorJob);
+                printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
+
+                recalibratedBams.put(outputGroup, Pair.of(printReadsCommand.getOutputFile(), printReadsJob));
+            }
         }
-        
-        PrintReads printReadsCommand = printReadsCommandBuilder.build();
 
-        Job printReadsJob = getWorkflow().createBashJob("GATKTableRecalibration")
-                .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
-                .setQueue(queue);
+        return recalibratedBams;
+    }
 
-        printReadsJob.addParent(analyzeCovariatesJob);
-        printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
-        recalibratedBams.put(chrSize, Pair.of(printReadsCommand.getOutputFile(), printReadsJob));
+    protected Multimap<String, Pair<String, Job>> getUnmappedBamJob(Multimap<String, Pair<String, Job>> inputFilesByGroup) {
+        Multimap<String, Pair<String, Job>> unmappedFilesByGroup = HashMultimap.create();
+        for (Entry<String, Collection<Pair<String, Job>>> e : inputFilesByGroup.asMap().entrySet()) {
+            String outputGroup = e.getKey();
+            String inputFile = Iterables.getOnlyElement(e.getValue()).getLeft();
+            Job parentJob = Iterables.getOnlyElement(e.getValue()).getRight();
+
+            PrintReads printReadsCommand;
+            printReadsCommand = new PrintReads.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
+                    .setReferenceSequence(refFasta)
+                    .addInputFile(inputFile)
+                    .addInterval("unmapped")
+                    .setExtraParameters(printReadsParams)
+                    .build();
+
+            Job printReadsJob = getWorkflow().createBashJob("GATKPrintReadsUnmapped")
+                    .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
+                    .setQueue(queue);
+            printReadsJob.addParent(parentJob);
+            printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
+
+            unmappedFilesByGroup.put(outputGroup, Pair.of(printReadsCommand.getOutputFile(), printReadsJob));
         }
-    }
-    
-    protected Pair<String, Job> getUnmappedBamJob(Job parent, List<String> inputBams) {
-        PrintReadsUnmapped printReadsCommand;
-        printReadsCommand = new PrintReadsUnmapped.Builder(java, gatkPrintReadsXmx + "g", tmpDir, gatk, gatkKey, dataDir)
-                .setReferenceSequence(refFasta)
-                .addInputFiles(inputBams)
-                .addInterval("unmapped")
-                .setExtraParameters(printReadsParams)
-                .build();
 
-        Job printReadsJob = getWorkflow().createBashJob("GATKPrintReadsUnmapped")
-                .setMaxMemory(Integer.toString((gatkPrintReadsXmx + gatkOverhead) * 1024))
-                .setQueue(queue);
-
-        printReadsJob.addParent(parent);
-        printReadsJob.getCommand().setArguments(printReadsCommand.getCommand());
-        return Pair.of(printReadsCommand.getOutputFile(), printReadsJob);
+        return unmappedFilesByGroup;
     }
-   
+
     /**
-     * Note that file path should not have extension
-     * @param inputFile
-     * @return 
+     * Index will be written to the same directory as the bam
+     *
+     * @param inputFilePath
+     *
+     * @return
      */
-    protected Job indexBamJob(String inputFile) {
-    Job jobIndex = this.getWorkflow().createBashJob("index_bam");
+    protected Job getIndexBamJob(String inputFilePath) {
+        String outputFilePath = FilenameUtils.getPath(inputFilePath) + FilenameUtils.getBaseName(inputFilePath) + ".bai";
+
+        Job jobIndex = this.getWorkflow().createBashJob("index_bam");
         jobIndex.setCommand(this.java + " -Xmx3G -jar "
                 + this.picard_dir + "BuildBamIndex.jar"
-                + " I=" + inputFile + "bam"
-                + " O=" + inputFile + "bai");
+                + " I=" + inputFilePath
+                + " O=" + outputFilePath);
         jobIndex.setMaxMemory("5000");
-        jobIndex.setQueue(getOptionalProperty("queue", ""));      
-        
+        jobIndex.setQueue(getOptionalProperty("queue", ""));
+
         return jobIndex;
     }
 
@@ -642,6 +690,31 @@ public class BamMPWorkflow extends SemanticWorkflow {
             ts.add(p.getRight());
         }
         return ts;
+    }
+
+    private Map<String, Set<String>> getMapOfSets(List<String> keys, List<String> values, String valuesDelimiter) {
+        if (keys.isEmpty() || values.isEmpty() || keys.size() != values.size()) {
+            error("key size (" + keys.size() + ") != values size (" + values.size() + ")");
+        }
+        Map<String, Set<String>> map = new HashMap<>();
+        for (int i = 0; i < keys.size(); i++) {
+            List<String> valsList = Arrays.asList(values.get(i).split(valuesDelimiter));
+            Set<String> vals = new LinkedHashSet<>(valsList);
+            if (map.put(keys.get(i), vals) != null) {
+                error("Duplicate key detected = [" + keys.get(i));
+            }
+        }
+        return map;
+    }
+
+    private <T> boolean hasDuplicates(Collection<T> c) {
+        Set<T> s = new HashSet<>(c);
+        return c.size() != s.size();
+    }
+
+    private void error(String msg) {
+        Log.error(msg);
+        setWorkflowInvalid();
     }
 
 }
