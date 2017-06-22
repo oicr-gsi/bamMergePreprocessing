@@ -188,7 +188,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         this.splitCigarMem = Integer.parseInt(getProperty("split_cigar_mem"));
         this.splitCigarRMQF = Integer.parseInt(getProperty("split_cigar_RMQF"));
         this.splitCigarRMQT = Integer.parseInt(getProperty("split_cigar_RMQT"));
-        this.flagReassignOneMappingQuality = Boolean.parseBoolean(getProperty("Reassign_One_Mapping_Quality"));
+        this.flagReassignOneMappingQuality = Boolean.parseBoolean(getProperty("reassign_One_Mapping_Quality"));
 
         //GATK
         this.gatkRealignTargetCreatorXmx = Integer.parseInt(getProperty("gatk_realign_target_creator_xmx"));
