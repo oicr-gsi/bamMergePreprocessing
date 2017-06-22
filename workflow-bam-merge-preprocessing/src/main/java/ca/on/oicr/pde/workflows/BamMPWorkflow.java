@@ -44,6 +44,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private boolean doDedup = true;
     private boolean doRemoveDups = true;
     private boolean doFilter = true;
+    private boolean doSplitNTrim = true; // flag for split and trim 
     private final boolean doIndelRealignment = true; //currently this is not an optional step
     private final boolean assumeSorted = false; // we should have assumeSorted set to false ALWAYS (due to re-structuring)
     private boolean useThreading = true;
@@ -70,7 +71,13 @@ public class BamMPWorkflow extends SemanticWorkflow {
     //References
     private String refFasta;
     private String dbsnpVcf;
-
+    
+    // SPLIT CIGAR
+    private Integer splitCigarXmxg;
+    private Integer splitCigarMem;
+    private Integer splitCigarRMQF;
+    private Integer splitCigarRMQT;
+    
     //GATK
     private Integer gatkRealignTargetCreatorXmx;
     private Integer gatkIndelRealignerXmx;
@@ -143,6 +150,8 @@ public class BamMPWorkflow extends SemanticWorkflow {
         doFilter = Boolean.parseBoolean(getProperty("do_sam_filter"));
         doRemoveDups = Boolean.parseBoolean(getOptionalProperty("do_remove_duplicates", "false"));
         doDedup = doRemoveDups ? true : Boolean.parseBoolean(getProperty("do_mark_duplicates"));
+        doSplitNTrim = Boolean.parseBoolean(getProperty("do_split_trim_reassign_quality"));
+        //doSplitNTrim = doDedup ? true : Boolean.parseBoolean(getProperty("do_split_trim_reassign_quality")); // flag to check if mark duplicates is complete
 
         //Picard
         markDuplicatesJar = getProperty("picard_mark_duplicates");
@@ -173,6 +182,12 @@ public class BamMPWorkflow extends SemanticWorkflow {
         //References
         this.refFasta = getProperty("ref_fasta");
         this.dbsnpVcf = getProperty("gatk_dbsnp_vcf");
+        
+        //split trim reassign mapping quality
+        this.splitCigarXmxg = Integer.parseInt(getProperty("split_cigar_Xmxg"));
+        this.splitCigarMem = Integer.parseInt(getProperty("split_cigar_mem"));
+        this.splitCigarRMQF = Integer.parseInt(getProperty("split_cigar_RMQF"));
+        this.splitCigarRMQT = Integer.parseInt(getProperty("split_cigar_RMQT"));
 
         //GATK
         this.gatkRealignTargetCreatorXmx = Integer.parseInt(getProperty("gatk_realign_target_creator_xmx"));
@@ -359,15 +374,38 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 SqwFile metricFile = this.createOutputFile(dataDir + outputName + "metrics", TXT_METATYPE, this.manualOutput);
                 this.attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
                 jobDedup.addFile(metricFile);
-
+                
                 //link this file to its LIMS metadata (IUS-LimsKeys)
                 if (outputSwidsByGroup.containsKey(outputGroup)) {
                     metricFile.setParentAccessions(outputSwidsByGroup.get(outputGroup));
                 }
-
+               
                 parentJob = jobDedup;
                 inputFilePath = outputFilePath;
             }
+            
+            // SpliNTrim N Cigars and Reassign mapping quality 
+            if(doSplitNTrim){
+                String outputName = outputNameByOutputGroup.get(outputGroup) + "split.";
+                outputNameByOutputGroup.put(outputGroup, outputName);
+                String outputFilePath = dataDir + outputName + "bam";
+                Job jobSplitNCigar = this.splitNCigarReads(inputFilePath, outputFilePath); // create a job function to wrap the following command line
+                        /*
+                        java -Xmx16G -jar $GATKROOT/GenomeAnalysisTK.jar \
+                            -T SplitNCigarReads \
+                            -R /.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa \
+                            -I TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.bam \
+                            -o TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \
+                            -rf ReassignOneMappingQuality \
+                            -RMQF 255 \
+                            -RMQT 60 \
+                            -U ALLOW_N_CIGAR_READS
+                         */
+                jobSplitNCigar.addParent(parentJob);
+                parentJob = jobSplitNCigar;
+                inputFilePath = outputFilePath;    
+                }
+
 
             Job jobIdx = getIndexBamJob(inputFilePath);
             jobIdx.addParent(parentJob);
@@ -376,7 +414,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
             inputFileAndJobToNextStepByOutputGroup = mergedBamsByGroup;
         }
-
+        
         if (doIndelRealignment) {
             for (String outputGroup : outputIdentifiers) {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "realign.";
@@ -490,7 +528,36 @@ public class BamMPWorkflow extends SemanticWorkflow {
         job.setQueue(getOptionalProperty("queue", ""));
         return job;
     }
-
+    
+    // splitNCigar
+    protected Job splitNCigarReads(String inputFile, String outputFile) {
+            /**
+        java -Xmx16G -jar $GATKROOT/GenomeAnalysisTK.jar \
+            -T SplitNCigarReads \
+            -R /.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa \
+            -I TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.bam \
+            -o TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \
+            -rf ReassignOneMappingQuality \
+            -RMQF 255 \
+            -RMQT 60 \
+            -U ALLOW_N_CIGAR_READS
+    **/
+       Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
+       jobSplitCigar.setCommand(this.java + " -Xmx" + (splitCigarXmxg).toString() +"G" + " -jar "
+                                + this.gatk + " -T SplitNCigarReads"
+                                + " -R " + refFasta
+                                + " -I " + inputFile
+                                + " -o " + outputFile
+                                + " -rf " + "ReassignOneMappingQuality"
+                                + " -RMQF " + splitCigarRMQF
+                                + " -RMQT " + splitCigarRMQT
+                                + " -U ALLOW_N_CIGAR_READS");
+       jobSplitCigar.setMaxMemory(splitCigarMem.toString());
+       jobSplitCigar.setQueue(getOptionalProperty("queue", ""));
+       
+       return jobSplitCigar;
+    }
+    
     protected Multimap<String, Pair<String, Job>> indelRealignJob(Multimap<String, Pair<String, Job>> inputFilesByGroup, Set<String> chrSizes) {
 
         if (chrSizes != null && !chrSizes.isEmpty() && chrSizes.contains("unmapped")) {
