@@ -535,7 +535,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
        Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
        if (!flagReassignOneMappingQuality){
            jobSplitCigar.setCommand(this.java + " -Xmx" + (splitCigarXmxg).toString() +"G" + " -jar "
-                                + this.gatk + " -T SplitNCigarReads"
+                                + gatk + " -T SplitNCigarReads"
                                 + " -R " + refFasta
                                 + " -I " + inputFile
                                 + " -o " + outputFile
@@ -547,7 +547,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
        }
        else {
            jobSplitCigar.setCommand(this.java + " -Xmx" + (splitCigarXmxg).toString() +"G" + " -jar "
-                                + this.gatk + " -T SplitNCigarReads"
+                                + gatk + " -T SplitNCigarReads"
                                 + " -R " + refFasta
                                 + " -I " + inputFile
                                 + " -o " + outputFile
