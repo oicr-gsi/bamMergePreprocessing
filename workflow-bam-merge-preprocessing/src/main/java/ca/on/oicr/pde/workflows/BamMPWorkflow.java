@@ -398,7 +398,6 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 parentJob = jobSplitNCigar;
                 inputFilePath = outputFilePath;    
                 }
-            
             mergedBamsByGroup.put(outputGroup, Pair.of(inputFilePath, jobIdx));
 
             inputFileAndJobToNextStepByOutputGroup = mergedBamsByGroup;
