@@ -387,18 +387,19 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
             Job jobIdx = getIndexBamJob(inputFilePath);
             jobIdx.addParent(parentJob);
+            parentJob = jobIdx;
 
             // SpliNTrim N Cigars and Reassign mapping quality 
-            if(doSplitNTrim){
+            if (doSplitNTrim) {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "split.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
                 Job jobSplitNCigar = this.splitNCigarReads(inputFilePath, outputFilePath);
                 jobSplitNCigar.addParent(parentJob);
                 parentJob = jobSplitNCigar;
-                inputFilePath = outputFilePath;    
-                }
-            mergedBamsByGroup.put(outputGroup, Pair.of(inputFilePath, jobIdx));
+                inputFilePath = outputFilePath;
+            }
+            mergedBamsByGroup.put(outputGroup, Pair.of(inputFilePath, parentJob));
 
             inputFileAndJobToNextStepByOutputGroup = mergedBamsByGroup;
         }
