@@ -736,6 +736,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         Job jobIndex = this.getWorkflow().createBashJob("index_bam");
         jobIndex.setCommand(this.java + " -Xmx3G -jar "
                 + this.picard_dir + "BuildBamIndex.jar"
+                + " VALIDATION_STRINGENCY=SILENT"
                 + " I=" + inputFilePath
                 + " O=" + outputFilePath);
         jobIndex.setMaxMemory("5000");
