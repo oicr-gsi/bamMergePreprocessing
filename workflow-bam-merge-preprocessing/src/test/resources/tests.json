@@ -115,7 +115,7 @@
                 "do_remove_duplicates": "false",
                 "do_split_trim_reassign_quality": "true",
                 "reassign_One_Mapping_Quality": "true",
-                "input_files": "/.mounts/labs/PDE/data/testdata/RNA/bam/STAR_bams/TGL01_0001_Sk_P_PE_251_WT.Aligned.sortedByCoord.out.bam",
+                "input_files": "/.mounts/labs/PDE/data/testdata/RNA/bam/STAR_bams/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam",
                 "chr_sizes": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX"
             }
         }, {
