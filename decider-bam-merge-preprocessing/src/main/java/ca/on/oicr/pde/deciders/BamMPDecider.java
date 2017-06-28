@@ -45,7 +45,7 @@ public class BamMPDecider extends OicrDecider {
     private final Map<String, GroupableFile> fileSwaToFile = new HashMap<>();
     private String ltt = "";
     private List<String> tissueTypes = null;
-    private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
+    private Boolean doFilter = true, doDedup = true, doRemoveDups = true, doSplitNTrim = false;
     private String queue = null;
 
     private String chrSizes = null;
@@ -100,6 +100,7 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
+        defineArgument("do-split-and-trim", "Whether to run spliNcigar reads on the BAM file. Default: false", true);
     }
 
     @Override
@@ -188,6 +189,10 @@ public class BamMPDecider extends OicrDecider {
             } else {
                 throw new RuntimeException("--downsampling parameter expects true/false.");
             }
+        }
+        
+        if (options.has("do-split-and-trim")) {
+            doSplitNTrim = Boolean.valueOf(getArgument("do_split_trim_reassign_quality"));
         }
 
         return super.init();
@@ -398,6 +403,7 @@ public class BamMPDecider extends OicrDecider {
 
         run.addProperty("do_mark_duplicates", doDedup.toString());
         run.addProperty("do_remove_duplicates", doRemoveDups.toString());
+        run.addProperty("do_split_trim_reassign_quality", doSplitNTrim.toString());
         run.addProperty("do_sam_filter", doFilter.toString());
         run.addProperty("samtools_filter_flag", filterFlag.toString());
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
