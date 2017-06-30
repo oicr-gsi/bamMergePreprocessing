@@ -68,7 +68,7 @@
                 "--group-by": "ROOT_SAMPLE_NAME",
                 "--parent-wf-accessions": "5126914",
                 "--before-date": "2017-04-12",
-                "--do-split-and-trim": ""
+                "--do-split-and-trim": "true"
             }
         }
     ]

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import joptsimple.OptionParser;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
@@ -100,7 +101,7 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
-        defineArgument("do-split-and-trim", "Whether to run spliNcigar reads on the BAM file. Default: false", false);
+        parser.accepts("do-split-and-trim", "Optional: Whether to run spliNcigar reads on the BAM file. Default: false").withRequiredArg();
     }
 
     @Override

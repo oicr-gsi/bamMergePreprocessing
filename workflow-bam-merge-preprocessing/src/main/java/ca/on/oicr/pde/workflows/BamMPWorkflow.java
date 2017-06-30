@@ -520,43 +520,38 @@ public class BamMPWorkflow extends SemanticWorkflow {
     
     // splitNCigar
     protected Job splitNCigarReads(String inputFile, String outputFile) {
-    /** This method wraps the following command:
-        java -Xmx16G -jar $GATKROOT/GenomeAnalysisTK.jar \
-            -T SplitNCigarReads \
-            -R /.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa \
-            -I TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.bam \
-            -o TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \
-            -rf ReassignOneMappingQuality \
-            -RMQF 255 \
-            -RMQT 60 \
-            -U ALLOW_N_CIGAR_READS
-    **/
-       Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
-       if (!flagReassignOneMappingQuality){
-           jobSplitCigar.setCommand(this.java + " -Xmx" + (splitCigarXmxg).toString() +"G" + " -jar "
-                                + gatk + " -T SplitNCigarReads"
-                                + " -R " + refFasta
-                                + " -I " + inputFile
-                                + " -o " + outputFile
-                                + " -rf " + "ReassignOneMappingQuality"
-                                + " -RMQF " + splitCigarRMQF
-                                + " -RMQT " + splitCigarRMQT
-                                + " -U ALLOW_N_CIGAR_READS"
-                                + " -fixNDN");
-       }
-       else {
-           jobSplitCigar.setCommand(this.java + " -Xmx" + (splitCigarXmxg).toString() +"G" + " -jar "
-                                + gatk + " -T SplitNCigarReads"
-                                + " -R " + refFasta
-                                + " -I " + inputFile
-                                + " -o " + outputFile
-                                + " -U ALLOW_N_CIGAR_READS"
-                                + " -fixNDN");
-       }
-       jobSplitCigar.setMaxMemory(Integer.toString((splitCigarMem + gatkOverhead) * 1024));
-       jobSplitCigar.setQueue(getOptionalProperty("queue", ""));
-       
-       return jobSplitCigar;
+        /**
+         * This method wraps the following command: java -Xmx16G -jar
+         * $GATKROOT/GenomeAnalysisTK.jar \ -T SplitNCigarReads \ -R
+         * /.mounts/labs/PDE/data/gatkAnnotationResources/hg19_random.fa \ -I
+         * TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.bam \ -o
+         * TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \ -rf
+         * ReassignOneMappingQuality \ -RMQF 255 \ -RMQT 60 \ -U
+         * ALLOW_N_CIGAR_READS
+    *
+         */
+        Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
+
+        String cmd = this.java + " -Xmx" + (splitCigarXmxg).toString() + "G" + " -jar "
+                + gatk + " -T SplitNCigarReads"
+                + " -R " + refFasta
+                + " -I " + inputFile
+                + " -o " + outputFile;
+        
+        if (flagReassignOneMappingQuality) {
+            cmd += " -rf " + "ReassignOneMappingQuality"
+                    + " -RMQF " + splitCigarRMQF
+                    + " -RMQT " + splitCigarRMQT;
+        }
+
+        cmd += " -U ALLOW_N_CIGAR_READS"
+                + " -fixNDN";
+
+        jobSplitCigar.setCommand(cmd);
+        jobSplitCigar.setMaxMemory(Integer.toString((splitCigarMem + gatkOverhead) * 1024));
+        jobSplitCigar.setQueue(getOptionalProperty("queue", ""));
+
+        return jobSplitCigar;
     }
     
     protected Multimap<String, Pair<String, Job>> indelRealignJob(Multimap<String, Pair<String, Job>> inputFilesByGroup, Set<String> chrSizes) {
