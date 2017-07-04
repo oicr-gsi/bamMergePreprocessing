@@ -193,7 +193,7 @@ public class BamMPDecider extends OicrDecider {
         }
         
         if (options.has("do-split-and-trim")) {
-            doSplitNTrim = Boolean.valueOf(getArgument("do_split_trim_reassign_quality"));
+            doSplitNTrim = Boolean.valueOf(getArgument("do-split-and-trim"));
         }
 
         return super.init();
