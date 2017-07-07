@@ -71,14 +71,13 @@ public class BamMPWorkflow extends SemanticWorkflow {
     //References
     private String refFasta;
     private String dbsnpVcf;
-    
+
     // SPLIT CIGAR
     private Integer splitCigarXmxg;
-    private Integer splitCigarMem;
     private Integer splitCigarRMQF;
     private Integer splitCigarRMQT;
     private Boolean flagReassignOneMappingQuality;
-    
+
     //GATK
     private Integer gatkRealignTargetCreatorXmx;
     private Integer gatkIndelRealignerXmx;
@@ -182,10 +181,9 @@ public class BamMPWorkflow extends SemanticWorkflow {
         //References
         this.refFasta = getProperty("ref_fasta");
         this.dbsnpVcf = getProperty("gatk_dbsnp_vcf");
-        
+
         //split trim reassign mapping quality
         this.splitCigarXmxg = Integer.parseInt(getProperty("split_cigar_Xmxg"));
-        this.splitCigarMem = Integer.parseInt(getProperty("split_cigar_mem"));
         this.splitCigarRMQF = Integer.parseInt(getProperty("split_cigar_RMQF"));
         this.splitCigarRMQT = Integer.parseInt(getProperty("split_cigar_RMQT"));
         this.flagReassignOneMappingQuality = Boolean.parseBoolean(getProperty("reassign_One_Mapping_Quality"));
@@ -389,7 +387,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
             jobIdx.addParent(parentJob);
             parentJob = jobIdx;
 
-            // SpliNTrim N Cigars and Reassign mapping quality 
+            // SplitNTrim N Cigars and Reassign mapping quality 
             if (doSplitNTrim) {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "split.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
@@ -491,8 +489,8 @@ public class BamMPWorkflow extends SemanticWorkflow {
      *
      * <code>samtools view -b -F 260 > output.bam</code>
      *
-     * @param jobName    the name of the samtools filter job
-     * @param inputFile  the input bam file
+     * @param jobName the name of the samtools filter job
+     * @param inputFile the input bam file
      * @param outputFile the output bam file
      *
      * @return
@@ -517,7 +515,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         job.setQueue(getOptionalProperty("queue", ""));
         return job;
     }
-    
+
     // splitNCigar
     protected Job splitNCigarReads(String inputFile, String outputFile) {
         /**
@@ -527,8 +525,8 @@ public class BamMPWorkflow extends SemanticWorkflow {
          * TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.bam \ -o
          * TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \ -rf
          * ReassignOneMappingQuality \ -RMQF 255 \ -RMQT 60 \ -U
-         * ALLOW_N_CIGAR_READS
-    *
+         * ALLOW_N_CIGAR_READS -fixNDN
+         *
          */
         Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
 
@@ -537,7 +535,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 + " -R " + refFasta
                 + " -I " + inputFile
                 + " -o " + outputFile;
-        
+
         if (flagReassignOneMappingQuality) {
             cmd += " -rf " + "ReassignOneMappingQuality"
                     + " -RMQF " + splitCigarRMQF
@@ -548,12 +546,12 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 + " -fixNDN";
 
         jobSplitCigar.setCommand(cmd);
-        jobSplitCigar.setMaxMemory(Integer.toString((splitCigarMem + gatkOverhead) * 1024));
+        jobSplitCigar.setMaxMemory(Integer.toString((splitCigarXmxg + gatkOverhead) * 1024));
         jobSplitCigar.setQueue(getOptionalProperty("queue", ""));
 
         return jobSplitCigar;
     }
-    
+
     protected Multimap<String, Pair<String, Job>> indelRealignJob(Multimap<String, Pair<String, Job>> inputFilesByGroup, Set<String> chrSizes) {
 
         if (chrSizes != null && !chrSizes.isEmpty() && chrSizes.contains("unmapped")) {

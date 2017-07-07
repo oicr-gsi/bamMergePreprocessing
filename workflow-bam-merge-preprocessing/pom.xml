@@ -21,6 +21,7 @@
         <workflow-name>BamMergePreprocessing</workflow-name>
         <picard-version>1.89</picard-version>
         <samtools-version>0.1.19</samtools-version>
+        <gatk-version>3.4-46</gatk-version>
     </properties>
 
     <dependencies>

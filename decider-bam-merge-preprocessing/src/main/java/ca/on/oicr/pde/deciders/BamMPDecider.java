@@ -101,7 +101,7 @@ public class BamMPDecider extends OicrDecider {
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
-        parser.accepts("do-split-and-trim", "Optional: Whether to run spliNcigar reads on the BAM file. Default: false").withRequiredArg();
+        parser.accepts("do-split-and-trim", "Optional: Whether to run splitNcigar reads on the BAM file. Default: false").withRequiredArg();
     }
 
     @Override
