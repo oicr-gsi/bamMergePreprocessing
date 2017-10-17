@@ -709,7 +709,7 @@
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
         "geo_template_type" : [ [ "Illumina PE Library" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
-        "geo_tissue_preparation" : [ [ "FFPE" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],

@@ -3,7 +3,6 @@ package ca.on.oicr.pde.deciders;
 import ca.on.oicr.pde.deciders.GroupableFileFactory.GroupableFile;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.MultimapBuilder;
@@ -12,21 +11,16 @@ import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
-import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * This decider has several modifications to allow it to group files properly
  * and select the appropriate files for processing.
- *
+ * <p>
  * <ol> <li> separateFiles: captures information about the file necessary for
  * grouping and for filtering. It also starts filtering the files, choosing only
  * the most recent file from each sequencer run/lane/barcode/metatype for
@@ -39,10 +33,8 @@ import org.apache.logging.log4j.Logger;
  *
  * @author mtaschuk
  */
-public class BamMPDecider extends OicrDecider {
+public class BamMPDecider extends MergingDecider {
 
-    private final GroupableFileFactory groupableFileFactory;
-    private final Map<String, GroupableFile> fileSwaToFile = new HashMap<>();
     private String ltt = "";
     private List<String> tissueTypes = null;
     private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
@@ -75,12 +67,9 @@ public class BamMPDecider extends OicrDecider {
         }
     };
 
-    private final Logger log = LogManager.getLogger(BamMPDecider.class);
-
     public BamMPDecider() {
-        super();
+        super(LogManager.getLogger(BamMPDecider.class));
         files = new HashMap<>();
-        groupableFileFactory = new GroupableFileFactory();
 
         defineArgument("library-template-type", "Restrict the processing to samples of a particular template type, e.g. WG, EX, TS", false);
         defineArgument("tissue-type", "Restrict the processing to samples of particular tissue types, e.g. P, R, X, C. Multiple values can be comma-separated. Tissue types are processed individually (all R's together, all C's together)", false);
@@ -193,27 +182,28 @@ public class BamMPDecider extends OicrDecider {
         return super.init();
     }
 
-    /**
-     * Final check
-     *
-     * @param commaSeparatedFilePaths
-     * @param commaSeparatedParentAccessions
-     *
-     * @return
-     */
     @Override
-    protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
+    public boolean checkFilePassesFilterBeforeGrouping(FileAttributes fileAttributes) {
+        boolean metatypeOK = false;
+        boolean bamtypeOK = false;
 
-        if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
-            this.downsamplingType = GATK_DT[0];
+        try {
+            if (fileAttributes.getMetatype().equals(BAM_METATYPE)) {
+                metatypeOK = true;
+            }
+            if (!fileAttributes.getPath().contains(TRANSCRIPTOME_SUFFIX)) {
+                bamtypeOK = true;
+            }
+        } catch (Exception e) {
+            log.error("Error checking a file");
+            return false;
         }
 
-        return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
+        return metatypeOK && bamtypeOK;
     }
 
     @Override
-    protected boolean checkFileDetails(FileAttributes attributes) {
-        boolean rv = super.checkFileDetails(attributes);
+    protected boolean checkFilePassesFilterAfterGrouping(FileAttributes attributes) {
         if (attributes.basename().contains(TRANSCRIPTOME_SUFFIX)) {
             log.debug("Found Transcriptome-aligned reads");
             return false;
@@ -231,121 +221,12 @@ public class BamMPDecider extends OicrDecider {
         }
 
         this.currentTemplate = currentTemplateType;
-        return rv;
-    }
-
-    /**
-     * This method is extended in the GATK decider so that only the most recent
-     * file for each sequencer run, lane, barcode and filetype is kept.
-     *
-     * @return candidate groups of files to scheduled workflow runs on
-     */
-    @Override
-    public Map<String, List<ReturnValue>> separateFiles(List<ReturnValue> vals, String groupBy) {
-        Map<String, ReturnValue> iusDeetsToRV = new HashMap<>();
-
-        //Iterate through the potential files
-        for (ReturnValue currentRV : vals) {
-            //set aside information needed for subsequent processing
-            boolean metatypeOK = false;
-            boolean bamtypeOK = false;
-
-            for(FileMetadata fm : currentRV.getFiles()) {
-                try {
-                    if (fm.getMetaType().equals(BAM_METATYPE)) {
-                        metatypeOK = true;
-                    }
-                    if (!fm.getFilePath().contains(TRANSCRIPTOME_SUFFIX)) {
-                        bamtypeOK = true;
-                    }
-                } catch (Exception e) {
-                    log.error("Error checking a file");
-                    continue;
-                }
-            }
-            if (!metatypeOK || !bamtypeOK) {
-                continue; // Go to the next value
-            }
-            GroupableFile currentFile = groupableFileFactory.getGroupableFile(currentRV);
-            fileSwaToFile.put(currentRV.getAttribute(Header.FILE_SWA.getTitle()), currentFile);
-
-            //make sure you only have the most recent single file for each
-            //sequencer run + lane + barcode + meta-type
-            String fileDeets = currentFile.getIusDetails();
-            Date currentDate = currentFile.getDate();
-
-            //if there is no entry yet, add it
-            if (iusDeetsToRV.get(fileDeets) == null) {
-                log.debug("Adding file " + fileDeets + " -> \n\t" + currentFile.getPath());
-                iusDeetsToRV.put(fileDeets, currentRV);
-            } //if there is an entry, compare the current value to the 'old' one in
-            //the groupedFiles. if the current date is newer than the 'old' date, replace
-            //it in the groupedFiles
-            else {
-                ReturnValue oldRV = iusDeetsToRV.get(fileDeets);
-                GroupableFile oldFile = fileSwaToFile.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
-                Date oldDate = oldFile.getDate();
-                if (currentDate.after(oldDate)) {
-                    log.debug("Adding file " + fileDeets + " -> \n\t" + currentFile.getDate()
-                            + "\n\t instead of file "
-                            + "\n\t" + oldFile.getDate());
-                    iusDeetsToRV.put(fileDeets, currentRV);
-                } else {
-                    log.debug("Disregarding file " + fileDeets + " -> \n\t" + currentFile.getDate()
-                            + "\n\tas older than duplicate sequencer run/lane/barcode in favour of "
-                            + "\n\t" + oldFile.getDate());
-                    log.debug(currentDate + " is before " + oldDate);
-                }
-            }
-        }
-
-        //only use those files that entered into the iusDeetsToRV
-        //since it's a map, only the most recent values
-        Map<String, List<ReturnValue>> groupedFiles;
-        if (options.hasArgument("group-by") && getHeadersToGroupBy() != null) {
-            groupedFiles = super.separateFiles(new ArrayList<>(iusDeetsToRV.values()), getHeadersToGroupBy());
-        } else {
-            //use the default grouping
-            ListMultimap<String, ReturnValue> hm = ArrayListMultimap.create();
-            for (ReturnValue rv : iusDeetsToRV.values()) {
-                hm.put(fileSwaToFile.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute(), rv);
-            }
-            groupedFiles = Multimaps.asMap(hm);
-        }
-
-        if (options.has("verbose")) {
-            for (Entry<String, List<ReturnValue>> e : groupedFiles.entrySet()) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("group = ");
-                sb.append(e.getKey());
-                sb.append("\n");
-
-                List<String> fileInfos = new ArrayList<>();
-                for (ReturnValue rv : e.getValue()) {
-                    StringBuilder fileInfo = new StringBuilder();
-                    fileInfo.append(fileSwaToFile.get(rv.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute());
-                    fileInfo.append(" -> ");
-                    fileInfo.append(Iterables.getOnlyElement(rv.getFiles()).getFilePath());
-                    fileInfos.add(fileInfo.toString());
-                }
-                sb.append(Joiner.on("\n").join(fileInfos));
-                log.debug(sb.toString());
-            }
-        }
-
-        int groupedFilesCount = 0;
-        for (List<ReturnValue> rvs : groupedFiles.values()) {
-            groupedFilesCount += rvs.size();
-        }
-
-        log.info("separateFiles summary: group by = [{}], input file count = [{}], group count = [{}], grouped file count = [{}]",
-                groupBy, vals.size(), groupedFiles.size(), groupedFilesCount);
-
-        return groupedFiles;
+        return true;
     }
 
     @Override
-    public ReturnValue customizeRun(WorkflowRun run) {
+    public ReturnValue customizeWorkflowRun(WorkflowRun run) {
+        ReturnValue rv = new ReturnValue();
 
         //the following data structures needs keys sorted - use a tree map to sort keys
         ListMultimap<String, String> inputFilePathsByGroup = MultimapBuilder.treeKeys().linkedListValues().build();
@@ -360,9 +241,7 @@ public class BamMPDecider extends OicrDecider {
             String fileGroup = file.getGroupByAttribute();
 
             inputFilePathsByGroup.put(fileGroup, inputFile.getPath());
-            iusLimsKeysByGroup.put(fileGroup,
-                    currentWorkflowRun.getInputIusToOutputIus()
-                            .get(inputFile.getOtherAttribute(Header.IUS_SWA.getTitle())));
+            iusLimsKeysByGroup.put(fileGroup, run.getInputIusToOutputIus().get(inputFile.getOtherAttribute(Header.IUS_SWA.getTitle())));
 
             String idRaw = getCombinedFileName(new FileAttributes[]{inputFile});
             String[] tokens = idRaw.split("_");
@@ -417,6 +296,9 @@ public class BamMPDecider extends OicrDecider {
             run.addProperty("samtools_min_map_quality", minMapQuality.toString());
         }
 
+        if (this.currentTemplate != null && this.currentTemplate.equals("TS")) {
+            this.downsamplingType = GATK_DT[0];
+        }
         if (downsamplingType != null && !downsamplingType.isEmpty()) {
             run.addProperty("downsampling_type", downsamplingType);
         }
@@ -427,7 +309,7 @@ public class BamMPDecider extends OicrDecider {
             run.addProperty("queue", " ");
         }
 
-        return new ReturnValue();
+        return rv;
     }
 
     public static void main(String args[]) {
