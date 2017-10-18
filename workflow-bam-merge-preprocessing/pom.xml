@@ -43,6 +43,7 @@
             <groupId>ca.on.oicr.pde.tools</groupId>
             <artifactId>gatk3</artifactId>
             <version>1.4</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 
