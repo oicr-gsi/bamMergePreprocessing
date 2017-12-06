@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import joptsimple.OptionParser;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +38,7 @@ public class BamMPDecider extends MergingDecider {
 
     private String ltt = "";
     private List<String> tissueTypes = null;
-    private Boolean doFilter = true, doDedup = true, doRemoveDups = true;
+    private Boolean doFilter = true, doDedup = true, doRemoveDups = true, doSplitNTrim = false;
     private String queue = null;
 
     private String chrSizes = null;
@@ -89,6 +90,7 @@ public class BamMPDecider extends MergingDecider {
         defineArgument("downsampling", "Set whether or not the variant caller should downsample the reads. Default: false for TS, true for everything else", false);
         defineArgument("dbsnp", "Specify the absolute path to the dbSNP vcf.", false);
         defineArgument("disable-bqsr", "Disable BQSR (BaseRecalibrator + PrintReads steps) and pass indel realigned BAMs directly to variant calling.", false);
+        parser.accepts("do-split-and-trim", "Optional: Whether to run splitNcigar reads on the BAM file. Default: false").withRequiredArg();
     }
 
     @Override
@@ -177,6 +179,10 @@ public class BamMPDecider extends MergingDecider {
             } else {
                 throw new RuntimeException("--downsampling parameter expects true/false.");
             }
+        }
+        
+        if (options.has("do-split-and-trim")) {
+            doSplitNTrim = Boolean.valueOf(getArgument("do-split-and-trim"));
         }
 
         return super.init();
@@ -277,6 +283,7 @@ public class BamMPDecider extends MergingDecider {
 
         run.addProperty("do_mark_duplicates", doDedup.toString());
         run.addProperty("do_remove_duplicates", doRemoveDups.toString());
+        run.addProperty("do_split_trim_reassign_quality", doSplitNTrim.toString());
         run.addProperty("do_sam_filter", doFilter.toString());
         run.addProperty("samtools_filter_flag", filterFlag.toString());
         run.addProperty("stand-emit-conf", String.valueOf(this.standEmitConf));
