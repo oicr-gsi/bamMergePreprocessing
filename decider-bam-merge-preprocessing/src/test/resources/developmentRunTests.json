@@ -60,6 +60,16 @@
                 "--parent-wf-accessions": "2967897",
                 "--before-date": "2017-04-12"
             }
+        },
+        {
+            "id": "tgl rnaseq test",
+            "parameters": {
+                "--root-sample-name": "TGL01_0009",
+                "--group-by": "ROOT_SAMPLE_NAME",
+                "--parent-wf-accessions": "10067501",
+                "--before-date": "2017-08-01",
+                "--do-split-and-trim": "true"
+            }
         }
     ]
 }
