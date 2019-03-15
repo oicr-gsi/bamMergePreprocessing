@@ -10,6 +10,9 @@
   "maxInputFiles" : 10,
   "minInputFiles" : 2,
   "totalInputFiles" : 102,
+  "maxOutputFileProvenanceRecords" : 10,
+  "minOutputFileProvenanceRecords" : 2,
+  "totalOutputFileProvenanceRecords" : 102,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -481,7 +484,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1709125052
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -953,7 +957,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 941275812
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -1425,7 +1430,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -71359197
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -1897,7 +1903,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 332638741
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -2369,7 +2376,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1137032524
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -2841,7 +2849,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -776590791
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -3313,7 +3322,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1163074170
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -3785,7 +3795,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1249634724
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -4257,7 +4268,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 366417732
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -4729,7 +4741,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -946718900
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -4857,6 +4870,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -139665946
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   } ]
 }

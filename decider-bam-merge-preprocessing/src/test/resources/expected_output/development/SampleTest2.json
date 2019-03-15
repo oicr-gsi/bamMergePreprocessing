@@ -10,6 +10,9 @@
   "maxInputFiles" : 4,
   "minInputFiles" : 4,
   "totalInputFiles" : 4,
+  "maxOutputFileProvenanceRecords" : 4,
+  "minOutputFileProvenanceRecords" : 4,
+  "totalOutputFileProvenanceRecords" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -200,6 +203,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1396954235
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 4
   } ]
 }

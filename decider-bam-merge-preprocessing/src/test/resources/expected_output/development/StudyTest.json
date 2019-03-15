@@ -10,6 +10,9 @@
   "maxInputFiles" : 2,
   "minInputFiles" : 1,
   "totalInputFiles" : 33,
+  "maxOutputFileProvenanceRecords" : 2,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 33,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -95,7 +98,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1283198479
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -180,7 +184,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -528158192
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -266,7 +271,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1154573772
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -352,7 +358,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1588042460
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -437,7 +444,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1535392113
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -523,7 +531,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 816670238
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -608,7 +617,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 213075461
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -694,7 +704,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 340618353
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -780,7 +791,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2001889747
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -865,7 +877,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1816945804
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -951,7 +964,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2120856225
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1037,7 +1051,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -50066008
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1123,7 +1138,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -2130934866
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1209,7 +1225,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -306901705
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1295,7 +1312,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 599205895
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1381,7 +1399,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1534583839
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1467,7 +1486,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -969948791
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1553,7 +1573,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2141736595
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1639,7 +1660,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -457482428
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1725,7 +1747,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -169377836
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1811,7 +1834,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1077701095
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1897,7 +1921,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -907667420
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1983,7 +2008,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1640496120
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2104,7 +2130,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1396954235
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2190,7 +2217,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1778820773
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2276,7 +2304,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -220465499
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2362,7 +2391,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1188492190
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2448,7 +2478,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -99958345
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2534,7 +2565,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1869227652
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2620,7 +2652,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1679574046
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2706,7 +2739,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 492043594
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2792,6 +2826,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1095874990
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }

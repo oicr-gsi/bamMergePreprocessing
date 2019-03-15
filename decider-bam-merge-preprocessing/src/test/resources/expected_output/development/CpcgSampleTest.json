@@ -10,6 +10,9 @@
   "maxInputFiles" : 6,
   "minInputFiles" : 4,
   "totalInputFiles" : 10,
+  "maxOutputFileProvenanceRecords" : 6,
+  "minOutputFileProvenanceRecords" : 4,
+  "totalOutputFileProvenanceRecords" : 10,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -220,7 +223,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 254925786
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 4
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -511,6 +515,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 315876567
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 6
   } ]
 }

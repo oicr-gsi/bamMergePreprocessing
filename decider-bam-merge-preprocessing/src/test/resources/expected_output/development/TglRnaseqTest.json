@@ -10,6 +10,9 @@
   "maxInputFiles" : 1,
   "minInputFiles" : 1,
   "totalInputFiles" : 1,
+  "maxOutputFileProvenanceRecords" : 1,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 1,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "STAR",
@@ -96,6 +99,7 @@
         "cvterms" : [ [ "EDAM:format_2572,EDAM:format_1921,EDAM:topic_0182" ] ]
       },
       "fileId" : -1529140559
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }
