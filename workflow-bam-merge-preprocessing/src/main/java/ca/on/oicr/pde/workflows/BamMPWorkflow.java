@@ -732,7 +732,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 + " VALIDATION_STRINGENCY=SILENT"
                 + " I=" + inputFilePath
                 + " O=" + outputFilePath);
-        jobIndex.setMaxMemory("5000");
+        jobIndex.setMaxMemory(getProperty("index_mem"));
         jobIndex.setQueue(getOptionalProperty("queue", ""));
 
         return jobIndex;
