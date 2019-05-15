@@ -10,6 +10,9 @@
   "maxInputFiles" : 2,
   "minInputFiles" : 1,
   "totalInputFiles" : 33,
+  "maxOutputFileProvenanceRecords" : 2,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 33,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -30,9 +33,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -76,7 +80,7 @@
         "geo_run_id_and_position" : [ [ "1775_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -86,7 +90,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170119_D00343_0157_BCA62MANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "INS_DNA_PCL_pool_01" ] ]
+      },
       "iusTag" : [ "GAATCTGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -95,7 +101,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1283198479
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -116,9 +123,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -162,7 +170,7 @@
         "geo_run_id_and_position" : [ [ "1775_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
       },
@@ -171,7 +179,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170119_D00343_0157_BCA62MANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "INS_DNA_PCL_pool_01" ] ]
+      },
       "iusTag" : [ "ATGCCTAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -180,7 +190,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -528158192
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -201,9 +212,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -247,7 +259,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -257,7 +269,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "CACTTCGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -266,7 +280,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1154573772
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -287,9 +302,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -333,7 +349,7 @@
         "geo_run_id_and_position" : [ [ "1808_3" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
@@ -343,7 +359,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_3" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_03" ] ]
+      },
       "iusTag" : [ "AGCAGGAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -352,7 +370,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1588042460
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -373,9 +392,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -419,7 +439,7 @@
         "geo_run_id_and_position" : [ [ "1775_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
       },
@@ -428,7 +448,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170119_D00343_0157_BCA62MANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "INS_DNA_PCL_pool_01" ] ]
+      },
       "iusTag" : [ "AACGTGAT" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -437,7 +459,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1535392113
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -458,9 +481,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -504,7 +528,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -514,7 +538,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "GACTAGTA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -523,7 +549,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 816670238
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -544,9 +571,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -590,7 +618,7 @@
         "geo_run_id_and_position" : [ [ "1775_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
       },
@@ -599,7 +627,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170119_D00343_0157_BCA62MANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "INS_DNA_PCL_pool_01" ] ]
+      },
       "iusTag" : [ "GCCAAGAC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -608,7 +638,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 213075461
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -629,9 +660,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -675,7 +707,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -685,7 +717,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "GATGAATC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -694,7 +728,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 340618353
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -715,9 +750,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -761,17 +797,20 @@
         "geo_run_id_and_position" : [ [ "1808_3" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "INS-E-013-C3T" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_3" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_03" ] ]
+      },
       "iusTag" : [ "GAATCTGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -780,7 +819,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2001889747
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -801,9 +841,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -847,7 +888,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
       },
@@ -856,7 +897,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "ATTGGCTC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -865,7 +908,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1816945804
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -886,9 +930,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -932,7 +977,7 @@
         "geo_run_id_and_position" : [ [ "1808_6" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Oc" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -942,7 +987,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_6" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_06" ] ]
+      },
       "iusTag" : [ "AAACATCG" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -951,7 +998,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2120856225
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -972,9 +1020,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1018,7 +1067,7 @@
         "geo_run_id_and_position" : [ [ "1808_6" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Br" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1028,7 +1077,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_6" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_06" ] ]
+      },
       "iusTag" : [ "GAGTTAGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1037,7 +1088,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -50066008
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1058,9 +1110,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1104,7 +1157,7 @@
         "geo_run_id_and_position" : [ [ "1808_6" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ov" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1114,7 +1167,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_6" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_06" ] ]
+      },
       "iusTag" : [ "CGAACTTA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1123,7 +1178,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -2130934866
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1144,9 +1200,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1190,7 +1247,7 @@
         "geo_run_id_and_position" : [ [ "1808_7" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ov" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1200,7 +1257,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_7" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_07" ] ]
+      },
       "iusTag" : [ "GATAGACA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1209,7 +1268,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -306901705
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1230,9 +1290,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1276,7 +1337,7 @@
         "geo_run_id_and_position" : [ [ "1808_7" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Ov" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1286,7 +1347,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_7" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_07" ] ]
+      },
       "iusTag" : [ "AAGGACAC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1295,7 +1358,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 599205895
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1316,9 +1380,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1362,7 +1427,7 @@
         "geo_run_id_and_position" : [ [ "1808_2" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
@@ -1372,7 +1437,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_2" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_02" ] ]
+      },
       "iusTag" : [ "ATGCCTAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1381,7 +1448,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1534583839
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1402,9 +1470,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1448,7 +1517,7 @@
         "geo_run_id_and_position" : [ [ "1808_2" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Nk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
@@ -1458,7 +1527,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_2" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_02" ] ]
+      },
       "iusTag" : [ "GAATCTGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1467,7 +1538,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -969948791
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1488,9 +1560,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1534,7 +1607,7 @@
         "geo_run_id_and_position" : [ [ "1808_4" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Oc" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1544,7 +1617,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_4" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_04" ] ]
+      },
       "iusTag" : [ "CACTTCGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1553,7 +1628,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2141736595
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1574,9 +1650,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1620,7 +1697,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -1630,7 +1707,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "AACGTGAT" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1639,7 +1718,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -457482428
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1660,9 +1740,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1706,7 +1787,7 @@
         "geo_run_id_and_position" : [ [ "1808_2" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -1716,7 +1797,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_2" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_02" ] ]
+      },
       "iusTag" : [ "AACGTGAT" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1725,7 +1808,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -169377836
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1746,9 +1830,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1792,7 +1877,7 @@
         "geo_run_id_and_position" : [ [ "1808_2" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -1802,7 +1887,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_2" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_02" ] ]
+      },
       "iusTag" : [ "CACTTCGA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1811,7 +1898,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1077701095
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1832,9 +1920,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1878,7 +1967,7 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -1888,7 +1977,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "AGCAGGAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1897,7 +1988,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -907667420
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -1918,9 +2010,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1964,7 +2057,7 @@
         "geo_run_id_and_position" : [ [ "1808_4" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "M" ] ]
@@ -1974,7 +2067,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_4" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_04" ] ]
+      },
       "iusTag" : [ "AAACATCG" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -1983,7 +2078,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1640496120
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2004,9 +2100,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2050,7 +2147,7 @@
         "geo_run_id_and_position" : [ [ "1808_7" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -2060,7 +2157,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_7" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_07" ] ]
+      },
       "iusTag" : [ "GACAGTGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2085,17 +2184,20 @@
         "geo_run_id_and_position" : [ [ "1808_4" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "INS-D-006-ST" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_4" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_04" ] ]
+      },
       "iusTag" : [ "GAGCTGAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2104,7 +2206,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1396954235
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2125,9 +2228,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2171,17 +2275,20 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
-        "geo_tissue_type" : [ [ "R" ] ]
+        "geo_tissue_type" : [ [ "R" ] ],
+        "geo_tube_id" : [ [ "INS-D-007-SB" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "GAGTTAGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2190,7 +2297,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1778820773
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2211,9 +2319,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2257,17 +2366,20 @@
         "geo_run_id_and_position" : [ [ "1808_5" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Sk" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "INS-D-007-ST" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_5" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_05" ] ]
+      },
       "iusTag" : [ "CGAACTTA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2276,7 +2388,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -220465499
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2297,9 +2410,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2343,17 +2457,20 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
-        "geo_tissue_type" : [ [ "R" ] ]
+        "geo_tissue_type" : [ [ "R" ] ],
+        "geo_tube_id" : [ [ "INS-E-016-SB" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "GAGCTGAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2362,7 +2479,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1188492190
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2383,9 +2501,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2429,17 +2548,20 @@
         "geo_run_id_and_position" : [ [ "1808_5" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "INS-E-016-C2T" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_5" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_05" ] ]
+      },
       "iusTag" : [ "GATAGACA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2448,7 +2570,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -99958345
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2469,9 +2592,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2515,17 +2639,20 @@
         "geo_run_id_and_position" : [ [ "1808_3" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "P" ] ]
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "INS-E-016-ST" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_3" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_03" ] ]
+      },
       "iusTag" : [ "ATGCCTAA" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2534,7 +2661,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1869227652
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2555,9 +2683,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2601,17 +2730,20 @@
         "geo_run_id_and_position" : [ [ "1808_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Pb" ] ],
         "geo_tissue_preparation" : [ [ "Blood" ] ],
-        "geo_tissue_type" : [ [ "R" ] ]
+        "geo_tissue_type" : [ [ "R" ] ],
+        "geo_tube_id" : [ [ "INS-E-018-SB" ] ]
       },
       "sequencerRunName" : [ "170315_D00343_0165_BCAUK4ANXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_01" ] ]
+      },
       "iusTag" : [ "AAGGACAC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2620,7 +2752,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1679574046
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2641,9 +2774,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2687,7 +2821,7 @@
         "geo_run_id_and_position" : [ [ "1808_5" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -2697,7 +2831,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "170315_D00343_0165_BCAUK4ANXX_lane_5" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "CAUK4ANXX_lane_05" ] ]
+      },
       "iusTag" : [ "GACAGTGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2706,7 +2842,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 492043594
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
       "aligner_name" : "BwaMem",
@@ -2727,9 +2864,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2773,17 +2911,20 @@
         "geo_run_id_and_position" : [ [ "1820_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect Human All Exon V5 + UTRs" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "nn" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
-        "geo_tissue_type" : [ [ "M" ] ]
+        "geo_tissue_type" : [ [ "M" ] ],
+        "geo_tube_id" : [ [ "INS-E-008-EOT-T" ] ]
       },
       "sequencerRunName" : [ "170324_NB551056_0013_AHJL2MAFXX" ],
       "sequencerRunAttributes" : {
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "170324_NB551056_0013_AHJL2MAFXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HJL7MAFXX_pool" ] ]
+      },
       "iusTag" : [ "AAGGACAC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BwaMem" ],
@@ -2792,6 +2933,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1095874990
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }

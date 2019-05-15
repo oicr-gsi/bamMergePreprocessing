@@ -10,6 +10,9 @@
   "maxInputFiles" : 10,
   "minInputFiles" : 2,
   "totalInputFiles" : 102,
+  "maxOutputFileProvenanceRecords" : 10,
+  "minOutputFileProvenanceRecords" : 2,
+  "totalOutputFileProvenanceRecords" : 102,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -30,9 +33,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -480,7 +484,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1709125052
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -501,9 +506,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -951,7 +957,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 941275812
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -972,9 +979,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1422,7 +1430,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -71359197
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -1443,9 +1452,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -1893,7 +1903,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 332638741
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -1914,9 +1925,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2364,7 +2376,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1137032524
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -2385,9 +2398,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -2835,7 +2849,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -776590791
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -2856,9 +2871,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -3306,7 +3322,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1163074170
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -3327,9 +3344,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -3777,7 +3795,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1249634724
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -3798,9 +3817,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -4248,7 +4268,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 366417732
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -4269,9 +4290,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -4719,7 +4741,8 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -946718900
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 10
   }, {
     "workflowIni" : {
       "aligner_name" : "GenomicAlignmentNovoalign",
@@ -4740,9 +4763,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -4846,6 +4870,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -139665946
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   } ]
 }

@@ -10,6 +10,9 @@
   "maxInputFiles" : 1,
   "minInputFiles" : 1,
   "totalInputFiles" : 1,
+  "maxOutputFileProvenanceRecords" : 1,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 1,
   "workflowRuns" : [ {
     "workflowIni" : {
       "aligner_name" : "STAR",
@@ -30,9 +33,10 @@
       "gatk_key" : "/.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key",
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
-      "gatk_sched_overhead_mem" : "4",
+      "gatk_sched_overhead_mem" : "6",
+      "index_mem" : "8000",
       "interval-padding" : "100",
-      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.7.0_51/bin/java",
+      "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -75,7 +79,7 @@
         "geo_receive_date" : [ [ "2016-12-16" ] ],
         "geo_run_id_and_position" : [ [ "1794_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Oc" ] ],
         "geo_tissue_preparation" : [ [ "FFPE" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -85,7 +89,9 @@
         "instrument_name" : [ [ "NB551056" ] ]
       },
       "laneName" : [ "170215_NB551056_0008_AHGGMMBGX2_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "HGGMMBGX2" ] ]
+      },
       "iusTag" : [ "ACAGTG" ],
       "iusAttributes" : { },
       "workflowName" : [ "STAR" ],
@@ -96,6 +102,7 @@
         "cvterms" : [ [ "EDAM:format_2572,EDAM:format_1921,EDAM:topic_0182" ] ]
       },
       "fileId" : -1529140559
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }

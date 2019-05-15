@@ -32,8 +32,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 /**
  *
- * Merge -> Sort -> Mark Duplicates (optional q-score filtering) -> Realign
- * Indels -> Base Q score recalibration
+ * Merge ➜ Sort ➜ Mark Duplicates (optional q-score filtering) ➜ Realign
+ * Indels ➜ Base Q score recalibration
  *
  */
 public class BamMPWorkflow extends SemanticWorkflow {
@@ -487,13 +487,13 @@ public class BamMPWorkflow extends SemanticWorkflow {
      * <p>
      * Example command line</p>
      *
-     * <code>samtools view -b -F 260 > output.bam</code>
+     * {@code samtools view -b -F 260 > output.bam}
      *
      * @param jobName the name of the samtools filter job
      * @param inputFile the input bam file
      * @param outputFile the output bam file
      *
-     * @return
+     * @return samtools filter reads job
      */
     protected Job samtoolsFilterReads(String jobName, String inputFile, String outputFile) {
         Job job = this.getWorkflow().createBashJob(jobName + samtoolsFlag);
@@ -719,9 +719,9 @@ public class BamMPWorkflow extends SemanticWorkflow {
     /**
      * Index will be written to the same directory as the bam
      *
-     * @param inputFilePath
+     * @param inputFilePath the input bam file
      *
-     * @return
+     * @return index bam file job
      */
     protected Job getIndexBamJob(String inputFilePath) {
         String outputFilePath = FilenameUtils.getPath(inputFilePath) + FilenameUtils.getBaseName(inputFilePath) + ".bai";
@@ -732,7 +732,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 + " VALIDATION_STRINGENCY=SILENT"
                 + " I=" + inputFilePath
                 + " O=" + outputFilePath);
-        jobIndex.setMaxMemory("5000");
+        jobIndex.setMaxMemory(getProperty("index_mem"));
         jobIndex.setQueue(getOptionalProperty("queue", ""));
 
         return jobIndex;
