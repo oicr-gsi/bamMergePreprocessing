@@ -1,3 +1,6 @@
+## 1.3.3 - 2019-06-10
+- [GP-1998](https://jira.oicr.on.ca/browse/GP-1998) - Support old workflow "identifier" ini property
+
 ## 1.3.2 - 2019-05-10
 - [GP-1951](https://jira.oicr.on.ca/browse/GP-1951) - Update to pipedev 2.5+
   - Support for filtering of workflow runs annotated as skipped or deleted from being blocking workflow runs
