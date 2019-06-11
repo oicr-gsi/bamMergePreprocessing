@@ -273,6 +273,10 @@ public class BamMPDecider extends MergingDecider {
         run.addProperty("input_files", inputFilePathsStringByGroup);
         String outputIdentifierStringByGroup = Joiner.on(";").join(outputIdentifierByGroup.values());
         run.addProperty("output_identifiers", outputIdentifierStringByGroup);
+
+        // add legacy "identifier" ini property value for BMPP 1.0.3
+        run.addProperty("identifier", outputIdentifierStringByGroup);
+
         String iusLimsKeysStringByGroup = Joiner.on(";").skipNulls().join(Iterables.transform(Multimaps.asMap(iusLimsKeysByGroup).values(), listOfStringsToStringFunction));
         if (iusLimsKeysByGroup.keySet().size() > 1 && !iusLimsKeysStringByGroup.isEmpty()) {
             //when there is only one group, output files should use the IUS-LimsKeys associated with the workflow run

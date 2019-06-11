@@ -34,6 +34,7 @@
       "gatk_print_reads_xmx" : "12",
       "gatk_realign_target_creator_xmx" : "12",
       "gatk_sched_overhead_mem" : "6",
+      "identifier" : "TGL01_0009_Oc_P_WT",
       "index_mem" : "8000",
       "interval-padding" : "100",
       "java" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/jre1.8.0_45/bin/java",
