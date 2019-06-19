@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import joptsimple.OptionParser;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import org.apache.logging.log4j.LogManager;
@@ -180,7 +179,7 @@ public class BamMPDecider extends MergingDecider {
                 throw new RuntimeException("--downsampling parameter expects true/false.");
             }
         }
-        
+
         if (options.has("do-split-and-trim")) {
             doSplitNTrim = Boolean.valueOf(getArgument("do-split-and-trim"));
         }
@@ -232,6 +231,11 @@ public class BamMPDecider extends MergingDecider {
 
     @Override
     public ReturnValue customizeWorkflowRun(WorkflowRun run) {
+        return new ReturnValue();
+    }
+
+    @Override
+    public ReturnValue customizeWorkflowRunAfterCreatingSwidsToLinkWorkflowRunTo(WorkflowRun run) {
         ReturnValue rv = new ReturnValue();
 
         //the following data structures needs keys sorted - use a tree map to sort keys

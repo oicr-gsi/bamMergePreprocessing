@@ -1,3 +1,6 @@
+## 1.3.4 - 2019-06-19
+- [GP-2003](https://jira.oicr.on.ca/browse/GP-2003) - Update to pipedev 2.5.2 - fixes customizing workflow run after creating swids to link to
+
 ## 1.3.3 - 2019-06-10
 - [GP-1998](https://jira.oicr.on.ca/browse/GP-1998) - Support old workflow "identifier" ini property
 

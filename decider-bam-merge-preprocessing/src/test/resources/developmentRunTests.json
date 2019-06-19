@@ -6,7 +6,10 @@
         },
         "iniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
             "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", 
-            "input_files", "output_ius_lims_keys"]
+            "input_files"],
+        "iniStringSubstitutions": {
+            "\\d{6,}": "SWID"
+        }
     },
     "tests": [
         {
