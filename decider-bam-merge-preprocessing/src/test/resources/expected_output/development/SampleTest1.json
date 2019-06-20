@@ -42,6 +42,7 @@
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
       "output_identifiers" : "TGL01_0019_Oc_P_EX;TGL01_0019_Pb_R_EX",
+      "output_ius_lims_keys" : "SWID;SWID",
       "output_prefix" : "./",
       "picard_dir" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/picard-tools-1.89/",
       "picard_mark_duplicates" : "${workflow_bundle_dir}/Workflow_Bundle_BamMergePreprocessing/1.2/bin/picard-tools-1.89/MarkDuplicates.jar",
