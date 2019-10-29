@@ -1,3 +1,8 @@
+## 1.2.1 - 2019-10-29
+- Configurable index_mem and picard_mem_overhead_mb
+- Update to pipedev 2.5
+## 1.2 - 2017-07-14
+- [GP-1202](https://jira.oicr.on.ca/browse/GP-1202) - Support RNAseq samples
 ## 1.1 - 2017-04-17
 - [GP-1106](https://jira.oicr.on.ca/browse/GP-1106) 
     - Support for performing GATK Indel Realignment together on groups of inputs, but provisioning out by the separate groups

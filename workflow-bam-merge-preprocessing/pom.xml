@@ -12,7 +12,7 @@
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
     <artifactId>BamMergePreprocessing</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
@@ -25,13 +25,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>picard</groupId>
-            <artifactId>picard-tools</artifactId>
-            <version>${picard-version}</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>

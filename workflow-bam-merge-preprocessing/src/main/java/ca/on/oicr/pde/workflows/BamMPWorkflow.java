@@ -6,7 +6,6 @@ import ca.on.oicr.pde.tools.gatk3.IndelRealigner;
 import ca.on.oicr.pde.tools.gatk3.PrintReads;
 import ca.on.oicr.pde.tools.gatk3.RealignerTargetCreator;
 import ca.on.oicr.pde.utilities.workflows.SemanticWorkflow;
-import ca.on.oicr.pde.utilities.workflows.jobfactory.PicardTools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -25,7 +24,6 @@ import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Command;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
-import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,6 +39,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private String dataDir, tmpDir, rDir;
     private String java, markDuplicatesJar, mergeSamFilesJar, sortSamFilesJar;
     private Integer picardMarkDupMem, picardMergeMem;
+    private Integer picardMemOverhead;
     private boolean doDedup = true;
     private boolean doRemoveDups = true;
     private boolean doFilter = true;
@@ -55,8 +54,6 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private Integer samtoolsFlag;
     private String samtoolsMinMapQuality;
     private String alignerName;
-    private Workflow wf;
-    private PicardTools picard;
     private String filterOtherParams, dedupOtherParams, mergeOtherParams, sortOtherParams;
     private String sortOrder;
     private static final String REMOVE_DUPLICATES = "REMOVE_DUPLICATES=";
@@ -155,6 +152,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         //Picard
         markDuplicatesJar = getProperty("picard_mark_duplicates");
         picardMarkDupMem = Integer.parseInt(getProperty("picard_mark_duplicates_mem_mb"));
+        picardMemOverhead = Integer.parseInt(getProperty("picard_mem_overhead_mb"));
         mergeSamFilesJar = getProperty("picard_merge_sam");
         sortSamFilesJar = getProperty("picard_sort_sam");
         picardMergeMem = Integer.parseInt(getProperty("picard_merge_sam_mem_mb"));
@@ -163,8 +161,6 @@ public class BamMPWorkflow extends SemanticWorkflow {
         mergeOtherParams = getOptionalProperty("picard_merge_other_params", "");
         analyzeCovariatesParams = getOptionalProperty("gatk_analyze_covariates_params", null);
         picard_dir = getProperty("picard_dir");
-        wf = this.getWorkflow();
-        picard = new PicardTools(wf);
         binDir = this.getWorkflowBaseDir() + "/bin/";
         doBQSR = Boolean.valueOf(getOptionalProperty("do_bqsr", "true"));
         //Samtools
@@ -312,7 +308,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "merged.sorted.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobMergeSort = picard.mergeSamFiles(this.java,
+                Job jobMergeSort = mergeSamFiles(this.java,
                         mergeSamFilesJar,
                         picardMergeMem,
                         tmpDir,
@@ -329,7 +325,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "sorted.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobSort = picard.sortSamFile(this.java,
+                Job jobSort = sortSamFile(this.java,
                         sortSamFilesJar,
                         picardMergeMem,
                         tmpDir,
@@ -358,7 +354,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "deduped.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobDedup = picard.markDuplicates(this.java,
+                Job jobDedup = markDuplicates(this.java,
                         markDuplicatesJar,
                         picardMarkDupMem,
                         tmpDir,
@@ -440,7 +436,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
             String[] inputBams = getLeftCollection(inputFileAndJobToNextStepByOutputGroup.get(outputGroup)).toArray(new String[0]);
 
-            Job jobMergeFinal = picard.mergeSamFiles(this.java,
+            Job jobMergeFinal = mergeSamFiles(this.java,
                     mergeSamFilesJar,
                     picardMergeMem,
                     tmpDir,
@@ -777,6 +773,67 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private void error(String msg) {
         Log.error(msg);
         setWorkflowInvalid();
+    }
+
+    public Job markDuplicates(String java, String markDuplicatesJar, int memoryMb, String tmpDir,
+            String input, String output, String metricsFile, String otherParams) {
+        String command = String.format("%s -Xmx%dM -jar %s INPUT=%s OUTPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT TMP_DIR=%s METRICS_FILE=%s",
+                java, memoryMb, markDuplicatesJar, input, output, tmpDir, metricsFile, otherParams);
+        Job job = this.getWorkflow().createBashJob("PicardMarkDuplicates");
+        job.getCommand().addArgument(command);
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
+    }
+
+    public Job mergeSamFiles(String java, String mergeBamFilesJar, int memoryMb, String tmpDir,
+            String sortOrder, boolean assumeSorted, boolean useThreading, String otherParams,
+            String output, String... input) {
+        String command = String.format("java -Xmx%dM -jar %s "
+                + "OUTPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT "
+                + "TMP_DIR=%s "
+                + "SORT_ORDER=%s "
+                + "CREATE_INDEX=true",
+                memoryMb, mergeBamFilesJar, output, tmpDir, sortOrder);
+        Job job = this.getWorkflow().createBashJob("PicardMergeBam");
+        job.getCommand().addArgument(command);
+        for (String in : input) {
+            job.getCommand().addArgument(String.format("INPUT=%s", in));
+        }
+        if (assumeSorted) {
+            job.getCommand().addArgument(String.format("ASSUME_SORTED=true"));
+        }
+        if (useThreading) {
+            job.getCommand().addArgument(String.format("USE_THREADING=true"));
+        }
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
+    }
+
+    public Job sortSamFile(String java, String sortSamFileJar, int memoryMb,
+            String tmpDir, String sortOrder, String output, String input, String otherParams) {
+        String command = String.format("java -Xmx%dM -jar %s "
+                + "OUTPUT=%s "
+                + "INPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT "
+                + "TMP_DIR=%s "
+                + "SORT_ORDER=%s "
+                + "CREATE_INDEX=true",
+                memoryMb, sortSamFileJar, output, input, tmpDir, sortOrder);
+        Job job = this.getWorkflow().createBashJob("PicardSortBam");
+        job.getCommand().addArgument(command);
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
     }
 
 }

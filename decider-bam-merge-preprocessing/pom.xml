@@ -18,7 +18,7 @@
     <name>${display-name}</name>
 
     <properties>
-        <workflow-version>1.2</workflow-version>
+        <workflow-version>1.2.1</workflow-version>
         <main-class>ca.on.oicr.pde.deciders.BamMPDecider</main-class>
     </properties>
     
