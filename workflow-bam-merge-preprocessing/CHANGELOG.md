@@ -1,5 +1,6 @@
 ## 1.2.1 - 2019-10-29
 - Configurable index_mem and picard_mem_overhead_mb
+- Use external picard-tools
 - Update to pipedev 2.5
 ## 1.2 - 2017-07-14
 - [GP-1202](https://jira.oicr.on.ca/browse/GP-1202) - Support RNAseq samples
