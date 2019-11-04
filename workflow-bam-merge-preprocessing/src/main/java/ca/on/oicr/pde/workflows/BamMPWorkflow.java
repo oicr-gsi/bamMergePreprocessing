@@ -800,13 +800,13 @@ public class BamMPWorkflow extends SemanticWorkflow {
     public Job mergeSamFiles(String java, String picardJar, int memoryMb, String tmpDir,
             String sortOrder, boolean assumeSorted, boolean useThreading, String otherParams,
             String output, String... input) {
-        String command = String.format("java -Xmx%dM -jar %s MergeBamAlignment "
+        String command = String.format("%s -Xmx%dM -jar %s MergeSamFiles "
                 + "OUTPUT=%s "
                 + "VALIDATION_STRINGENCY=SILENT "
                 + "TMP_DIR=%s "
                 + "SORT_ORDER=%s "
                 + "CREATE_INDEX=true",
-                memoryMb, picardJar, output, tmpDir, sortOrder);
+                java, memoryMb, picardJar, output, tmpDir, sortOrder);
         Job job = getWorkflow().createBashJob("PicardMergeBam");
         job.getCommand().addArgument(command);
         for (String in : input) {
@@ -827,14 +827,14 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
     public Job sortSamFile(String java, String picardJar, int memoryMb,
             String tmpDir, String sortOrder, String output, String input, String otherParams) {
-        String command = String.format("java -Xmx%dM -jar %s SortSam "
+        String command = String.format("%s -Xmx%dM -jar %s SortSam "
                 + "OUTPUT=%s "
                 + "INPUT=%s "
                 + "VALIDATION_STRINGENCY=SILENT "
                 + "TMP_DIR=%s "
                 + "SORT_ORDER=%s "
                 + "CREATE_INDEX=true",
-                memoryMb, picardJar, output, input, tmpDir, sortOrder);
+                java, memoryMb, picardJar, output, input, tmpDir, sortOrder);
         Job job = getWorkflow().createBashJob("PicardSortBam");
         job.getCommand().addArgument(command);
         if (otherParams != null) {
