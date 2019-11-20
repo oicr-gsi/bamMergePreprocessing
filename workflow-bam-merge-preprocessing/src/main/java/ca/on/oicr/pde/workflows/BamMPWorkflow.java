@@ -6,7 +6,6 @@ import ca.on.oicr.pde.tools.gatk3.IndelRealigner;
 import ca.on.oicr.pde.tools.gatk3.PrintReads;
 import ca.on.oicr.pde.tools.gatk3.RealignerTargetCreator;
 import ca.on.oicr.pde.utilities.workflows.SemanticWorkflow;
-import ca.on.oicr.pde.utilities.workflows.jobfactory.PicardTools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -25,7 +24,6 @@ import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Command;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
-import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,31 +32,36 @@ import org.apache.commons.lang3.tuple.Pair;
  *
  * Merge ➜ Sort ➜ Mark Duplicates (optional q-score filtering) ➜ Realign
  * Indels ➜ Base Q score recalibration
- *
+ * <p>
  */
 public class BamMPWorkflow extends SemanticWorkflow {
 
-    private String dataDir, tmpDir, rDir;
-    private String java, markDuplicatesJar, mergeSamFilesJar, sortSamFilesJar;
-    private Integer picardMarkDupMem, picardMergeMem;
+    private String dataDir;
+    private String tmpDir;
+    private String rDir;
+    private String java;
+    private String picardJar;
+    private Integer picardMarkDupMem;
+    private Integer picardMergeMem;
+    private Integer picardMemOverhead;
     private boolean doDedup = true;
     private boolean doRemoveDups = true;
     private boolean doFilter = true;
     private boolean doSplitNTrim = false; // flag for split and trim ; set to false unless changed in the workflow.ini
     private final boolean doIndelRealignment = true; //currently this is not an optional step
     private final boolean assumeSorted = false; // we should have assumeSorted set to false ALWAYS (due to re-structuring)
-    private boolean useThreading = true;
+    private boolean picardMergeUseThreading = true;
     private boolean manualOutput = false;
     private String samtools;
-    private String picard_dir;
     private Integer samtoolsMem;
     private Integer samtoolsFlag;
     private String samtoolsMinMapQuality;
     private String alignerName;
-    private Workflow wf;
-    private PicardTools picard;
-    private String filterOtherParams, dedupOtherParams, mergeOtherParams, sortOtherParams;
-    private String sortOrder;
+    private String filterOtherParams;
+    private String picardDedupOtherParams;
+    private String picardMergeOtherParams;
+    private String picardSortOtherParams;
+    private String picardSortOrder;
     private static final String REMOVE_DUPLICATES = "REMOVE_DUPLICATES=";
     private final static String BAM_METATYPE = "application/bam";
     private final static String BAI_METATYPE = "application/bam-index";
@@ -153,19 +156,23 @@ public class BamMPWorkflow extends SemanticWorkflow {
         doSplitNTrim = Boolean.parseBoolean(getProperty("do_split_trim_reassign_quality"));
 
         //Picard
-        markDuplicatesJar = getProperty("picard_mark_duplicates");
+        picardJar = getProperty("picard_jar");
+        picardMemOverhead = Integer.parseInt(getProperty("picard_mem_overhead_mb"));
+
         picardMarkDupMem = Integer.parseInt(getProperty("picard_mark_duplicates_mem_mb"));
-        mergeSamFilesJar = getProperty("picard_merge_sam");
-        sortSamFilesJar = getProperty("picard_sort_sam");
+        picardDedupOtherParams = getOptionalProperty("picard_mark_duplicates_other_params", "");
+
         picardMergeMem = Integer.parseInt(getProperty("picard_merge_sam_mem_mb"));
+        picardMergeUseThreading = Boolean.parseBoolean(getProperty("picard_merge_use_threading"));
+        picardMergeOtherParams = getOptionalProperty("picard_merge_other_params", "");
+
+        picardSortOrder = getProperty("sort_order");
+        picardSortOtherParams = getOptionalProperty("picard_sort_other_params", "");
+
         filterOtherParams = getOptionalProperty("samtools_filter_other_params", "");
-        dedupOtherParams = getOptionalProperty("picard_mark_duplicates_other_params", "");
-        mergeOtherParams = getOptionalProperty("picard_merge_other_params", "");
+
         analyzeCovariatesParams = getOptionalProperty("gatk_analyze_covariates_params", null);
-        picard_dir = getProperty("picard_dir");
-        wf = this.getWorkflow();
-        picard = new PicardTools(wf);
-        binDir = this.getWorkflowBaseDir() + "/bin/";
+        binDir = getWorkflowBaseDir() + "/bin/";
         doBQSR = Boolean.valueOf(getOptionalProperty("do_bqsr", "true"));
         //Samtools
         samtools = getProperty("samtools");
@@ -174,52 +181,49 @@ public class BamMPWorkflow extends SemanticWorkflow {
         samtoolsMinMapQuality = getOptionalProperty("samtools_min_map_quality", null);
 
         alignerName = getOptionalProperty("aligner_name", "");
-        sortOtherParams = getOptionalProperty("picard_sort_other_params", "");
-        sortOrder = getProperty("sort_order");
-        useThreading = Boolean.parseBoolean(getProperty("picard_merge_use_threading"));
 
         //References
-        this.refFasta = getProperty("ref_fasta");
-        this.dbsnpVcf = getProperty("gatk_dbsnp_vcf");
+        refFasta = getProperty("ref_fasta");
+        dbsnpVcf = getProperty("gatk_dbsnp_vcf");
 
         //split trim reassign mapping quality
-        this.splitCigarXmxg = Integer.parseInt(getProperty("split_cigar_Xmxg"));
-        this.splitCigarRMQF = Integer.parseInt(getProperty("split_cigar_RMQF"));
-        this.splitCigarRMQT = Integer.parseInt(getProperty("split_cigar_RMQT"));
-        this.flagReassignOneMappingQuality = Boolean.parseBoolean(getProperty("reassign_One_Mapping_Quality"));
+        splitCigarXmxg = Integer.parseInt(getProperty("split_cigar_Xmxg"));
+        splitCigarRMQF = Integer.parseInt(getProperty("split_cigar_RMQF"));
+        splitCigarRMQT = Integer.parseInt(getProperty("split_cigar_RMQT"));
+        flagReassignOneMappingQuality = Boolean.parseBoolean(getProperty("reassign_One_Mapping_Quality"));
 
         //GATK
-        this.gatkRealignTargetCreatorXmx = Integer.parseInt(getProperty("gatk_realign_target_creator_xmx"));
-        this.gatkIndelRealignerXmx = Integer.parseInt(getProperty("gatk_indel_realigner_xmx"));
-        this.gatkPrintReadsXmx = Integer.parseInt(getProperty("gatk_print_reads_xmx"));
-        this.gatkBaseRecalibratorXmx = Integer.parseInt(getProperty("gatk_base_recalibrator_xmx"));
-        this.gatkBaseRecalibratorMem = Integer.parseInt(getProperty("gatk_base_recalibrator_mem"));
-        this.gatkBaseRecalibratorNct = Integer.parseInt(getProperty("gatk_base_recalibrator_nct"));
-        this.gatkBaseRecalibratorSmp = Integer.parseInt(getProperty("gatk_base_recalibrator_smp"));
-        this.gatkOverhead = Integer.parseInt(getProperty("gatk_sched_overhead_mem"));
-        this.downsamplingCoverage = hasPropertyAndNotNull("downsampling_coverage") ? Integer.parseInt(getProperty("downsampling_coverage")) : null;
-        this.preserveQscoresLessThan = hasPropertyAndNotNull("preserve_qscores_less_than") ? Integer.parseInt(getProperty("preserve_qscores_less_than")) : null;
-        this.intervalPadding = hasPropertyAndNotNull("interval_padding") ? Integer.parseInt(getProperty("interval_padding")) : null;
+        gatkRealignTargetCreatorXmx = Integer.parseInt(getProperty("gatk_realign_target_creator_xmx"));
+        gatkIndelRealignerXmx = Integer.parseInt(getProperty("gatk_indel_realigner_xmx"));
+        gatkPrintReadsXmx = Integer.parseInt(getProperty("gatk_print_reads_xmx"));
+        gatkBaseRecalibratorXmx = Integer.parseInt(getProperty("gatk_base_recalibrator_xmx"));
+        gatkBaseRecalibratorMem = Integer.parseInt(getProperty("gatk_base_recalibrator_mem"));
+        gatkBaseRecalibratorNct = Integer.parseInt(getProperty("gatk_base_recalibrator_nct"));
+        gatkBaseRecalibratorSmp = Integer.parseInt(getProperty("gatk_base_recalibrator_smp"));
+        gatkOverhead = Integer.parseInt(getProperty("gatk_sched_overhead_mem"));
+        downsamplingCoverage = hasPropertyAndNotNull("downsampling_coverage") ? Integer.parseInt(getProperty("downsampling_coverage")) : null;
+        preserveQscoresLessThan = hasPropertyAndNotNull("preserve_qscores_less_than") ? Integer.parseInt(getProperty("preserve_qscores_less_than")) : null;
+        intervalPadding = hasPropertyAndNotNull("interval_padding") ? Integer.parseInt(getProperty("interval_padding")) : null;
 
-        this.queue = getOptionalProperty("queue", "");
-        this.realignerTargetCreatorParams = getOptionalProperty("gatk_realigner_target_creator_params", null);
-        this.indelRealignerParams = getOptionalProperty("gatk_indel_realigner_params", null);
-        this.baseRecalibratorParams = getOptionalProperty("gatk_base_recalibrator_params", null);
-        this.printReadsParams = getOptionalProperty("gatk_print_reads_params", null);
-        this.downsamplingType = getOptionalProperty("downsampling_type", null);
-        this.gatk = getOptionalProperty("gatk_jar", binDir);
-        this.gatkKey = getProperty("gatk_key");
+        queue = getOptionalProperty("queue", "");
+        realignerTargetCreatorParams = getOptionalProperty("gatk_realigner_target_creator_params", null);
+        indelRealignerParams = getOptionalProperty("gatk_indel_realigner_params", null);
+        baseRecalibratorParams = getOptionalProperty("gatk_base_recalibrator_params", null);
+        printReadsParams = getOptionalProperty("gatk_print_reads_params", null);
+        downsamplingType = getOptionalProperty("downsampling_type", null);
+        gatk = getOptionalProperty("gatk_jar", binDir);
+        gatkKey = getProperty("gatk_key");
 
-        this.intervalFilesList = Arrays.asList(StringUtils.split(getOptionalProperty("interval_files", ""), ","));
-        this.intervalFiles = new HashSet<>(intervalFilesList);
+        intervalFilesList = Arrays.asList(StringUtils.split(getOptionalProperty("interval_files", ""), ","));
+        intervalFiles = new HashSet<>(intervalFilesList);
         if (intervalFiles.size() != intervalFilesList.size()) {
             throw new RuntimeException("Duplicate interval_files detected");
         }
 
-        this.bqsrCovariates = Sets.newHashSet(StringUtils.split(getProperty("bqsr_covariates"), ","));
+        bqsrCovariates = Sets.newHashSet(StringUtils.split(getProperty("bqsr_covariates"), ","));
 
-        this.chrSizesList = Arrays.asList(StringUtils.split(getProperty("chr_sizes"), ","));
-        this.chrSizes = new LinkedHashSet<>();
+        chrSizesList = Arrays.asList(StringUtils.split(getProperty("chr_sizes"), ","));
+        chrSizes = new LinkedHashSet<>();
         for (String c : chrSizesList) {
             List<String> cc = Arrays.asList(StringUtils.split(c, "+"));
             Set<String> cc2 = new LinkedHashSet<>(cc);
@@ -253,8 +257,8 @@ public class BamMPWorkflow extends SemanticWorkflow {
     public void setupDirectory() {
         try {
             BamMPWorkflow();
-            this.addDirectory(dataDir);
-            this.addDirectory(tmpDir);
+            addDirectory(dataDir);
+            addDirectory(tmpDir);
             if (!dataDir.endsWith("/")) {
                 dataDir += "/";
             }
@@ -277,7 +281,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 if (!"bam".equals(FilenameUtils.getExtension(filePath))) {
                     error("Unsupported input file: " + filePath);
                 }
-                SqwFile bam = this.createFile("file_in_" + id++);
+                SqwFile bam = createFile("file_in_" + id++);
                 bam.setSourcePath(filePath);
                 bam.setType(BAM_METATYPE);
                 bam.setIsInput(true);
@@ -286,7 +290,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
             provisionedFilesByGroup.put(outputGroup, provisionedPaths);
         }
 
-        return this.getFiles();
+        return getFiles();
     }
 
     @Override
@@ -312,14 +316,14 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "merged.sorted.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobMergeSort = picard.mergeSamFiles(this.java,
-                        mergeSamFilesJar,
+                Job jobMergeSort = mergeSamFiles(java,
+                        picardJar,
                         picardMergeMem,
                         tmpDir,
-                        sortOrder,
+                        picardSortOrder,
                         assumeSorted,
-                        useThreading, //use threading
-                        mergeOtherParams,
+                        picardMergeUseThreading, //use threading
+                        picardMergeOtherParams,
                         outputFilePath,
                         provisionedFilesByGroup.get(outputGroup).toArray(new String[0]));
                 jobMergeSort.setQueue(getOptionalProperty("queue", ""));
@@ -329,14 +333,14 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "sorted.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobSort = picard.sortSamFile(this.java,
-                        sortSamFilesJar,
+                Job jobSort = sortSamFile(java,
+                        picardJar,
                         picardMergeMem,
                         tmpDir,
-                        sortOrder,
+                        picardSortOrder,
                         outputFilePath,
                         Iterables.getOnlyElement(provisionedFilesByGroup.get(outputGroup)),
-                        sortOtherParams);
+                        picardSortOtherParams);
                 jobSort.setQueue(getOptionalProperty("queue", ""));
                 parentJob = jobSort;
                 inputFilePath = outputFilePath;
@@ -358,20 +362,20 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "deduped.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobDedup = picard.markDuplicates(this.java,
-                        markDuplicatesJar,
+                Job jobDedup = markDuplicates(java,
+                        picardJar,
                         picardMarkDupMem,
                         tmpDir,
                         inputFilePath,
                         outputFilePath,
                         dataDir + outputName + "metrics",
-                        dedupOtherParams);
-                jobDedup.getCommand().addArgument(REMOVE_DUPLICATES + Boolean.toString(this.doRemoveDups));
+                        picardDedupOtherParams);
+                jobDedup.getCommand().addArgument(REMOVE_DUPLICATES + Boolean.toString(doRemoveDups));
                 jobDedup.setQueue(getOptionalProperty("queue", ""));
                 jobDedup.addParent(parentJob);
 
-                SqwFile metricFile = this.createOutputFile(dataDir + outputName + "metrics", TXT_METATYPE, this.manualOutput);
-                this.attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
+                SqwFile metricFile = createOutputFile(dataDir + outputName + "metrics", TXT_METATYPE, manualOutput);
+                attachCVterms(metricFile, EDAM, "plain text format (unformatted),Sequence alignment metadata");
                 jobDedup.addFile(metricFile);
 
                 //link this file to its LIMS metadata (IUS-LimsKeys)
@@ -392,7 +396,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 String outputName = outputNameByOutputGroup.get(outputGroup) + "split.";
                 outputNameByOutputGroup.put(outputGroup, outputName);
                 String outputFilePath = dataDir + outputName + "bam";
-                Job jobSplitNCigar = this.splitNCigarReads(inputFilePath, outputFilePath);
+                Job jobSplitNCigar = splitNCigarReads(inputFilePath, outputFilePath);
                 jobSplitNCigar.addParent(parentJob);
                 parentJob = jobSplitNCigar;
                 inputFilePath = outputFilePath;
@@ -440,23 +444,23 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
             String[] inputBams = getLeftCollection(inputFileAndJobToNextStepByOutputGroup.get(outputGroup)).toArray(new String[0]);
 
-            Job jobMergeFinal = picard.mergeSamFiles(this.java,
-                    mergeSamFilesJar,
+            Job jobMergeFinal = mergeSamFiles(java,
+                    picardJar,
                     picardMergeMem,
                     tmpDir,
-                    sortOrder,
+                    picardSortOrder,
                     assumeSorted,
-                    useThreading, //use threading
-                    mergeOtherParams,
+                    picardMergeUseThreading, //use threading
+                    picardMergeOtherParams,
                     bamOutputFilePath,
                     inputBams);
             jobMergeFinal.setQueue(getOptionalProperty("queue", ""));
             jobMergeFinal.getParents().addAll(getRightCollection(inputFileAndJobToNextStepByOutputGroup.get(outputGroup)));
 
             // Annotate and provision final bam and its index
-            SqwFile finalBam = this.createOutputFile(bamOutputFilePath, BAM_METATYPE, manualOutput);
-            if (!this.alignerName.isEmpty()) {
-                finalBam.getAnnotations().put("aligner", this.alignerName);
+            SqwFile finalBam = createOutputFile(bamOutputFilePath, BAM_METATYPE, manualOutput);
+            if (!alignerName.isEmpty()) {
+                finalBam.getAnnotations().put("aligner", alignerName);
             }
             attachCVterms(finalBam, EDAM, "BAM,Sequence alignment refinement");
             jobMergeFinal.addFile(finalBam);
@@ -466,7 +470,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
                 finalBam.setParentAccessions(outputSwidsByGroup.get(outputGroup));
             }
 
-            SqwFile finalBai = this.createOutputFile(baiOutputFilePath, BAI_METATYPE, manualOutput);
+            SqwFile finalBai = createOutputFile(baiOutputFilePath, BAI_METATYPE, manualOutput);
             attachCVterms(finalBai, EDAM, "BAI");
             jobMergeFinal.addFile(finalBai);
 
@@ -483,20 +487,20 @@ public class BamMPWorkflow extends SemanticWorkflow {
      * <p>
      * Filters out the reads according to the samtools flag.
      * http://picard.sourceforge.net/explain-flags.html</p>
-     *
+     * <p>
      * <p>
      * Example command line</p>
-     *
+     * <p>
      * {@code samtools view -b -F 260 > output.bam}
      *
-     * @param jobName the name of the samtools filter job
-     * @param inputFile the input bam file
+     * @param jobName    the name of the samtools filter job
+     * @param inputFile  the input bam file
      * @param outputFile the output bam file
      *
      * @return samtools filter reads job
      */
     protected Job samtoolsFilterReads(String jobName, String inputFile, String outputFile) {
-        Job job = this.getWorkflow().createBashJob(jobName + samtoolsFlag);
+        Job job = getWorkflow().createBashJob(jobName + samtoolsFlag);
         Command cmd = job.getCommand();
         cmd.addArgument(samtools).addArgument("view -b");
         if (samtoolsFlag != null) {
@@ -526,11 +530,11 @@ public class BamMPWorkflow extends SemanticWorkflow {
          * TGL01_0001_Pb_R_PE_466_EX.filter.dedupped.split.bam \ -rf
          * ReassignOneMappingQuality \ -RMQF 255 \ -RMQT 60 \ -U
          * ALLOW_N_CIGAR_READS -fixNDN
-         *
+         * <p>
          */
-        Job jobSplitCigar = this.getWorkflow().createBashJob("split_n_trim_reassign");
+        Job jobSplitCigar = getWorkflow().createBashJob("split_n_trim_reassign");
 
-        String cmd = this.java + " -Xmx" + (splitCigarXmxg).toString() + "G" + " -jar "
+        String cmd = java + " -Xmx" + (splitCigarXmxg).toString() + "G" + " -jar "
                 + gatk + " -T SplitNCigarReads"
                 + " -R " + refFasta
                 + " -I " + inputFile
@@ -604,7 +608,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
 
         Job indelRealignerJob = getWorkflow().createBashJob("GATKIndelRealigner")
                 .setMaxMemory(Integer.toString((gatkIndelRealignerXmx + gatkOverhead) * 1024))
-                .setQueue(this.queue)
+                .setQueue(queue)
                 .addParent(realignerTargetCreatorJob);
         indelRealignerJob.getCommand().setArguments(indelRealignerCommand.getCommand());
 
@@ -639,7 +643,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         baseRecalibratorJob.getCommand().setArguments(baseRecalibratorCommand.getCommand());
 
         SqwFile recalibrationData = createOutputFile(baseRecalibratorCommand.getOutputFile(), TXT_METATYPE, manualOutput);
-        this.attachCVterms(recalibrationData, EDAM, "plain text format (unformatted),Read pre-processing,Sequence alignment refinement,Sequence alignment metadata");
+        attachCVterms(recalibrationData, EDAM, "plain text format (unformatted),Read pre-processing,Sequence alignment refinement,Sequence alignment metadata");
         baseRecalibratorJob.addFile(recalibrationData);
 
         //GATK Analyze Covariates ( https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_bqsr_AnalyzeCovariates.php )
@@ -656,7 +660,7 @@ public class BamMPWorkflow extends SemanticWorkflow {
         analyzeCovariatesJob.getCommand().setArguments(analyzeCovariatesCommand.getCommand());
 
         SqwFile recalibrationReport = createOutputFile(analyzeCovariatesCommand.getPlotsReportFile(), PDF_METATYPE, manualOutput);
-        this.attachCVterms(recalibrationReport, EDAM, "Read pre-processing,Sequence alignment refinement");
+        attachCVterms(recalibrationReport, EDAM, "Read pre-processing,Sequence alignment refinement");
         analyzeCovariatesJob.addFile(recalibrationReport);
 
         Multimap<String, Pair<String, Job>> recalibratedBams = HashMultimap.create();
@@ -726,9 +730,9 @@ public class BamMPWorkflow extends SemanticWorkflow {
     protected Job getIndexBamJob(String inputFilePath) {
         String outputFilePath = FilenameUtils.getPath(inputFilePath) + FilenameUtils.getBaseName(inputFilePath) + ".bai";
 
-        Job jobIndex = this.getWorkflow().createBashJob("index_bam");
-        jobIndex.setCommand(this.java + " -Xmx3G -jar "
-                + this.picard_dir + "BuildBamIndex.jar"
+        Job jobIndex = getWorkflow().createBashJob("index_bam");
+        jobIndex.setCommand(java + " -Xmx3G -jar "
+                + picardJar + " BuildBamIndex"
                 + " VALIDATION_STRINGENCY=SILENT"
                 + " I=" + inputFilePath
                 + " O=" + outputFilePath);
@@ -777,6 +781,67 @@ public class BamMPWorkflow extends SemanticWorkflow {
     private void error(String msg) {
         Log.error(msg);
         setWorkflowInvalid();
+    }
+
+    public Job markDuplicates(String java, String picardJar, int memoryMb, String tmpDir,
+            String input, String output, String metricsFile, String otherParams) {
+        String command = String.format("%s -Xmx%dM -jar %s MarkDuplicates INPUT=%s OUTPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT TMP_DIR=%s METRICS_FILE=%s",
+                java, memoryMb, picardJar, input, output, tmpDir, metricsFile, otherParams);
+        Job job = getWorkflow().createBashJob("PicardMarkDuplicates");
+        job.getCommand().addArgument(command);
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
+    }
+
+    public Job mergeSamFiles(String java, String picardJar, int memoryMb, String tmpDir,
+            String sortOrder, boolean assumeSorted, boolean useThreading, String otherParams,
+            String output, String... input) {
+        String command = String.format("%s -Xmx%dM -jar %s MergeSamFiles "
+                + "OUTPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT "
+                + "TMP_DIR=%s "
+                + "SORT_ORDER=%s "
+                + "CREATE_INDEX=true",
+                java, memoryMb, picardJar, output, tmpDir, sortOrder);
+        Job job = getWorkflow().createBashJob("PicardMergeBam");
+        job.getCommand().addArgument(command);
+        for (String in : input) {
+            job.getCommand().addArgument(String.format("INPUT=%s", in));
+        }
+        if (assumeSorted) {
+            job.getCommand().addArgument(String.format("ASSUME_SORTED=true"));
+        }
+        if (useThreading) {
+            job.getCommand().addArgument(String.format("USE_THREADING=true"));
+        }
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
+    }
+
+    public Job sortSamFile(String java, String picardJar, int memoryMb,
+            String tmpDir, String sortOrder, String output, String input, String otherParams) {
+        String command = String.format("%s -Xmx%dM -jar %s SortSam "
+                + "OUTPUT=%s "
+                + "INPUT=%s "
+                + "VALIDATION_STRINGENCY=SILENT "
+                + "TMP_DIR=%s "
+                + "SORT_ORDER=%s "
+                + "CREATE_INDEX=true",
+                java, memoryMb, picardJar, output, input, tmpDir, sortOrder);
+        Job job = getWorkflow().createBashJob("PicardSortBam");
+        job.getCommand().addArgument(command);
+        if (otherParams != null) {
+            job.getCommand().addArgument(otherParams);
+        }
+        job.setMaxMemory(String.valueOf(memoryMb + picardMemOverhead));
+        return job;
     }
 
 }
