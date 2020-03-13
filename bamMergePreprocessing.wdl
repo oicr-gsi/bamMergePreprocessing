@@ -402,6 +402,10 @@ task splitNCigarReads {
     String modules = "gatk/4.1.5.0"
   }
 
+  # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
+  # ~{sep = " " prefix("--read-filter ", readFilters)}
+  Array[String] prefixedReadFilters = prefix("--read-filter ", readFilters)
+
   command <<<
     set -euo pipefail
 
@@ -409,8 +413,8 @@ task splitNCigarReads {
     --input="~{bam}" \
     --output="~{outputFileName}~{suffix}.bam" \
     --reference ~{reference} \
-    ~{sep = " " prefix("--read-filter ", readFilters)} \
-    --CREATE_INDEX=true \
+    ~{sep = " " prefixedReadFilters} \
+    --create-output-bam-index true \
     ~{additionalParams}
   >>>
 
@@ -583,7 +587,7 @@ task baseQualityScoreRecalibration {
 
   # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
   # ~{sep=" " prefix("--intervals ", intervals)}
-  Array[String] prefixedIntervals = prefix("--intervals", intervals)
+  Array[String] prefixedIntervals = prefix("--intervals ", intervals)
 
   command <<<
     set -euo pipefail
