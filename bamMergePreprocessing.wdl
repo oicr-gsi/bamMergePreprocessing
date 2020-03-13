@@ -20,16 +20,23 @@ workflow bamMergePreprocessing {
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
   scatter (i in inputGroups) {
-    if(length(i.inputFiles) == 1) {
-      if(doFilterBam) {
-        call filterBam as filterSingleBam {
+    if(doFilterBam){
+      scatter(f in i.inputFiles) {
+        call filterBam {
           input:
-            bam = i.inputFiles[0],
-            outputFileName = i.outputIdentifier,
+            bam = f,
+            outputFileName = if length(i.inputFiles) == 1 then i.outputIdentifier else basename(f, ".bam"),
             suffix = ".filter"
         }
       }
-      if(!doFilterBam) {
+    }
+
+    if(length(i.inputFiles) == 1) {
+      if(defined(filterBam.filteredBam)) {
+        File filteredSingleBam = select_first([filterBam.filteredBam])[0]
+        File filteredSingleBamIndex = select_first([filterBam.filteredBamIndex])[0]
+      }
+      if(!defined(filterBam.filteredBam)) {
         call renameAndIndexBam {
           input:
             bam = i.inputFiles[0],
@@ -39,39 +46,33 @@ workflow bamMergePreprocessing {
       }
     }
     if(length(i.inputFiles) > 1) {
-      if(doFilterBam) {
-        scatter (bamFile in i.inputFiles) {
-          call filterBam as filterMultipleBams {
-            input:
-              bam = bamFile
-          }
-        }
-      }
-      call mergeBams as mergeSampleBams {
+      call mergeBams {
         input:
-          bams = select_first([filterMultipleBams.filteredBam, i.inputFiles]),
+          bams = select_first([filterBam.filteredBam, i.inputFiles]),
           outputFileName = i.outputIdentifier,
           suffix = if doFilterBam then ".filter.merge" else ".merge"
       }
     }
+    File singleBam = select_first([mergeBams.mergedBam, filteredSingleBam, renameAndIndexBam.renamedBam])
+    File singleBamIndex = select_first([mergeBams.mergedBamIndex, filteredSingleBamIndex, renameAndIndexBam.renamedBamIndex])
 
     if(doMarkDuplicates) {
       call markDuplicates {
         input:
-          bam = select_first([mergeSampleBams.mergedBam, filterSingleBam.filteredBam, renameAndIndexBam.renamedBam])
+          bam = singleBam
       }
     }
 
     if(doSplitNCigarReads) {
         call splitNCigarReads {
           input:
-            bam = select_first([markDuplicates.dedupedBam, mergeSampleBams.mergedBam, filterSingleBam.filteredBam, renameAndIndexBam.renamedBam]),
+            bam = select_first([markDuplicates.dedupedBam, singleBam]),
             reference = reference
         }
     }
 
-    File preprocessedBam = select_first([splitNCigarReads.splitBam, markDuplicates.dedupedBam, mergeSampleBams.mergedBam, filterSingleBam.filteredBam, renameAndIndexBam.renamedBam])
-    File preprocessedBamIndex = select_first([splitNCigarReads.splitBamIndex, markDuplicates.dedupedBamIndex, mergeSampleBams.mergedBamIndex, filterSingleBam.filteredBamIndex, renameAndIndexBam.renamedBamIndex])
+    File preprocessedBam = select_first([splitNCigarReads.splitBam, markDuplicates.dedupedBam, singleBam])
+    File preprocessedBamIndex = select_first([splitNCigarReads.splitBamIndex, markDuplicates.dedupedBamIndex, singleBam])
   }
   Array[File] preprocessedBams = preprocessedBam
   Array[File] preprocessedBamIndexes = preprocessedBamIndex
@@ -785,7 +786,7 @@ task collectFilesBySample {
 
 struct InputGroup {
   String outputIdentifier
-  Array[File] inputFiles
+  Array[File]+ inputFiles
 }
 
 struct InputGroups {
