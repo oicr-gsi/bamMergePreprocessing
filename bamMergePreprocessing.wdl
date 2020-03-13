@@ -198,7 +198,7 @@ task filterBam {
     Int? minMapQuality
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int cores = 1
     Int timeout = 6
     String modules = "samtools/1.9"
@@ -245,7 +245,7 @@ task renameAndIndexBam {
     String outputFileName
     String suffix = ""
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int cores = 1
     Int timeout = 6
     String modules = "samtools/1.9"
@@ -289,7 +289,7 @@ task mergeBams {
     String suffix = ".merge"
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -342,7 +342,7 @@ task markDuplicates {
     Int opticalDuplicatePixelDistance = 100
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -395,7 +395,7 @@ task splitNCigarReads {
     Array[String] readFilters = []
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -446,7 +446,7 @@ task realignerTargetCreator {
     Array[String] intervals
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -500,7 +500,7 @@ task indelRealign {
     File targetIntervals
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -574,7 +574,7 @@ task baseQualityScoreRecalibration {
     String? additionalParams
     String outputFileName = "gatk.recalibration.csv"
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -625,7 +625,7 @@ task analyzeCovariates {
     String? additionalParams
     String outputFileName = "gatk.recalibration.pdf"
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
@@ -671,7 +671,7 @@ task applyBaseQualityScoreRecalibration {
     String suffix = ".recalibrated"
     String? additionalParams
 
-    Int jobMemory = 16
+    Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
