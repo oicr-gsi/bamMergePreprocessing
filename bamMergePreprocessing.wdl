@@ -392,6 +392,7 @@ task splitNCigarReads {
     String outputFileName = basename(bam, ".bam")
     String suffix = ".split"
     String reference
+    Boolean refactorCigarString = false
     Array[String] readFilters = []
     String? additionalParams
 
@@ -415,6 +416,7 @@ task splitNCigarReads {
     --reference ~{reference} \
     ~{sep = " " prefixedReadFilters} \
     --create-output-bam-index true \
+    --refactor-cigar-string ~{refactorCigarString} \
     ~{additionalParams}
   >>>
 
