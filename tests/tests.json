@@ -56,7 +56,7 @@
           "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
-          "bamMergePreprocessing.filterBams.minMapQuality": 60,
+          "bamMergePreprocessing.filterBam.minMapQuality": 60,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -119,7 +119,7 @@
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -157,7 +157,7 @@
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -196,7 +196,7 @@
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -235,7 +235,7 @@
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -273,7 +273,7 @@
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -307,7 +307,7 @@
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBams.filterFlags": 256,
+          "bamMergePreprocessing.filterBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -343,7 +343,7 @@
           "bamMergePreprocessing.doMarkDuplicates": true,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitTrimReassignQuality.readFilters": [
+          "bamMergePreprocessing.splitNCigarReads.readFilters": [
             "ReassignOneMappingQuality"
           ],
           "bamMergePreprocessing.inputGroups": [
