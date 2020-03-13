@@ -343,9 +343,6 @@
           "bamMergePreprocessing.doMarkDuplicates": true,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitNCigarReads.readFilters": [
-            "ReassignOneMappingQuality"
-          ],
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_bam_full",
