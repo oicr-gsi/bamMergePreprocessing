@@ -343,7 +343,7 @@
           "bamMergePreprocessing.doMarkDuplicates": true,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitNCigarReads.refactorCigarString": true,
+	  "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_bam_full",
@@ -376,7 +376,7 @@
           "bamMergePreprocessing.doMarkDuplicates": true,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitNCigarReads.refactorCigarString": true,
+          "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_test",
