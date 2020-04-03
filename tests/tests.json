@@ -38,6 +38,19 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -68,6 +81,19 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -96,6 +122,19 @@
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
               ]
+            }
+          ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
             }
           ]
         }
@@ -136,6 +175,28 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_P"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            },
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_R"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -172,6 +233,28 @@
               "inputFiles": [
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam"
               ]
+            }
+          ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_P"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            },
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_R"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
             }
           ]
         }
@@ -213,6 +296,28 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_P"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            },
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_R"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -252,6 +357,28 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_P"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            },
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022_R"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -283,6 +410,19 @@
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
               ]
+            }
+          ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
             }
           ]
         }
@@ -319,6 +459,19 @@
               ]
             }
           ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "PCSI0022"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
+            }
+          ]
         }
       }
     },
@@ -343,13 +496,26 @@
           "bamMergePreprocessing.doMarkDuplicates": true,
           "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-	  "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
+          "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_bam_full",
               "inputFiles": [
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam"
               ]
+            }
+          ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "star_bam_full"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
             }
           ]
         }
@@ -384,6 +550,19 @@
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam",
                 "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam"
               ]
+            }
+          ]
+        },
+        "wdl_outputs": {
+          "bamMergePreprocessing.outputGroups": [
+            {
+              "key": {
+                "outputIdentifier": "star_test"
+              },
+              "annotations": {
+                "key1": "val1",
+                "key2": "val2"
+              }
             }
           ]
         }
