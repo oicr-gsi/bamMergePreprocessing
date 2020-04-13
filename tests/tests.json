@@ -30,11 +30,23 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             }
           ]
@@ -73,11 +85,23 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             }
           ]
@@ -116,11 +140,23 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             }
           ]
@@ -162,16 +198,28 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             },
             {
               "outputIdentifier": "PCSI0022_R",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                }
               ]
             }
           ]
@@ -222,16 +270,28 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             },
             {
               "outputIdentifier": "PCSI0022_R",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                }
               ]
             }
           ]
@@ -283,16 +343,28 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             },
             {
               "outputIdentifier": "PCSI0022_R",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                }
               ]
             }
           ]
@@ -344,16 +416,28 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             },
             {
               "outputIdentifier": "PCSI0022_R",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                }
               ]
             }
           ]
@@ -404,11 +488,23 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             }
           ]
@@ -451,11 +547,23 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
+                }
               ]
             }
           ]
@@ -500,8 +608,11 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_bam_full",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam.bai"
+                }
               ]
             }
           ]
@@ -546,9 +657,15 @@
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_test",
-              "inputFiles": [
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam",
-                "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam"
+              "bamAndBamIndexInputs": [
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam.bai"
+                },
+                {
+                  "left": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam",
+                  "right": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam.bai"
+                }
               ]
             }
           ]
