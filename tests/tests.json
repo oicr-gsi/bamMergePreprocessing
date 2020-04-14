@@ -16,6 +16,7 @@
       "id": "Test1",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -70,6 +71,7 @@
       "id": "Test2",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -81,7 +83,7 @@
           "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
-          "bamMergePreprocessing.filterBam.minMapQuality": 60,
+          "bamMergePreprocessing.preprocessBam.minMapQuality": 60,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -125,6 +127,7 @@
       "id": "Test3",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -181,6 +184,7 @@
       "description": "bqsr + multiple output groups",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -193,8 +197,8 @@
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -253,6 +257,7 @@
       "description": "bqsr + chr_size grouping test + multiple output groups",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -265,8 +270,8 @@
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -325,6 +330,7 @@
       "description": "no bqsr + multiple output groups",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -338,8 +344,8 @@
           ],
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -398,6 +404,7 @@
       "description": "no bqsr + chr_size grouping test + multiple output groups",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -411,8 +418,8 @@
           ],
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022_P",
@@ -471,6 +478,7 @@
       "description": "bqsr + chr_size grouping test + merge all inputs",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -483,8 +491,8 @@
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -529,6 +537,7 @@
       "description": "no bqsr + chr_size grouping test + merge all inputs",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -542,8 +551,8 @@
           ],
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": false,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
-          "bamMergePreprocessing.filterBam.filterFlags": 256,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.filterFlags": 256,
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "PCSI0022",
@@ -588,6 +597,7 @@
       "description": "split trim test on full star bams",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -599,12 +609,12 @@
           "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
-          "bamMergePreprocessing.doFilterBam": false,
+          "bamMergePreprocessing.doFilter": false,
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": true,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
+          "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_bam_full",
@@ -637,6 +647,7 @@
       "description": "split trim test on star bams",
       "parameters": {
         "wdl_inputs": {
+          "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
           "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
           "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
           "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
@@ -648,12 +659,12 @@
           "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
             "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
           ],
-          "bamMergePreprocessing.doFilterBam": false,
+          "bamMergePreprocessing.doFilter": false,
           "bamMergePreprocessing.doBqsr": false,
           "bamMergePreprocessing.doMarkDuplicates": true,
-          "bamMergePreprocessing.markDuplicates.removeDuplicates": false,
+          "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
           "bamMergePreprocessing.doSplitNCigarReads": true,
-          "bamMergePreprocessing.splitNCigarReads.additionalParams": "--process-secondary-alignments true",
+          "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
           "bamMergePreprocessing.inputGroups": [
             {
               "outputIdentifier": "star_test",

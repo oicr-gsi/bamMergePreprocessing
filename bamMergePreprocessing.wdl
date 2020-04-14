@@ -5,7 +5,7 @@ workflow bamMergePreprocessing {
   input {
     Array[InputGroup] inputGroups
     String intervalsToParallelizeByString
-    Boolean doFilterBam = true
+    Boolean doFilter = true
     Boolean doMarkDuplicates = true
     Boolean doSplitNCigarReads = false
     Boolean doIndelRealignment = true
@@ -19,76 +19,28 @@ workflow bamMergePreprocessing {
   }
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
-  scatter (i in inputGroups) {
-    #if(doFilterBam){
-      scatter (intervals in intervalsToParallelizeBy) {
-        scatter(bamAndBamIndex in i.bamAndBamIndexInputs) {
-          call filterBam {
-            input:
-              bam = bamAndBamIndex.left,
-              bamIndex = bamAndBamIndex.right,
-              regions = intervals,
-              outputFileName = if length(i.bamAndBamIndexInputs) == 1 then i.outputIdentifier else basename(bamAndBamIndex.left, ".bam"),
-              suffix = ".filter"
-          }
-        }
-        Array[File] filterBamOutput = filterBam.filteredBam
-
-        # mark duplicates by interval + merge
-        if(doMarkDuplicates) {
-          call markDuplicates {
-            input:
-              bams = filterBamOutput,
-              outputFileName = i.outputIdentifier,
-              suffix = if doFilterBam then ".filter.merge" else ".merge"
-          }
-          Array[File] markDuplicatesOutput = [markDuplicates.dedupedBam]
-        }
-
-        if(doSplitNCigarReads) {
-          call splitNCigarReads {
-            input:
-              bams = select_first([markDuplicatesOutput, filterBamOutput]),
-              reference = reference
-          }
-          Array[File] splitNCigarReadsOutput = [splitNCigarReads.splitBam]
-        }
-
-        Array[File] scatteredFiles = select_first([splitNCigarReadsOutput, markDuplicatesOutput, filterBamOutput])
-      }
-      Array[File] scatteredFilesFlattened = flatten(scatteredFiles)
-
-      # merge by split by chr bams
-      # if only one inputFile in group, no merge suffix
-      if(length(i.bamAndBamIndexInputs) == 1) {
-        call mergeBams as singleInputMergedBam{
+  scatter (intervals in intervalsToParallelizeBy) {
+    scatter (i in inputGroups) {
+      scatter(index in range(length(i.bamAndBamIndexInputs))) {
+        Pair[File,File] bamAndBamIndex = i.bamAndBamIndexInputs[index]
+        call preprocessBam {
           input:
-            bams = scatteredFilesFlattened,
-            outputFileName = i.outputIdentifier,
-            suffix = ""
+            bam = bamAndBamIndex.left,
+            bamIndex = bamAndBamIndex.right,
+            regions = intervals,
+            outputFileName = index + "_" + i.outputIdentifier, # prefix outputIdentifier b/c nWayOut, collectFilesBySample removes this prefix
+            reference = reference,
+            doFilter = doFilter,
+            doMarkDuplicates = doMarkDuplicates,
+            doSplitNCigarReads = doSplitNCigarReads
         }
       }
-      # if multiple inputs in group, add merge suffix
-      if(length(i.bamAndBamIndexInputs) > 1) {
-        call mergeBams as multipleInputMergeBam{
-          input:
-            bams = scatteredFilesFlattened,
-            outputFileName = i.outputIdentifier,
-            suffix = if doFilterBam then ".filter.merge" else ".merge"
-        }
-      }
-    #} # end filter
+    }
+    Array[File] preprocessedBams = flatten(preprocessBam.preprocessedBam)
+    Array[File] preprocessedBamIndexes = flatten(preprocessBam.preprocessedBamIndex)
 
-    File preprocessedBam = select_first([multipleInputMergeBam.mergedBam, singleInputMergedBam.mergedBam])
-    File preprocessedBamIndex = select_first([multipleInputMergeBam.mergedBamIndex, singleInputMergedBam.mergedBamIndex])
-
-  }
-  Array[File] preprocessedBams = preprocessedBam
-  Array[File] preprocessedBamIndexes = preprocessedBamIndex
-
-  # indel realignment combines samples (nWayOut) and is parallized by chromosome
-  if(doIndelRealignment) {
-    scatter (intervals in intervalsToParallelizeBy) {
+    # indel realignment combines samples (nWayOut) and is parallized by chromosome
+    if(doIndelRealignment) {
       call realignerTargetCreator {
         input:
           bams = preprocessedBams,
@@ -105,28 +57,40 @@ workflow bamMergePreprocessing {
           targetIntervals = realignerTargetCreator.targetIntervals,
           reference = reference
       }
+      Array[File] indelRealignedBams = indelRealign.indelRealignedBams
+      Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
     }
-    Array[File] indelRealignedBams = flatten(indelRealign.indelRealignedBams)
-    Array[File] indelRealignedBamIndexes = flatten(indelRealign.indelRealignedBamIndexes)
+
+    if(doBqsr) {
+      call baseQualityScoreRecalibration {
+        input:
+          bams = select_first([indelRealignedBams, preprocessedBams]),
+          reference = reference
+      }
+    }
+    Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])
+    Array[File] processedBamIndexesByInterval = select_first([indelRealignedBamIndexes, preprocessedBamIndexes])
+    File? recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
   }
+  Array[File] processedBams = flatten(processedBamsByInterval)
+  Array[File] processedBamIndexes = flatten(processedBamIndexesByInterval)
 
   if(doBqsr) {
-    call baseQualityScoreRecalibration {
+    call gatherBQSRReports {
       input:
-        bams = select_first([indelRealignedBams, preprocessedBams]),
-        reference = reference
+        recalibrationTables = select_all(recalibrationTableByInterval)
     }
 
     call analyzeCovariates {
       input:
-        recalibrationTables = [baseQualityScoreRecalibration.recalibrationTable]
+        recalibrationTable = gatherBQSRReports.recalibrationTable
     }
 
-    scatter(f in select_first([indelRealignedBams, preprocessedBams])) {
+    scatter(bam in processedBams) {
       call applyBaseQualityScoreRecalibration {
         input:
-          recalibrationTables = [baseQualityScoreRecalibration.recalibrationTable],
-          bam = f
+          recalibrationTable = gatherBQSRReports.recalibrationTable,
+          bam = bam
       }
     }
     Array[File] recalibratedBams = applyBaseQualityScoreRecalibration.recalibratedBam
@@ -136,8 +100,8 @@ workflow bamMergePreprocessing {
   call collectFilesBySample {
     input:
       inputGroups = inputGroups,
-      bams = select_first([recalibratedBams, indelRealignedBams, preprocessedBams]),
-      bamIndexes = select_first([recalibratedBamIndexes, indelRealignedBamIndexes, preprocessedBamIndexes])
+      bams = select_first([recalibratedBams, processedBams]),
+      bamIndexes = select_first([recalibratedBamIndexes, processedBamIndexes])
   }
 
   scatter(o in collectFilesBySample.filesByOutputIdentifier.collectionGroups) {
@@ -199,39 +163,153 @@ task splitStringToArray {
   }
 }
 
-task filterBam {
+task preprocessBam {
   input {
+    Boolean doFilter = true
+    Boolean doMarkDuplicates = true
+    Boolean doSplitNCigarReads = false
+
+    String outputFileName
+
+    # by default write tmp files to the current working directory (cromwell task directory)
+    # $TMPDIR is set by Cromwell
+    # $TMP is set by Univa
+    String temporaryWorkingDir = ""
+
     File bam
     File bamIndex
-    String outputFileName = basename(bam, ".bam")
-    String suffix = ".filter"
     Array[String] regions
+
+    # filter parameters
+    String filterSuffix = ".filter"
     Int filterFlags = 260
     Int? minMapQuality
-    String? additionalParams
+    String? filterAdditionalParams
+
+    # mark duplicates
+    String markDuplicatesSuffix = ".deduped"
+    Boolean removeDuplicates = false
+    Int opticalDuplicatePixelDistance = 100
+    String? markDuplicatesAdditionalParams
+
+    # split N cigar reads
+    String splitNCigarReadsSuffix = ".split"
+    String reference
+    Boolean refactorCigarString = false
+    Array[String] readFilters = []
+    String? splitNCigarReadsAdditionalParams
 
     Int jobMemory = 24
+    Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "samtools/1.9"
+    String modules = "samtools/1.9 gatk/4.1.5.0"
   }
+
+  String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
+
+  String baseFileName = "~{outputFileName}"
+
+  String filteredFileName = if doFilter then
+                            "~{baseFileName}.filter"
+                           else
+                            "~{baseFileName}"
+  String filteredFilePath = if doMarkDuplicates || doSplitNCigarReads then
+                            "~{workingDir}~{filteredFileName}"
+                           else "~{filteredFileName}"
+
+  String markDuplicatesFileName = if doMarkDuplicates then
+                                  "~{filteredFileName}.deduped"
+                                 else
+                                  "~{filteredFileName}"
+  String markDuplicatesFilePath = if doSplitNCigarReads then
+                                  "~{workingDir}~{markDuplicatesFileName}"
+                                 else
+                                  "~{markDuplicatesFileName}"
+
+  String splitNCigarReadsFileName = if doSplitNCigarReads then
+                                    "~{markDuplicatesFileName}.split"
+                                   else
+                                    "~{markDuplicatesFileName}"
+  String splitNCigarReadsFilePath = if false then # there are no downstream steps, so don't write to temp dir
+                                    "~{workingDir}~{splitNCigarReadsFileName}"
+                                   else
+                                    "~{splitNCigarReadsFileName}"
+
+  # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
+  # ~{sep = " " prefix("--read-filter ", readFilters)}
+  Array[String] prefixedReadFilters = prefix("--read-filter ", readFilters)
 
   command <<<
     set -euo pipefail
+    inputBam="~{bam}"
+    inputBamIndex="~{bamIndex}"
+    # filter
+    if [ "~{doFilter}" = true ]; then
+      samtools view -b \
+      -F ~{filterFlags} \
+      ~{"-q " + minMapQuality} \
+      ~{filterAdditionalParams} \
+      $inputBam \
+      ~{sep=" " regions} > "~{filteredFilePath}.bam"
+      samtools index "~{filteredFilePath}.bam" "~{filteredFilePath}.bai"
+      inputBam="~{filteredFilePath}.bam"
+      inputBamIndex="~{filteredFilePath}.bai"
+    else
+      samtools view -b \
+      $inputBam \
+      ~{sep=" " regions} > "~{filteredFilePath}.bam"
+      samtools index "~{filteredFilePath}.bam" "~{filteredFilePath}.bai"
+      inputBam="~{filteredFilePath}.bam"
+      inputBamIndex="~{filteredFilePath}.bai"
+    fi
 
-    samtools view -b \
-    -F ~{filterFlags} \
-    ~{"-q " + minMapQuality} \
-    ~{additionalParams} \
-    ~{bam} \
-    ~{sep=" " regions} > ~{outputFileName}~{suffix}.bam
+    # mark duplicates
+    if [ "~{doMarkDuplicates}" = true ]; then
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+      --INPUT="$inputBam" \
+      --OUTPUT="~{markDuplicatesFilePath}.bam" \
+      --METRICS_FILE="~{outputFileName}.metrics" \
+      --VALIDATION_STRINGENCY=SILENT \
+      --REMOVE_DUPLICATES=~{removeDuplicates} \
+      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+      --CREATE_INDEX=true \
+      ~{markDuplicatesAdditionalParams}
+      inputBam="~{markDuplicatesFilePath}.bam"
+      inputBamIndex="~{markDuplicatesFilePath}.bai"
+    fi
 
-    samtools index ~{outputFileName}~{suffix}.bam ~{outputFileName}~{suffix}.bai
+    # split N cigar reads
+    if [ "~{doSplitNCigarReads}" = true ]; then
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
+      --input="$inputBam" \
+      --output="~{splitNCigarReadsFilePath}.bam" \
+      --reference ~{reference} \
+      ~{sep = " " prefixedReadFilters} \
+      --create-output-bam-index true \
+      --refactor-cigar-string ~{refactorCigarString} \
+      ~{splitNCigarReadsAdditionalParams}
+      inputBam="~{splitNCigarReadsFilePath}.bam"
+      inputBamIndex="~{splitNCigarReadsFilePath}.bai"
+    fi
   >>>
 
   output {
-    File filteredBam = outputFileName + suffix + ".bam"
-    File filteredBamIndex = outputFileName + suffix + ".bai"
+    File preprocessedBam = if doSplitNCigarReads then
+                            "~{splitNCigarReadsFilePath}.bam"
+                           else if doMarkDuplicates then
+                            "~{markDuplicatesFilePath}.bam"
+                           else if doFilter then
+                            "~{filteredFilePath}.bam"
+                           else "~{bam}"
+    File preprocessedBamIndex = if doSplitNCigarReads then
+                                  "~{splitNCigarReadsFilePath}.bai"
+                                else if doMarkDuplicates then
+                                  "~{markDuplicatesFilePath}.bai"
+                                else if doFilter then
+                                  "~{filteredFilePath}.bai"
+                                else "~{bamIndex}"
+    File? markDuplicateMetrics = "~{outputFileName}.metrics"
   }
 
   runtime {
@@ -239,59 +317,6 @@ task filterBam {
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
-  }
-
-  parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
-  }
-}
-
-task renameAndIndexBam {
-  input {
-    File bam
-    String outputFileName
-    String suffix = ""
-
-    Int jobMemory = 24
-    Int cores = 1
-    Int timeout = 6
-    String modules = "samtools/1.9"
-  }
-
-  command <<<
-    set -euo pipefail
-
-    ln -s ~{bam} ~{outputFileName}~{suffix}.bam
-
-    samtools index ~{outputFileName}~{suffix}.bam ~{outputFileName}~{suffix}.bai
-  >>>
-
-  output {
-    File renamedBam = outputFileName + suffix + ".bam"
-    File renamedBamIndex = outputFileName + suffix + ".bai"
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
   }
 }
 
@@ -326,119 +351,6 @@ task mergeBams {
   output {
     File mergedBam = "~{outputFileName}~{suffix}.bam"
     File mergedBamIndex = "~{outputFileName}~{suffix}.bai"
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
-  }
-}
-
-task markDuplicates {
-  input {
-    Array[File] bams
-    String outputFileName = basename(bams[0], ".bam")
-    String suffix = ".deduped"
-    Boolean removeDuplicates = false
-    Int opticalDuplicatePixelDistance = 100
-    String? additionalParams
-
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-    String modules = "gatk/4.1.5.0"
-  }
-
-
-
-  command <<<
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-    ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}~{suffix}.bam" \
-    --METRICS_FILE="~{outputFileName}.metrics" \
-    --VALIDATION_STRINGENCY=SILENT \
-    --REMOVE_DUPLICATES=~{removeDuplicates} \
-    --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-    --CREATE_INDEX=true \
-    ~{additionalParams}
-  >>>
-
-  output {
-    File dedupedBam = "~{outputFileName}~{suffix}.bam"
-    File dedupedBamIndex = "~{outputFileName}~{suffix}.bai"
-    File metricsFile = "~{outputFileName}.metrics"
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
-  }
-}
-
-task splitNCigarReads {
-  input {
-    Array[File] bams
-    String outputFileName = basename(bams[0], ".bam")
-    String suffix = ".split"
-    String reference
-    Boolean refactorCigarString = false
-    Array[String] readFilters = []
-    String? additionalParams
-
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-    String modules = "gatk/4.1.5.0"
-  }
-
-  # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
-  # ~{sep = " " prefix("--read-filter ", readFilters)}
-  Array[String] prefixedReadFilters = prefix("--read-filter ", readFilters)
-
-  command <<<
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-    ~{sep=" " prefix("--input=", bams)} \
-    --output="~{outputFileName}~{suffix}.bam" \
-    --reference ~{reference} \
-    ~{sep = " " prefixedReadFilters} \
-    --create-output-bam-index true \
-    --refactor-cigar-string ~{refactorCigarString} \
-    ~{additionalParams}
-  >>>
-
-  output {
-    File splitBam = "~{outputFileName}~{suffix}.bam"
-    File splitBamIndex = "~{outputFileName}~{suffix}.bai"
   }
 
   runtime {
@@ -645,9 +557,53 @@ task baseQualityScoreRecalibration {
   }
 }
 
-task analyzeCovariates {
+task gatherBQSRReports {
   input {
     Array[File] recalibrationTables
+    String? additionalParams
+    String outputFileName = "gatk.recalibration.csv"
+
+    Int jobMemory = 24
+    Int overhead = 6
+    Int cores = 1
+    Int timeout = 6
+    String modules = "gatk/4.1.5.0"
+  }
+
+  command <<<
+    set -euo pipefail
+
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
+    ~{sep=" " prefix("--input=", recalibrationTables)} \
+    --output ~{outputFileName} \
+    ~{additionalParams}
+  >>>
+
+  output {
+    File recalibrationTable = outputFileName
+  }
+
+  runtime {
+    memory: "~{jobMemory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+    modules: "~{modules}"
+  }
+
+  parameter_meta {
+
+  }
+
+  meta {
+    output_meta: {
+
+    }
+  }
+}
+
+task analyzeCovariates {
+  input {
+    File recalibrationTable
     String? additionalParams
     String outputFileName = "gatk.recalibration.pdf"
 
@@ -662,7 +618,7 @@ task analyzeCovariates {
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
-    ~{sep=" " prefix("--bqsr-recal-file=", recalibrationTables)} \
+    --bqsr-recal-file=~{recalibrationTable} \
     --plots-report-file ~{outputFileName} \
     ~{additionalParams}
   >>>
@@ -691,7 +647,7 @@ task analyzeCovariates {
 
 task applyBaseQualityScoreRecalibration {
   input {
-    Array[File] recalibrationTables
+    File recalibrationTable
     File bam
     String outputFileName = basename(bam, ".bam")
     String suffix = ".recalibrated"
@@ -708,7 +664,7 @@ task applyBaseQualityScoreRecalibration {
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
-    ~{sep=" " prefix("--bqsr-recal-file=", recalibrationTables)} \
+    --bqsr-recal-file=~{recalibrationTable} \
     ~{sep=" " prefix("--input=", [bam])} \
     --output ~{outputFileName}~{suffix}.bam \
     ~{additionalParams}
@@ -757,6 +713,7 @@ task collectFilesBySample {
     python <<CODE
     import json
     import os
+    import re
 
     with open('~{write_json(wrappedInputGroups)}') as f:
         inputGroups = json.load(f)
@@ -767,13 +724,17 @@ task collectFilesBySample {
 
     filesByOutputIdentifier = []
     for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
-        bams = [bam for bam in bamFiles if outputIdentifier in bam]
-        bais = [bai for bai in bamIndexFiles if outputIdentifier in bai]
-        fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
+        # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
+        bams = [bam for bam in bamFiles if re.match("^[0-9]+_" + outputIdentifier, os.path.basename(bam))]
+        bais = [bai for bai in bamIndexFiles if re.match("^[0-9]+_" + outputIdentifier, os.path.basename(bai))]
+
+        # get the file name, remove the "index" prefix from preprocessBam, check that there is only one unique final output file name
+        fileNames = list(set(["_".join(os.path.splitext(os.path.basename(f))[0].split("_")[1:]) for f in bams + bais]))
         if len(fileNames) != 1:
-            raise Exception("Unable to determine fileName, fileNames = [" + ','.join(f for f in fileNames) + "]")
+            raise Exception("Unable to determine unique fileName from fileNames = [" + ','.join(f for f in fileNames) + "]")
         else:
             fileName = fileNames[0]
+
         filesByOutputIdentifier.append({
             'outputIdentifier': outputIdentifier,
             'outputFileName': fileName,
