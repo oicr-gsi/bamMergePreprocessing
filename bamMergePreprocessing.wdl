@@ -21,23 +21,26 @@ workflow bamMergePreprocessing {
 
   scatter (intervals in intervalsToParallelizeBy) {
     scatter (i in inputGroups) {
-      scatter(index in range(length(i.bamAndBamIndexInputs))) {
-        Pair[File,File] bamAndBamIndex = i.bamAndBamIndexInputs[index]
-        call preprocessBam {
-          input:
-            bam = bamAndBamIndex.left,
-            bamIndex = bamAndBamIndex.right,
-            regions = intervals,
-            outputFileName = index + "_" + i.outputIdentifier, # prefix outputIdentifier b/c nWayOut, collectFilesBySample removes this prefix
-            reference = reference,
-            doFilter = doFilter,
-            doMarkDuplicates = doMarkDuplicates,
-            doSplitNCigarReads = doSplitNCigarReads
-        }
+      scatter(bamAndBamIndexInput in i.bamAndBamIndexInputs) {
+        File inputGroupBam = bamAndBamIndexInput.left
+        File inputGroupBamIndex = bamAndBamIndexInput.right
+      }
+      Array[File] inputGroupBams = inputGroupBam
+      Array[File] inputGroupBamIndexes = inputGroupBamIndex
+      call preprocessBam {
+        input:
+          bams = inputGroupBams,
+          bamIndexes = inputGroupBamIndexes,
+          intervals = intervals,
+          outputFileName = i.outputIdentifier,
+          reference = reference,
+          doFilter = doFilter,
+          doMarkDuplicates = doMarkDuplicates,
+          doSplitNCigarReads = doSplitNCigarReads
       }
     }
-    Array[File] preprocessedBams = flatten(preprocessBam.preprocessedBam)
-    Array[File] preprocessedBamIndexes = flatten(preprocessBam.preprocessedBamIndex)
+    Array[File] preprocessedBams = preprocessBam.preprocessedBam
+    Array[File] preprocessedBamIndexes = preprocessBam.preprocessedBamIndex
 
     # indel realignment combines samples (nWayOut) and is parallized by chromosome
     if(doIndelRealignment) {
@@ -176,9 +179,9 @@ task preprocessBam {
     # $TMP is set by Univa
     String temporaryWorkingDir = ""
 
-    File bam
-    File bamIndex
-    Array[String] regions
+    Array[File] bams
+    Array[File] bamIndexes
+    Array[String] intervals
 
     # filter parameters
     String filterSuffix = ".filter"
@@ -241,33 +244,56 @@ task preprocessBam {
   Array[String] prefixedReadFilters = prefix("--read-filter ", readFilters)
 
   command <<<
-    set -euo pipefail
-    inputBam="~{bam}"
-    inputBamIndex="~{bamIndex}"
+    set -euxo pipefail
+    inputBams="~{sep=" " bams}"
+    inputBamIndexes="~{sep=" " bamIndexes}"
+
     # filter
     if [ "~{doFilter}" = true ]; then
-      samtools view -b \
-      -F ~{filterFlags} \
-      ~{"-q " + minMapQuality} \
-      ~{filterAdditionalParams} \
-      $inputBam \
-      ~{sep=" " regions} > "~{filteredFilePath}.bam"
-      samtools index "~{filteredFilePath}.bam" "~{filteredFilePath}.bai"
-      inputBam="~{filteredFilePath}.bam"
-      inputBamIndex="~{filteredFilePath}.bai"
+      outputBams=()
+      outputBamIndexes=()
+      for inputBam in $inputBams; do
+        filename="$(basename $inputBam ".bam")"
+        outputBam="~{workingDir}${filename}.filtered.bam"
+        outputBamIndex="~{workingDir}${filename}.filtered.bai"
+        samtools view -b \
+        -F ~{filterFlags} \
+        ~{"-q " + minMapQuality} \
+        ~{filterAdditionalParams} \
+        $inputBam \
+        ~{sep=" " intervals} > $outputBam
+        samtools index $outputBam $outputBamIndex
+        outputBams+=("$outputBam")
+        outputBamIndexes+=("$outputBamIndex")
+      done
+      # set inputs for next step
+      inputBams=("${outputBams[@]}")
+      inputBamIndexes=("${outputBamIndexes[@]}")
     else
-      samtools view -b \
-      $inputBam \
-      ~{sep=" " regions} > "~{filteredFilePath}.bam"
-      samtools index "~{filteredFilePath}.bam" "~{filteredFilePath}.bai"
-      inputBam="~{filteredFilePath}.bam"
-      inputBamIndex="~{filteredFilePath}.bai"
+      outputBams=()
+      outputBamIndexes=()
+      for inputBam in $inputBams; do
+        filename="$(basename $inputBam ".bam")"
+        outputBam="~{workingDir}${filename}.bam"
+        outputBamIndex="~{workingDir}${filename}.bai"
+        samtools view -b \
+        $inputBam \
+        ~{sep=" " intervals} > $outputBam
+        samtools index $outputBam $outputBamIndex
+        outputBams+=("$outputBam")
+        outputBamIndexes+=("$outputBamIndex")
+      done
+      # set inputs for next step
+      inputBams=("${outputBams[@]}")
+      inputBamIndexes=("${outputBamIndexes[@]}")
     fi
 
     # mark duplicates
     if [ "~{doMarkDuplicates}" = true ]; then
+      outputBams=()
+      outputBamIndexes=()
       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      --INPUT="$inputBam" \
+      ${inputBams[@]/#/--INPUT } \
       --OUTPUT="~{markDuplicatesFilePath}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
       --VALIDATION_STRINGENCY=SILENT \
@@ -275,22 +301,43 @@ task preprocessBam {
       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
       --CREATE_INDEX=true \
       ~{markDuplicatesAdditionalParams}
-      inputBam="~{markDuplicatesFilePath}.bam"
-      inputBamIndex="~{markDuplicatesFilePath}.bai"
+      outputBams+=("~{markDuplicatesFilePath}.bam")
+      outputBamIndexes+=("~{markDuplicatesFilePath}.bai")
+      # set inputs for next step
+      inputBams=("${outputBams[@]}")
+      inputBamIndexes=("${outputBamIndexes[@]}")
     fi
 
     # split N cigar reads
     if [ "~{doSplitNCigarReads}" = true ]; then
+      outputBams=()
+      outputBamIndexes=()
       gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      --input="$inputBam" \
+      ${inputBams[@]/#/--input=} \
       --output="~{splitNCigarReadsFilePath}.bam" \
       --reference ~{reference} \
-      ~{sep = " " prefixedReadFilters} \
+      ~{sep=" " prefix("--intervals ", intervals)} \
+      ~{sep=" " prefixedReadFilters} \
       --create-output-bam-index true \
       --refactor-cigar-string ~{refactorCigarString} \
       ~{splitNCigarReadsAdditionalParams}
-      inputBam="~{splitNCigarReadsFilePath}.bam"
-      inputBamIndex="~{splitNCigarReadsFilePath}.bai"
+      outputBams+=("~{splitNCigarReadsFilePath}.bam")
+      outputBamIndexes+=("~{splitNCigarReadsFilePath}.bai")
+      # set inputs for next step
+      inputBams=("${outputBams[@]}")
+      inputBamIndexes=("${outputBamIndexes[@]}")
+    fi
+
+    # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
+    if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
+      ${inputBams[@]/#/--INPUT=} \
+      --OUTPUT="~{filteredFileName}.bam" \
+      --CREATE_INDEX=true \
+      --SORT_ORDER=coordinate \
+      --ASSUME_SORTED=false \
+      --USE_THREADING=true \
+      --VALIDATION_STRINGENCY=SILENT
     fi
   >>>
 
@@ -301,14 +348,14 @@ task preprocessBam {
                             "~{markDuplicatesFilePath}.bam"
                            else if doFilter then
                             "~{filteredFilePath}.bam"
-                           else "~{bam}"
+                           else "~{filteredFileName}.bam"
     File preprocessedBamIndex = if doSplitNCigarReads then
                                   "~{splitNCigarReadsFilePath}.bai"
                                 else if doMarkDuplicates then
                                   "~{markDuplicatesFilePath}.bai"
                                 else if doFilter then
                                   "~{filteredFilePath}.bai"
-                                else "~{bamIndex}"
+                                else "~{filteredFileName}.bai"
     File? markDuplicateMetrics = "~{outputFileName}.metrics"
   }
 
@@ -725,11 +772,10 @@ task collectFilesBySample {
     filesByOutputIdentifier = []
     for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
         # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
-        bams = [bam for bam in bamFiles if re.match("^[0-9]+_" + outputIdentifier, os.path.basename(bam))]
-        bais = [bai for bai in bamIndexFiles if re.match("^[0-9]+_" + outputIdentifier, os.path.basename(bai))]
+        bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier, os.path.basename(bam))]
+        bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier, os.path.basename(bai))]
 
-        # get the file name, remove the "index" prefix from preprocessBam, check that there is only one unique final output file name
-        fileNames = list(set(["_".join(os.path.splitext(os.path.basename(f))[0].split("_")[1:]) for f in bams + bais]))
+        fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
         if len(fileNames) != 1:
             raise Exception("Unable to determine unique fileName from fileNames = [" + ','.join(f for f in fileNames) + "]")
         else:
