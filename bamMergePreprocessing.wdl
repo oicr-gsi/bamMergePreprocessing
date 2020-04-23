@@ -206,7 +206,7 @@ task preprocessBam {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "samtools/1.9 gatk/4.1.5.0"
+    String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
@@ -378,7 +378,7 @@ task mergeBams {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.5.0"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -563,7 +563,7 @@ task baseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.5.0"
+    String modules = "gatk/4.1.6.0"
   }
 
   # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
@@ -614,7 +614,7 @@ task gatherBQSRReports {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.5.0"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -658,7 +658,7 @@ task analyzeCovariates {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.5.0"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -704,7 +704,7 @@ task applyBaseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.5.0"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
