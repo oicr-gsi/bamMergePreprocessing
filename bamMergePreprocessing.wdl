@@ -22,8 +22,8 @@ workflow bamMergePreprocessing {
   scatter (intervals in intervalsToParallelizeBy) {
     scatter (i in inputGroups) {
       scatter(bamAndBamIndexInput in i.bamAndBamIndexInputs) {
-        File inputGroupBam = bamAndBamIndexInput.left
-        File inputGroupBamIndex = bamAndBamIndexInput.right
+        File inputGroupBam = bamAndBamIndexInput.bam
+        File inputGroupBamIndex = bamAndBamIndexInput.bamIndex
       }
       Array[File] inputGroupBams = inputGroupBam
       Array[File] inputGroupBamIndexes = inputGroupBamIndex
@@ -817,9 +817,14 @@ task collectFilesBySample {
   }
 }
 
+struct BamAndBamIndex {
+  File bam
+  File bamIndex
+}
+
 struct InputGroup {
   String outputIdentifier
-  Array[Pair[File,File]]+ bamAndBamIndexInputs
+  Array[BamAndBamIndex]+ bamAndBamIndexInputs
 }
 
 struct InputGroups {
