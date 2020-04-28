@@ -772,8 +772,8 @@ task collectFilesBySample {
     filesByOutputIdentifier = []
     for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
         # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
-        bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier, os.path.basename(bam))]
-        bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier, os.path.basename(bai))]
+        bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bam))]
+        bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bai))]
 
         fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
         if len(fileNames) != 1:
