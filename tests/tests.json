@@ -6,8 +6,8 @@
     "output_metrics_dir": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics",
     "parameters": {
       "wdl_options": {
-        "write_to_cache": false,
-        "read_from_cache": false
+        "write_to_cache": true,
+        "read_from_cache": true
       }
     }
   },
