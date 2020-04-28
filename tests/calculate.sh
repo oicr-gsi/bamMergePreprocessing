@@ -11,3 +11,6 @@ module load samtools 2>/dev/null; \
 find . -regex '.*\.bam$' \
        -exec sh -c \" samtools flagstat {} | tr '\n' '\t'; echo \" \; \
 | sort | uniq | tr '\t' '\n'"
+
+# get a listing of the output files
+ls -1

@@ -123,6 +123,7 @@ workflow bamMergePreprocessing {
 
   output {
     Array[OutputGroup] outputGroups = outputGroup
+    File recalibrationReport = analyzeCovariates.recalibrationReport
   }
 }
 
