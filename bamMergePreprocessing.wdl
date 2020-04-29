@@ -426,6 +426,7 @@ task realignerTargetCreator {
     String reference
     Array[String] knownIndels
     Array[String] intervals
+    String? downsamplingType
     String? additionalParams
 
     Int jobMemory = 24
@@ -448,7 +449,7 @@ task realignerTargetCreator {
     ~{sep=" " prefix("--input_file ", bams)} \
     ~{sep=" " prefix("--known ", knownIndels)} \
     --out realignerTargetCreator.intervals \
-    --downsampling_type NONE \
+    ~{"--downsampling_type " + downsamplingType} \
     ~{additionalParams}
   >>>
 
