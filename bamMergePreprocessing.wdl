@@ -13,6 +13,46 @@ workflow bamMergePreprocessing {
     String reference
   }
 
+  parameter_meta {
+    inputGroups: "Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name)."
+    intervalsToParallelizeByString: "Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4)."
+    doFilter: "Enable/disable Samtools filtering."
+    doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
+    doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
+    doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
+    doBqsr: "Enable/disable GATK4 BQSR."
+    reference: "Path to reference file."
+  }
+
+  meta {
+    author: "Michael Laszloffy"
+    email: "michael.laszloffy@oicr.on.ca"
+    description: ""
+    dependencies: [
+      {
+        name: "samtools/1.9",
+        url: "http://www.htslib.org/"
+      },
+      {
+        name: "gatk/4.1.6.0",
+        url: "https://gatk.broadinstitute.org"
+      },
+      {
+        name: "gatk/3.6-0",
+        url: "https://gatk.broadinstitute.org"
+      },
+      {
+       name: "python/3.7",
+       url: "https://www.python.org"
+      }
+    ]
+    output_meta: {
+      outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
+      recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
+      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
+    }
+  }
+
   call splitStringToArray {
     input:
       str = intervalsToParallelizeByString
@@ -158,13 +198,13 @@ task splitStringToArray {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    str: "Interval string to split (e.g. chr1,chr2,chr3+chr4)."
+    lineSeparator: "Interval group separator - these are the intervals to split by."
+    recordSeparator: "Interval interval group separator - this can be used to combine multiple intervals into one group."
+    jobMemory: "Memory allocated to job (in GB)."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -367,6 +407,35 @@ task preprocessBam {
     timeout: "~{timeout}"
     modules: "~{modules}"
   }
+
+  parameter_meta {
+    doFilter: "Enable/disable Samtools filtering."
+    doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
+    doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
+    outputFileName: "Output files will be prefixed with this."
+    temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
+    bams: "Array of bam files to merge together."
+    bamIndexes: "Array of index files for input bams."
+    intervals: "One or more genomic intervals over which to operate."
+    filterSuffix: "Suffix to use for filtered bams."
+    filterFlags: "Samtools filter flags to apply."
+    minMapQuality: "Samtools minimum mapping quality filter to apply."
+    filterAdditionalParams: "Additional parameters to pass to samtools."
+    markDuplicatesSuffix: "Suffix to use for duplicate marked bams."
+    removeDuplicates: "MarkDuplicates remove duplicates?"
+    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
+    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
+    splitNCigarReadsSuffix: "Suffix to use for SplitNCigarReads bams."
+    reference: "Path to reference file."
+    refactorCigarString: "SplitNCigarReads refactor cigar string?"
+    readFilters: "SplitNCigarReads read filters"
+    splitNCigarReadsAdditionalParams: "Additional parameters to pass to GATK SplitNCigarReads."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
+  }
 }
 
 task mergeBams {
@@ -410,13 +479,14 @@ task mergeBams {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    bams: "Array of bam files to merge together."
+    outputFileName: "Output files will be prefixed with this."
+    additionalParams: "Additional parameters to pass to GATK MergeSamFiles."
+    jobMemory: "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -443,7 +513,6 @@ task realignerTargetCreator {
   command <<<
     set -euo pipefail
 
-    #--phone_home NO_ET --gatk_key /.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key --logging_level INFO
     java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type RealignerTargetCreator \
     --reference_sequence ~{reference} \
     ~{sep=" " prefix("--intervals ", intervals)} \
@@ -466,13 +535,19 @@ task realignerTargetCreator {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    bams: "Array of bam files to produce RTC intervals for."
+    bamIndexes: "Array of index files for input bams."
+    reference: "Path to reference file."
+    knownIndels: "Array of input VCF files with known indels."
+    intervals: "One or more genomic intervals over which to operate."
+    downsamplingType: "Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE)."
+    additionalParams: "Additional parameters to pass to GATK RealignerTargetCreator."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
+    gatkJar: "Path to GATK jar."
   }
 }
 
@@ -492,7 +567,7 @@ task indelRealign {
     Int timeout = 6
 
     # use gatk3 for now: https://github.com/broadinstitute/gatk/issues/3104
-    String modules = "gatk/3.6-0"
+    String modules = "python/3.7 gatk/3.6-0"
     String gatkJar = "$GATK_ROOT/GenomeAnalysisTK.jar"
   }
 
@@ -500,7 +575,7 @@ task indelRealign {
     set -euo pipefail
 
     # generate gatk nWayOut file
-    python <<CODE
+    python3 <<CODE
     import os
     import csv
 
@@ -518,7 +593,6 @@ task indelRealign {
         tsv_writer.writerows(nWayOut)
     CODE
 
-    #--phone_home NO_ET  --gatk_key /.mounts/labs/PDE/data/gatkAnnotationResources/GATK_public.key --logging_level INFO
     java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type IndelRealigner \
     --reference_sequence ~{reference} \
     ~{sep=" " prefix("--intervals ", intervals)} \
@@ -543,13 +617,19 @@ task indelRealign {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    bams: "Array of bam files to indel realign together."
+    bamIndexes: "Array of index files for input bams."
+    intervals: "One or more genomic intervals over which to operate."
+    reference: "Path to reference file."
+    knownAlleles: "Array of input VCF files with known indels."
+    targetIntervals: "Intervals file output from RealignerTargetCreator."
+    additionalParams: "Additional parameters to pass to GATK IndelRealigner."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
+    gatkJar: "Path to GATK jar."
   }
 }
 
@@ -597,13 +677,17 @@ task baseQualityScoreRecalibration {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    bams: "Array of bam files to produce a recalibration table for."
+    reference: "Path to reference file."
+    intervals: "One or more genomic intervals over which to operate."
+    knownSites: "Array of VCF with known polymorphic sites used to exclude regions around known polymorphisms from analysis."
+    additionalParams: "Additional parameters to pass to GATK BaseRecalibrator."
+    outputFileName: "Recalibration table file name."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -641,13 +725,14 @@ task gatherBQSRReports {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    recalibrationTables: "Array of recalibration tables to merge."
+    additionalParams: "Additional parameters to pass to GATK GatherBQSRReports."
+    outputFileName: "Recalibration table file name."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -685,13 +770,14 @@ task analyzeCovariates {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    recalibrationTable: "Recalibration table to produce report for."
+    additionalParams: "Additional parameters to pass to GATK AnalyzeCovariates"
+    outputFileName: "Recalibration report file name."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -733,13 +819,16 @@ task applyBaseQualityScoreRecalibration {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    recalibrationTable: "Recalibration table to apply to all input bams."
+    bam: "Bam file to recalibrate."
+    outputFileName: "Output files will be prefixed with this."
+    suffix: "Suffix to use for recalibrated bams."
+    additionalParams: "Additional parameters to pass to GATK ApplyBQSR."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -752,7 +841,7 @@ task collectFilesBySample {
     Int jobMemory = 1
     Int cores = 1
     Int timeout = 1
-    String modules = "python/3.6"
+    String modules = "python/3.7"
   }
 
   InputGroups wrappedInputGroups = {"inputGroups": inputGroups}
@@ -760,7 +849,7 @@ task collectFilesBySample {
   command <<<
     set -euo pipefail
 
-    python <<CODE
+    python3 <<CODE
     import json
     import os
     import re
@@ -810,13 +899,13 @@ task collectFilesBySample {
   }
 
   parameter_meta {
-
-  }
-
-  meta {
-    output_meta: {
-
-    }
+    inputGroups: "Array of objects describing output file groups. The output file group name is used to partition input bams by name."
+    bams: "Array of bams to partition by inputGroup output file name."
+    bamIndexes: "Array of index files for input bams."
+    jobMemory:  "Memory allocated to job (in GB)."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
