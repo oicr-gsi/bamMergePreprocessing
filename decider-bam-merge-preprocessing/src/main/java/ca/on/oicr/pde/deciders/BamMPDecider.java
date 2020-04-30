@@ -263,7 +263,7 @@ public class BamMPDecider extends MergingDecider {
             alignerByGroup.put(fileGroup, file.getParentWf());
         }
 
-        String alignerName = Iterables.getOnlyElement(Sets.newHashSet(alignerByGroup.values()));
+        String alignerName = Iterables.getFirst(Sets.newHashSet(alignerByGroup.values()), "");
         run.addProperty("aligner_name", alignerName);
 
         //Build the output_identifiers, input_files, and output_ius_lims_keys ini properties for each "output group" (GroupableFileFactory).

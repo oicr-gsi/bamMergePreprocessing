@@ -1,3 +1,6 @@
+## 1.4.1 - 2020-04-30
+- [GDI-1625](https://jira.oicr.on.ca/browse/GDI-1625) - Pick one of the parentWfs for aligner
+
 ## 1.3.4 - 2019-06-19
 - [GP-2003](https://jira.oicr.on.ca/browse/GP-2003) - Update to pipedev 2.5.2 - fixes customizing workflow run after creating swids to link to
 
