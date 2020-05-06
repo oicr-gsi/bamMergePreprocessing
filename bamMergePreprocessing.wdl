@@ -11,6 +11,7 @@ workflow bamMergePreprocessing {
     Boolean doIndelRealignment = true
     Boolean doBqsr = true
     String reference
+    #Map[String, RuntimeAttributes]? preprocessingBamRuntimeAttributes
   }
 
   parameter_meta {
@@ -244,11 +245,13 @@ task preprocessBam {
     Array[String] readFilters = []
     String? splitNCigarReadsAdditionalParams
 
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-    String modules = "samtools/1.9 gatk/4.1.6.0"
+    RuntimeAttributes runtimeAttributes = {
+      "memory": 24,
+      "overhead": 6,
+      "cores": 1,
+      "timeout": 6,
+      "modules": "samtools/1.9 gatk/4.1.6.0"
+    }
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
@@ -334,7 +337,7 @@ task preprocessBam {
     if [ "~{doMarkDuplicates}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" MarkDuplicates \
       ${inputBams[@]/#/--INPUT } \
       --OUTPUT="~{markDuplicatesFilePath}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
@@ -354,7 +357,7 @@ task preprocessBam {
     if [ "~{doSplitNCigarReads}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
+      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" SplitNCigarReads \
       ${inputBams[@]/#/--input=} \
       --output="~{splitNCigarReadsFilePath}.bam" \
       --reference ~{reference} \
@@ -372,7 +375,7 @@ task preprocessBam {
 
     # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
     if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
+      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" MergeSamFiles \
       ${inputBams[@]/#/--INPUT=} \
       --OUTPUT="~{filteredFileName}.bam" \
       --CREATE_INDEX=true \
@@ -402,10 +405,10 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
+    memory: "~{runtimeAttributes.memory} GB"
+    cpu: "~{runtimeAttributes.cores}"
+    timeout: "~{runtimeAttributes.timeout}"
+    modules: "~{runtimeAttributes.modules}"
   }
 
   parameter_meta {
@@ -430,11 +433,12 @@ task preprocessBam {
     refactorCigarString: "SplitNCigarReads refactor cigar string?"
     readFilters: "SplitNCigarReads read filters"
     splitNCigarReadsAdditionalParams: "Additional parameters to pass to GATK SplitNCigarReads."
-    jobMemory:  "Memory allocated to job (in GB)."
-    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
-    cores: "The number of cores to allocate to the job."
-    timeout: "Maximum amount of time (in hours) the task can run for."
-    modules: "Environment module name and version to load (space separated) before command execution."
+    runtimeAttributes: ""
+#    jobMemory:  "Memory allocated to job (in GB)."
+#    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+#    cores: "The number of cores to allocate to the job."
+#    timeout: "Maximum amount of time (in hours) the task can run for."
+#    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -938,4 +942,12 @@ struct OutputGroup {
   String outputIdentifier
   File bam
   File bamIndex
+}
+
+struct RuntimeAttributes {
+  Int memory
+  Int timeout
+  Int cores
+  Int overhead
+  String modules
 }
