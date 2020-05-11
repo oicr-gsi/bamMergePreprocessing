@@ -64,11 +64,8 @@ Parameter|Value|Default|Description
 `preprocessBam.refactorCigarString`|Boolean|false|SplitNCigarReads refactor cigar string?
 `preprocessBam.readFilters`|Array[String]|[]|SplitNCigarReads read filters
 `preprocessBam.splitNCigarReadsAdditionalParams`|String?|None|Additional parameters to pass to GATK SplitNCigarReads.
-`preprocessBam.jobMemory`|Int|24|Memory allocated to job (in GB).
-`preprocessBam.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
-`preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`preprocessBam.runtimeAttributes`|RuntimeAttributes?|None|Override default runtime attributes using this parameter (see parameter defaultRuntimeAttributes).
+`preprocessBam.defaultRuntimeAttributes`|DefaultRuntimeAttributes|{"memory": 24, "overhead": 6, "cores": 1, "timeout": 6, "modules": "samtools/1.9 gatk/4.1.6.0"}|Default runtime attributes (memory in GB, overhead in GB, cores in cpu count, timeout in hours, modules are environment modules to load before the task executes).
 `realignerTargetCreator.downsamplingType`|String?|None|Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE).
 `realignerTargetCreator.additionalParams`|String?|None|Additional parameters to pass to GATK RealignerTargetCreator.
 `realignerTargetCreator.jobMemory`|Int|24|Memory allocated to job (in GB).

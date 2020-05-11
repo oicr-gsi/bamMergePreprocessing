@@ -245,7 +245,8 @@ task preprocessBam {
     Array[String] readFilters = []
     String? splitNCigarReadsAdditionalParams
 
-    RuntimeAttributes runtimeAttributes = {
+    RuntimeAttributes? runtimeAttributes
+    DefaultRuntimeAttributes defaultRuntimeAttributes = {
       "memory": 24,
       "overhead": 6,
       "cores": 1,
@@ -253,6 +254,16 @@ task preprocessBam {
       "modules": "samtools/1.9 gatk/4.1.6.0"
     }
   }
+
+  # select_first doesn't like struct?.field? and winstanley doesn't like empty object "{}"
+  RuntimeAttributes ras = select_first([runtimeAttributes, {"id":"using_defaults"}])
+
+  # get provided runtime attributes or use defaults
+  Int memory = select_first([ras.memory, defaultRuntimeAttributes.memory])
+  Int overhead = select_first([ras.overhead, defaultRuntimeAttributes.overhead])
+  Int cores = select_first([ras.cores, defaultRuntimeAttributes.cores])
+  Int timeout = select_first([ras.timeout, defaultRuntimeAttributes.timeout])
+  String modules = select_first([ras.modules, defaultRuntimeAttributes.modules])
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
 
@@ -337,7 +348,7 @@ task preprocessBam {
     if [ "~{doMarkDuplicates}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" MarkDuplicates \
+      gatk --java-options "-Xmx~{memory - overhead}G" MarkDuplicates \
       ${inputBams[@]/#/--INPUT } \
       --OUTPUT="~{markDuplicatesFilePath}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
@@ -357,7 +368,7 @@ task preprocessBam {
     if [ "~{doSplitNCigarReads}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" SplitNCigarReads \
+      gatk --java-options "-Xmx~{memory - overhead}G" SplitNCigarReads \
       ${inputBams[@]/#/--input=} \
       --output="~{splitNCigarReadsFilePath}.bam" \
       --reference ~{reference} \
@@ -375,7 +386,7 @@ task preprocessBam {
 
     # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
     if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-      gatk --java-options "-Xmx~{runtimeAttributes.memory - runtimeAttributes.overhead}G" MergeSamFiles \
+      gatk --java-options "-Xmx~{memory - overhead}G" MergeSamFiles \
       ${inputBams[@]/#/--INPUT=} \
       --OUTPUT="~{filteredFileName}.bam" \
       --CREATE_INDEX=true \
@@ -405,10 +416,10 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{runtimeAttributes.memory} GB"
-    cpu: "~{runtimeAttributes.cores}"
-    timeout: "~{runtimeAttributes.timeout}"
-    modules: "~{runtimeAttributes.modules}"
+    memory: "~{memory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+    modules: "~{modules}"
   }
 
   parameter_meta {
@@ -433,12 +444,8 @@ task preprocessBam {
     refactorCigarString: "SplitNCigarReads refactor cigar string?"
     readFilters: "SplitNCigarReads read filters"
     splitNCigarReadsAdditionalParams: "Additional parameters to pass to GATK SplitNCigarReads."
-    runtimeAttributes: ""
-#    jobMemory:  "Memory allocated to job (in GB)."
-#    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
-#    cores: "The number of cores to allocate to the job."
-#    timeout: "Maximum amount of time (in hours) the task can run for."
-#    modules: "Environment module name and version to load (space separated) before command execution."
+    runtimeAttributes: "Override default runtime attributes using this parameter (see parameter defaultRuntimeAttributes)."
+    defaultRuntimeAttributes: "Default runtime attributes (memory in GB, overhead in GB, cores in cpu count, timeout in hours, modules are environment modules to load before the task executes)."
   }
 }
 
@@ -945,9 +952,18 @@ struct OutputGroup {
 }
 
 struct RuntimeAttributes {
+  Int? memory
+  Int? overhead
+  Int? cores
+  Int? timeout
+  String? modules
+  String? id # optional internal id
+}
+
+struct DefaultRuntimeAttributes {
   Int memory
-  Int timeout
-  Int cores
   Int overhead
+  Int cores
+  Int timeout
   String modules
 }

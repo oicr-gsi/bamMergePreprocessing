@@ -59,10 +59,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -131,10 +128,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -203,10 +197,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -282,10 +273,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -371,10 +359,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -460,10 +445,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -550,10 +532,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -629,10 +608,7 @@
               "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
               "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
                 "memory": 18,
-                "overhead": 6,
-                "cores": 1,
-                "timeout": 1,
-                "modules": "samtools/1.9 gatk/4.1.6.0"
+                "timeout": 1
               },
               "bamMergePreprocessing.realignerTargetCreator.timeout": 1
             },
@@ -724,10 +700,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -800,10 +773,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -866,10 +836,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
@@ -936,10 +903,7 @@
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
             "memory": 18,
-            "overhead": 6,
-            "cores": 1,
-            "timeout": 1,
-            "modules": "samtools/1.9 gatk/4.1.6.0"
+            "timeout": 1
           },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
