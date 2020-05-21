@@ -67,12 +67,13 @@
               "id": "chr2",
               "memory": 21,
               "timeout": 1
+            },
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
             }
           ],
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -148,12 +149,13 @@
               "id": "chr2",
               "memory": 21,
               "timeout": 1
+            },
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
             }
           ],
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -229,12 +231,13 @@
               "id": "chr2",
               "memory": 21,
               "timeout": 1
+            },
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
             }
           ],
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -307,10 +310,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -393,10 +399,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -484,12 +493,13 @@
               "id": "chr17+chr18",
               "memory": 21,
               "timeout": 1
+            },
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
             }
           ],
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -573,10 +583,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -654,12 +667,13 @@
                   "id": "chr21+chr22+chrY+chrM",
                   "memory": 21,
                   "timeout": 1
+                },
+                {
+                  "id": "*",
+                  "memory": 18,
+                  "timeout": 1
                 }
               ],
-              "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-                "memory": 18,
-                "timeout": 1
-              },
               "bamMergePreprocessing.realignerTargetCreator.timeout": 1
             },
             {
@@ -748,10 +762,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -821,10 +838,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -884,10 +904,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
@@ -951,10 +974,13 @@
           "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-          "bamMergePreprocessing.preprocessBam.runtimeAttributes": {
-            "memory": 18,
-            "timeout": 1
-          },
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
           "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {

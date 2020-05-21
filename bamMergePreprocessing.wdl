@@ -80,7 +80,7 @@ workflow bamMergePreprocessing {
       #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals]
       String key = "~{sep="+" intervals}"
       scatter (runtimeAttributeOverride in preprocessingBamRuntimeAttributes) {
-        if(defined(runtimeAttributeOverride.id) && runtimeAttributeOverride.id == key) {
+        if(defined(runtimeAttributeOverride.id) && (runtimeAttributeOverride.id == key || runtimeAttributeOverride.id == "*")) {
           RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
         }
       }
