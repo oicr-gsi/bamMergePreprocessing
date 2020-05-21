@@ -11,7 +11,12 @@ workflow bamMergePreprocessing {
     Boolean doIndelRealignment = true
     Boolean doBqsr = true
     String reference
+
+    # preprocessingBam runtime attributes overrides
+    # map access with missing key (e.g. an interval that does not need an override) is not supported
+    # see: https://github.com/openwdl/wdl/issues/305
     #Map[String, RuntimeAttributes]? preprocessingBamRuntimeAttributes
+    Array[RuntimeAttributes] preprocessingBamRuntimeAttributes = []
   }
 
   parameter_meta {
@@ -23,6 +28,7 @@ workflow bamMergePreprocessing {
     doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
     doBqsr: "Enable/disable GATK4 BQSR."
     reference: "Path to reference file."
+    preprocessingBamRuntimeAttributes: "Interval specific runtime attributes to use as overrides for the defaults."
   }
 
   meta {
@@ -68,6 +74,16 @@ workflow bamMergePreprocessing {
       }
       Array[File] inputGroupBams = inputGroupBam
       Array[File] inputGroupBamIndexes = inputGroupBamIndex
+
+      # map access with missing key (e.g. an interval that does not need an override) is not supported
+      # see: https://github.com/openwdl/wdl/issues/305
+      #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals]
+      String key = "~{sep="+" intervals}"
+      scatter (runtimeAttributeOverride in preprocessingBamRuntimeAttributes) {
+        if(defined(runtimeAttributeOverride.id) && runtimeAttributeOverride.id == key) {
+          RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
+        }
+      }
       call preprocessBam {
         input:
           bams = inputGroupBams,
@@ -77,7 +93,8 @@ workflow bamMergePreprocessing {
           reference = reference,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates,
-          doSplitNCigarReads = doSplitNCigarReads
+          doSplitNCigarReads = doSplitNCigarReads,
+          runtimeAttributes = if length(intervalRuntimeAttributeOverride) > 0 then select_first(flatten([intervalRuntimeAttributeOverride,[{}]])) else {}
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
