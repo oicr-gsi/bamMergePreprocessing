@@ -64,7 +64,7 @@ workflow bamMergePreprocessing {
     input:
       str = intervalsToParallelizeByString
   }
-  Array[Intervals] intervalsToParallelizeBy = splitStringToArray.intervals
+  Array[Intervals] intervalsToParallelizeBy = splitStringToArray.intervalsList.intervalsList
 
   scatter (intervals in intervalsToParallelizeBy) {
     scatter (i in inputGroups) {
@@ -220,12 +220,16 @@ task splitStringToArray {
     for i in "~{str}".split("~{lineSeparator}"):
       interval = {"id": i, "intervalsList": i.split("~{recordSeparator}")}
       intervals.append(interval)
-    print(json.dumps(intervals))
+
+    # wrap intervals in intervalsList for cromwell
+    print(json.dumps({"intervalsList": intervals}))
     CODE
   >>>
 
   output {
-    Array[Intervals] intervals = read_json(stdout())
+    # cromwell doesn't support read_json where the json is an array of objects...
+    #Array[Intervals] intervals = read_json(stdout())
+    IntervalsList intervalsList = read_json(stdout())
   }
 
   runtime {
@@ -1008,4 +1012,8 @@ struct DefaultRuntimeAttributes {
 struct Intervals {
   String id
   Array[String] intervalsList
+}
+
+struct IntervalsList {
+  Array[Intervals] intervalsList
 }
