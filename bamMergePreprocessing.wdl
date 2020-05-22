@@ -64,7 +64,7 @@ workflow bamMergePreprocessing {
     input:
       str = intervalsToParallelizeByString
   }
-  Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
+  Array[Intervals] intervalsToParallelizeBy = splitStringToArray.intervals
 
   scatter (intervals in intervalsToParallelizeBy) {
     scatter (i in inputGroups) {
@@ -77,24 +77,35 @@ workflow bamMergePreprocessing {
 
       # map access with missing key (e.g. an interval that does not need an override) is not supported
       # see: https://github.com/openwdl/wdl/issues/305
-      #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals]
-      String key = "~{sep="+" intervals}"
+      #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals.id]
       scatter (runtimeAttributeOverride in preprocessingBamRuntimeAttributes) {
-        if(defined(runtimeAttributeOverride.id) && (runtimeAttributeOverride.id == key || runtimeAttributeOverride.id == "*")) {
-          RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
+        if(defined(runtimeAttributeOverride.id)) {
+          if(runtimeAttributeOverride.id == intervals.id) {
+            RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
+          }
+          if(runtimeAttributeOverride.id == "*") {
+            RuntimeAttributes? wildcardRuntimeAttributeOverride = runtimeAttributeOverride
+          }
         }
       }
+      Array[RuntimeAttributes] r1 = select_all(intervalRuntimeAttributeOverride)
+      Array[RuntimeAttributes] r2 = select_all(wildcardRuntimeAttributeOverride)
+      Array[RuntimeAttributes] r3 = flatten([r1,r2])
+      if(length(r3) > 0) {
+        RuntimeAttributes r = r3[0]
+      }
+
       call preprocessBam {
         input:
           bams = inputGroupBams,
           bamIndexes = inputGroupBamIndexes,
-          intervals = intervals,
+          intervals = intervals.intervalsList,
           outputFileName = i.outputIdentifier,
           reference = reference,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates,
           doSplitNCigarReads = doSplitNCigarReads,
-          runtimeAttributes = if length(intervalRuntimeAttributeOverride) > 0 then select_first(flatten([intervalRuntimeAttributeOverride,[{}]])) else {}
+          runtimeAttributes = r
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
@@ -106,7 +117,7 @@ workflow bamMergePreprocessing {
         input:
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
-          intervals = intervals,
+          intervals = intervals.intervalsList,
           reference = reference
       }
 
@@ -114,7 +125,7 @@ workflow bamMergePreprocessing {
         input:
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
-          intervals = intervals,
+          intervals = intervals.intervalsList,
           targetIntervals = realignerTargetCreator.targetIntervals,
           reference = reference
       }
@@ -195,17 +206,25 @@ task splitStringToArray {
     Int jobMemory = 1
     Int cores = 1
     Int timeout = 1
-    String modules = ""
+    String modules = "python/3.7"
   }
 
   command <<<
     set -euo pipefail
 
-    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+    python3 <<CODE
+    import json
+
+    intervals = []
+    for i in "~{str}".split("~{lineSeparator}"):
+      interval = {"id": i, "intervalsList": i.split("~{recordSeparator}")}
+      intervals.append(interval)
+    print(json.dumps(intervals))
+    CODE
   >>>
 
   output {
-    Array[Array[String]] out = read_tsv(stdout())
+    Array[Intervals] intervals = read_json(stdout())
   }
 
   runtime {
@@ -983,4 +1002,9 @@ struct DefaultRuntimeAttributes {
   Int cores
   Int timeout
   String modules
+}
+
+struct Intervals {
+  String id
+  Array[String] intervalsList
 }
