@@ -40,6 +40,7 @@ Parameter|Value|Default|Description
 `doSplitNCigarReads`|Boolean|false|Enable/disable GATK4 SplitNCigarReads.
 `doIndelRealignment`|Boolean|true|Enable/disable GATK3 RealignerTargetCreator + IndelRealigner.
 `doBqsr`|Boolean|true|Enable/disable GATK4 BQSR.
+`preprocessingBamRuntimeAttributes`|Array[RuntimeAttributes]|[]|Interval specific runtime attributes to use as overrides for the defaults.
 
 
 #### Optional task parameters:
@@ -50,7 +51,7 @@ Parameter|Value|Default|Description
 `splitStringToArray.jobMemory`|Int|1|Memory allocated to job (in GB).
 `splitStringToArray.cores`|Int|1|The number of cores to allocate to the job.
 `splitStringToArray.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
-`splitStringToArray.modules`|String|""|Environment module name and version to load (space separated) before command execution.
+`splitStringToArray.modules`|String|"python/3.7"|Environment module name and version to load (space separated) before command execution.
 `preprocessBam.temporaryWorkingDir`|String|""|Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp.
 `preprocessBam.filterSuffix`|String|".filter"|Suffix to use for filtered bams.
 `preprocessBam.filterFlags`|Int|260|Samtools filter flags to apply.
@@ -64,7 +65,6 @@ Parameter|Value|Default|Description
 `preprocessBam.refactorCigarString`|Boolean|false|SplitNCigarReads refactor cigar string?
 `preprocessBam.readFilters`|Array[String]|[]|SplitNCigarReads read filters
 `preprocessBam.splitNCigarReadsAdditionalParams`|String?|None|Additional parameters to pass to GATK SplitNCigarReads.
-`preprocessBam.runtimeAttributes`|RuntimeAttributes?|None|Override default runtime attributes using this parameter (see parameter defaultRuntimeAttributes).
 `preprocessBam.defaultRuntimeAttributes`|DefaultRuntimeAttributes|{"memory": 24, "overhead": 6, "cores": 1, "timeout": 6, "modules": "samtools/1.9 gatk/4.1.6.0"}|Default runtime attributes (memory in GB, overhead in GB, cores in cpu count, timeout in hours, modules are environment modules to load before the task executes).
 `realignerTargetCreator.downsamplingType`|String?|None|Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE).
 `realignerTargetCreator.additionalParams`|String?|None|Additional parameters to pass to GATK RealignerTargetCreator.

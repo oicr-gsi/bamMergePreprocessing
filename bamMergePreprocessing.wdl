@@ -80,10 +80,11 @@ workflow bamMergePreprocessing {
       #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals.id]
       scatter (runtimeAttributeOverride in preprocessingBamRuntimeAttributes) {
         if(defined(runtimeAttributeOverride.id)) {
-          if(runtimeAttributeOverride.id == intervals.id) {
+          String id = select_first([runtimeAttributeOverride.id])
+          if(id == intervals.id) {
             RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
           }
-          if(runtimeAttributeOverride.id == "*") {
+          if(id == "*") {
             RuntimeAttributes? wildcardRuntimeAttributeOverride = runtimeAttributeOverride
           }
         }
