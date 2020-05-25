@@ -78,22 +78,22 @@ workflow bamMergePreprocessing {
       # map access with missing key (e.g. an interval that does not need an override) is not supported
       # see: https://github.com/openwdl/wdl/issues/305
       #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals.id]
-      scatter (runtimeAttributeOverride in preprocessingBamRuntimeAttributes) {
-        if(defined(runtimeAttributeOverride.id)) {
-          String id = select_first([runtimeAttributeOverride.id])
+      scatter (preprocessingBamRuntimeAttributes in preprocessingBamRuntimeAttributes) {
+        if(defined(preprocessingBamRuntimeAttributes.id)) {
+          String id = select_first([preprocessingBamRuntimeAttributes.id])
           if(id == intervals.id) {
-            RuntimeAttributes? intervalRuntimeAttributeOverride = runtimeAttributeOverride
+            RuntimeAttributes? intervalRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
           }
           if(id == "*") {
-            RuntimeAttributes? wildcardRuntimeAttributeOverride = runtimeAttributeOverride
+            RuntimeAttributes? wildcardRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
           }
         }
       }
-      Array[RuntimeAttributes] r1 = select_all(intervalRuntimeAttributeOverride)
-      Array[RuntimeAttributes] r2 = select_all(wildcardRuntimeAttributeOverride)
-      Array[RuntimeAttributes] r3 = flatten([r1,r2])
-      if(length(r3) > 0) {
-        RuntimeAttributes r = r3[0]
+      # collect interval and wildcard runtime attribute overrides
+      Array[RuntimeAttributes] runtimeAttributeOverrides = flatten([select_all(intervalRuntimeAttributesOverride),select_all(wildcardRuntimeAttributesOverride)])
+      if(length(runtimeAttributeOverrides) > 0) {
+        # create a RuntimeAttributes optional
+        RuntimeAttributes runtimeAttributesOverride = runtimeAttributeOverrides[0]
       }
 
       call preprocessBam {
@@ -106,7 +106,7 @@ workflow bamMergePreprocessing {
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates,
           doSplitNCigarReads = doSplitNCigarReads,
-          runtimeAttributes = r
+          runtimeAttributes = runtimeAttributesOverride
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
@@ -297,14 +297,14 @@ task preprocessBam {
   }
 
   # select_first doesn't like struct?.field? and winstanley doesn't like empty object "{}"
-  RuntimeAttributes ras = select_first([runtimeAttributes, {"id":"using_defaults"}])
+  RuntimeAttributes optionalRuntimeAttributes = select_first([runtimeAttributes, {"id":"using_defaults"}])
 
   # get provided runtime attributes or use defaults
-  Int memory = select_first([ras.memory, defaultRuntimeAttributes.memory])
-  Int overhead = select_first([ras.overhead, defaultRuntimeAttributes.overhead])
-  Int cores = select_first([ras.cores, defaultRuntimeAttributes.cores])
-  Int timeout = select_first([ras.timeout, defaultRuntimeAttributes.timeout])
-  String modules = select_first([ras.modules, defaultRuntimeAttributes.modules])
+  Int memory = select_first([optionalRuntimeAttributes.memory, defaultRuntimeAttributes.memory])
+  Int overhead = select_first([optionalRuntimeAttributes.overhead, defaultRuntimeAttributes.overhead])
+  Int cores = select_first([optionalRuntimeAttributes.cores, defaultRuntimeAttributes.cores])
+  Int timeout = select_first([optionalRuntimeAttributes.timeout, defaultRuntimeAttributes.timeout])
+  String modules = select_first([optionalRuntimeAttributes.modules, defaultRuntimeAttributes.modules])
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
 
