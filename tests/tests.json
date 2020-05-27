@@ -64,7 +64,7 @@
               "timeout": 1
             },
             {
-              "id": "chr2",
+              "id": "PCSI0022.chr2",
               "memory": 21,
               "timeout": 1
             },
@@ -311,6 +311,16 @@
           "bamMergePreprocessing.indelRealign.timeout": 1,
           "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
           "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "PCSI0022_P.chr1",
+              "memory": 21,
+              "timeout": 1
+            },
+            {
+              "id": "PCSI0022_R.chr1",
+              "memory": 22,
+              "timeout": 1
+            },
             {
               "id": "*",
               "memory": 18,

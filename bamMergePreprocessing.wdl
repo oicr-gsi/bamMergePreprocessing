@@ -81,6 +81,9 @@ workflow bamMergePreprocessing {
       scatter (preprocessingBamRuntimeAttributes in preprocessingBamRuntimeAttributes) {
         if(defined(preprocessingBamRuntimeAttributes.id)) {
           String id = select_first([preprocessingBamRuntimeAttributes.id])
+          if(id == i.outputIdentifier + "." + intervals.id) {
+            RuntimeAttributes? inputGroupAndIntervalRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
+          }
           if(id == intervals.id) {
             RuntimeAttributes? intervalRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
           }
@@ -90,7 +93,9 @@ workflow bamMergePreprocessing {
         }
       }
       # collect interval and wildcard runtime attribute overrides
-      Array[RuntimeAttributes] runtimeAttributeOverrides = flatten([select_all(intervalRuntimeAttributesOverride),select_all(wildcardRuntimeAttributesOverride)])
+      Array[RuntimeAttributes] runtimeAttributeOverrides = flatten([select_all(inputGroupAndIntervalRuntimeAttributesOverride),
+                                                                    select_all(intervalRuntimeAttributesOverride),
+                                                                    select_all(wildcardRuntimeAttributesOverride)])
       if(length(runtimeAttributeOverrides) > 0) {
         # create a RuntimeAttributes optional
         RuntimeAttributes runtimeAttributesOverride = runtimeAttributeOverrides[0]
