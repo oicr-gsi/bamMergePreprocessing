@@ -665,26 +665,7 @@
                   "bam": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
                   "bamIndex": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai"
                 }
-              ],
-              "bamMergePreprocessing.analyzeCovariates.timeout": 1,
-              "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
-              "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
-              "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
-              "bamMergePreprocessing.indelRealign.timeout": 1,
-              "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-              "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                  "id": "chr21+chr22+chrY+chrM",
-                  "memory": 21,
-                  "timeout": 1
-                },
-                {
-                  "id": "*",
-                  "memory": 18,
-                  "timeout": 1
-                }
-              ],
-              "bamMergePreprocessing.realignerTargetCreator.timeout": 1
+              ]
             },
             {
               "outputIdentifier": "PCSI0022_R",
@@ -695,7 +676,26 @@
                 }
               ]
             }
-          ]
+          ],
+          "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+          "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+          "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+          "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+          "bamMergePreprocessing.indelRealign.timeout": 1,
+          "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+          "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+            {
+              "id": "chr21+chr22+chrY+chrM",
+              "memory": 21,
+              "timeout": 1
+            },
+            {
+              "id": "*",
+              "memory": 18,
+              "timeout": 1
+            }
+          ],
+          "bamMergePreprocessing.realignerTargetCreator.timeout": 1
         },
         "wdl_outputs": {
           "bamMergePreprocessing.outputGroups": [
