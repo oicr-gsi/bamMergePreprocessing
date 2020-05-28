@@ -34,7 +34,7 @@ workflow bamMergePreprocessing {
   meta {
     author: "Michael Laszloffy"
     email: "michael.laszloffy@oicr.on.ca"
-    description: ""
+    description: "WDL workflow to filter, merge, mark duplicates, indel realign and base quality score recalibrate groups of related (e.g. by library, donor, project) lane level alignments."
     dependencies: [
       {
         name: "samtools/1.9",
@@ -78,17 +78,17 @@ workflow bamMergePreprocessing {
       # map access with missing key (e.g. an interval that does not need an override) is not supported
       # see: https://github.com/openwdl/wdl/issues/305
       #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals.id]
-      scatter (preprocessingBamRuntimeAttributes in preprocessingBamRuntimeAttributes) {
-        if(defined(preprocessingBamRuntimeAttributes.id)) {
-          String id = select_first([preprocessingBamRuntimeAttributes.id])
+      scatter (p in preprocessingBamRuntimeAttributes) {
+        if(defined(p.id)) {
+          String id = select_first([p.id])
           if(id == i.outputIdentifier + "." + intervals.id) {
-            RuntimeAttributes? inputGroupAndIntervalRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
+            RuntimeAttributes? inputGroupAndIntervalRuntimeAttributesOverride = p
           }
           if(id == intervals.id) {
-            RuntimeAttributes? intervalRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
+            RuntimeAttributes? intervalRuntimeAttributesOverride = p
           }
           if(id == "*") {
-            RuntimeAttributes? wildcardRuntimeAttributesOverride = preprocessingBamRuntimeAttributes
+            RuntimeAttributes? wildcardRuntimeAttributesOverride = p
           }
         }
       }

@@ -1,6 +1,6 @@
 # bamMergePreprocessing
 
-
+WDL workflow to filter, merge, mark duplicates, indel realign and base quality score recalibrate groups of related (e.g. by library, donor, project) lane level alignments.
 
 ## Overview
 
