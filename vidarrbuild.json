@@ -1,0 +1,7 @@
+{
+    "names": [
+        "bamMergePreprocessing",
+        "bamMergePreprocessing_by_tumor_group"
+    ],
+    "wdl": "bamMergePreprocessing.wdl"
+}

@@ -1,0 +1,3264 @@
+[
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": null,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": null,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "chr1",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "PCSI0022.chr2",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bamMergePreprocessing workflow test",
+        "engineArguments": {},
+        "id": "Test1",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test1.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": null,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": null,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": 60,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "chr1",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "chr2",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bamMergePreprocessing workflow test",
+        "engineArguments": {},
+        "id": "Test2",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test2.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": null,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": null,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "chr1",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "chr2",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bamMergePreprocessing workflow test",
+        "engineArguments": {},
+        "id": "Test3",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test3.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": true,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "PCSI0022_P.chr1",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "PCSI0022_R.chr1",
+                    "memory": 22,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "multiple output groups",
+        "engineArguments": {},
+        "id": "MultipleOutputGroups",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_MultipleOutputGroups_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/MultipleOutputGroups.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bqsr + multiple output groups",
+        "engineArguments": {},
+        "id": "Test4",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test4_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test4.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "chr17+chr18",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bqsr + chr_size grouping test + multiple output groups",
+        "engineArguments": {},
+        "id": "Test5",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test5_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test5.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "no bqsr + multiple output groups",
+        "engineArguments": {},
+        "id": "Test6",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test6_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test6.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "chr21+chr22+chrY+chrM",
+                    "memory": 21,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                },
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "no bqsr + chr_size grouping test + multiple output groups",
+        "engineArguments": {},
+        "id": "Test7",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_P"
+                },
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022_R"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test7_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test7.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "bqsr + chr_size grouping test + merge all inputs",
+        "engineArguments": {},
+        "id": "Test8",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test8.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": null,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": false,
+            "bamMergePreprocessing.doSplitNCigarReads": null,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": 256,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "no bqsr + chr_size grouping test + merge all inputs",
+        "engineArguments": {},
+        "id": "Test9",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "PCSI0022"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test9.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": false,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": true,
+            "bamMergePreprocessing.doSplitNCigarReads": true,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "star_bam_full"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": null,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "split trim test on full star bams",
+        "engineArguments": {},
+        "id": "Test10",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "star_bam_full"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test10.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "bamMergePreprocessing.analyzeCovariates.additionalParams": null,
+            "bamMergePreprocessing.analyzeCovariates.cores": null,
+            "bamMergePreprocessing.analyzeCovariates.jobMemory": null,
+            "bamMergePreprocessing.analyzeCovariates.modules": null,
+            "bamMergePreprocessing.analyzeCovariates.outputFileName": null,
+            "bamMergePreprocessing.analyzeCovariates.overhead": null,
+            "bamMergePreprocessing.analyzeCovariates.timeout": 1,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.suffix": null,
+            "bamMergePreprocessing.applyBaseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.knownSites": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.outputFileName": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
+            "bamMergePreprocessing.collectFilesBySample.cores": null,
+            "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
+            "bamMergePreprocessing.collectFilesBySample.modules": null,
+            "bamMergePreprocessing.collectFilesBySample.timeout": null,
+            "bamMergePreprocessing.doBqsr": false,
+            "bamMergePreprocessing.doFilter": false,
+            "bamMergePreprocessing.doIndelRealignment": null,
+            "bamMergePreprocessing.doMarkDuplicates": true,
+            "bamMergePreprocessing.doSplitNCigarReads": true,
+            "bamMergePreprocessing.gatherBQSRReports.additionalParams": null,
+            "bamMergePreprocessing.gatherBQSRReports.cores": null,
+            "bamMergePreprocessing.gatherBQSRReports.jobMemory": null,
+            "bamMergePreprocessing.gatherBQSRReports.modules": null,
+            "bamMergePreprocessing.gatherBQSRReports.outputFileName": null,
+            "bamMergePreprocessing.gatherBQSRReports.overhead": null,
+            "bamMergePreprocessing.gatherBQSRReports.timeout": 1,
+            "bamMergePreprocessing.indelRealign.additionalParams": null,
+            "bamMergePreprocessing.indelRealign.cores": null,
+            "bamMergePreprocessing.indelRealign.gatkJar": null,
+            "bamMergePreprocessing.indelRealign.jobMemory": null,
+            "bamMergePreprocessing.indelRealign.knownAlleles": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.indelRealign.modules": null,
+            "bamMergePreprocessing.indelRealign.overhead": null,
+            "bamMergePreprocessing.indelRealign.timeout": 1,
+            "bamMergePreprocessing.inputGroups": [
+                {
+                    "bamAndBamIndexInputs": [
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        },
+                        {
+                            "bam": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            },
+                            "bamIndex": {
+                                "contents": {
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam.bai",
+                                    "externalIds": [
+                                        {
+                                            "id": "TEST",
+                                            "provider": "TEST"
+                                        }
+                                    ]
+                                },
+                                "type": "EXTERNAL"
+                            }
+                        }
+                    ],
+                    "outputIdentifier": "star_test"
+                }
+            ],
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
+            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
+            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.filterFlags": null,
+            "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
+            "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.readFilters": null,
+            "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
+            "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
+            "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
+                {
+                    "cores": null,
+                    "id": "*",
+                    "memory": 18,
+                    "modules": null,
+                    "overhead": null,
+                    "timeout": 1
+                }
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
+            "bamMergePreprocessing.realignerTargetCreator.cores": null,
+            "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
+            "bamMergePreprocessing.realignerTargetCreator.gatkJar": null,
+            "bamMergePreprocessing.realignerTargetCreator.jobMemory": null,
+            "bamMergePreprocessing.realignerTargetCreator.knownIndels": [
+                "/.mounts/labs/gsi/temp_reference_data/hg19/dbsnp_138/dbsnp_138.hg19.leftAligned.vcf.gz"
+            ],
+            "bamMergePreprocessing.realignerTargetCreator.modules": null,
+            "bamMergePreprocessing.realignerTargetCreator.overhead": null,
+            "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
+            "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.splitStringToArray.cores": null,
+            "bamMergePreprocessing.splitStringToArray.jobMemory": null,
+            "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.modules": null,
+            "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
+            "bamMergePreprocessing.splitStringToArray.timeout": null
+        },
+        "description": "split trim test on star bams",
+        "engineArguments": {},
+        "id": "Test11",
+        "metadata": {
+            "bamMergePreprocessing.outputGroups": [
+                {
+                    "bam": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "bamIndex": {
+                        "contents": [
+                            {
+                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
+                            }
+                        ],
+                        "type": "ALL"
+                    },
+                    "outputIdentifier": "star_test"
+                }
+            ],
+            "bamMergePreprocessing.recalibrationReport": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "bamMergePreprocessing.recalibrationTable": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test11.metrics",
+                "type": "script"
+            }
+        ]
+    }
+]

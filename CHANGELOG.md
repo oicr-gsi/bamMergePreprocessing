@@ -1,3 +1,5 @@
+## 2.0.2 -- 2020-05-31
+- Migrate to Vidarr
 ## 2.0 - Unreleased
 - Reimplement workflow in WDL
 ## 1.3 - 2019-10-29
