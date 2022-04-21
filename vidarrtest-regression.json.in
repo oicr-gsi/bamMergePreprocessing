@@ -231,7 +231,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test1",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -513,7 +516,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test2",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -795,7 +801,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test3",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1082,7 +1091,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "MultipleOutputGroups",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1372,7 +1384,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test4",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1670,7 +1685,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + chr_size grouping test + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test5",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1960,7 +1978,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test6",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2258,7 +2279,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + chr_size grouping test + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test7",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2543,7 +2567,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + chr_size grouping test + merge all inputs",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test8",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2809,7 +2836,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + chr_size grouping test + merge all inputs",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test9",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2997,7 +3027,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "split trim test on full star bams",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test10",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -3211,7 +3244,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "split trim test on star bams",
-        "engineArguments": {},
+        "engineArguments": {
+          "write_to_cache": false,
+          "read_from_cache": false
+        },
         "id": "Test11",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
