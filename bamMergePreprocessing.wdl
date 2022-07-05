@@ -11,12 +11,6 @@ workflow bamMergePreprocessing {
     Boolean doIndelRealignment = true
     Boolean doBqsr = true
     String reference
-
-    # preprocessingBam runtime attributes overrides
-    # map access with missing key (e.g. an interval that does not need an override) is not supported
-    # see: https://github.com/openwdl/wdl/issues/305
-    #Map[String, RuntimeAttributes]? preprocessingBamRuntimeAttributes
-    Array[RuntimeAttributes] preprocessingBamRuntimeAttributes = []
   }
 
   parameter_meta {
@@ -28,13 +22,12 @@ workflow bamMergePreprocessing {
     doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
     doBqsr: "Enable/disable GATK4 BQSR."
     reference: "Path to reference file."
-    preprocessingBamRuntimeAttributes: "Interval specific runtime attributes to use as overrides for the defaults."
   }
 
   meta {
     author: "Michael Laszloffy"
     email: "michael.laszloffy@oicr.on.ca"
-    description: "WDL workflow to filter, merge, mark duplicates, indel realign and base quality score recalibrate groups of related (e.g. by library, donor, project) lane level alignments."
+    description: ""
     dependencies: [
       {
         name: "samtools/1.9",
@@ -64,7 +57,7 @@ workflow bamMergePreprocessing {
     input:
       str = intervalsToParallelizeByString
   }
-  Array[Intervals] intervalsToParallelizeBy = splitStringToArray.intervalsList.intervalsList
+  Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
   scatter (intervals in intervalsToParallelizeBy) {
     scatter (i in inputGroups) {
@@ -74,44 +67,16 @@ workflow bamMergePreprocessing {
       }
       Array[File] inputGroupBams = inputGroupBam
       Array[File] inputGroupBamIndexes = inputGroupBamIndex
-
-      # map access with missing key (e.g. an interval that does not need an override) is not supported
-      # see: https://github.com/openwdl/wdl/issues/305
-      #RuntimeAttribute? runtimeAttributeOverride = preprocessingBamRuntimeAttributes[intervals.id]
-      scatter (p in preprocessingBamRuntimeAttributes) {
-        if(defined(p.id)) {
-          String id = select_first([p.id])
-          if(id == i.outputIdentifier + "." + intervals.id) {
-            RuntimeAttributes? inputGroupAndIntervalRuntimeAttributesOverride = p
-          }
-          if(id == intervals.id) {
-            RuntimeAttributes? intervalRuntimeAttributesOverride = p
-          }
-          if(id == "*") {
-            RuntimeAttributes? wildcardRuntimeAttributesOverride = p
-          }
-        }
-      }
-      # collect interval and wildcard runtime attribute overrides
-      Array[RuntimeAttributes] runtimeAttributeOverrides = flatten([select_all(inputGroupAndIntervalRuntimeAttributesOverride),
-                                                                    select_all(intervalRuntimeAttributesOverride),
-                                                                    select_all(wildcardRuntimeAttributesOverride)])
-      if(length(runtimeAttributeOverrides) > 0) {
-        # create a RuntimeAttributes optional
-        RuntimeAttributes runtimeAttributesOverride = runtimeAttributeOverrides[0]
-      }
-
       call preprocessBam {
         input:
           bams = inputGroupBams,
           bamIndexes = inputGroupBamIndexes,
-          intervals = intervals.intervalsList,
+          intervals = intervals,
           outputFileName = i.outputIdentifier,
           reference = reference,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates,
-          doSplitNCigarReads = doSplitNCigarReads,
-          runtimeAttributes = runtimeAttributesOverride
+          doSplitNCigarReads = doSplitNCigarReads
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
@@ -123,7 +88,7 @@ workflow bamMergePreprocessing {
         input:
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
-          intervals = intervals.intervalsList,
+          intervals = intervals,
           reference = reference
       }
 
@@ -131,7 +96,7 @@ workflow bamMergePreprocessing {
         input:
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
-          intervals = intervals.intervalsList,
+          intervals = intervals,
           targetIntervals = realignerTargetCreator.targetIntervals,
           reference = reference
       }
@@ -212,29 +177,17 @@ task splitStringToArray {
     Int jobMemory = 1
     Int cores = 1
     Int timeout = 1
-    String modules = "python/3.7"
+    String modules = ""
   }
 
   command <<<
     set -euo pipefail
 
-    python3 <<CODE
-    import json
-
-    intervals = []
-    for i in "~{str}".split("~{lineSeparator}"):
-      interval = {"id": i, "intervalsList": i.split("~{recordSeparator}")}
-      intervals.append(interval)
-
-    # wrap intervals in intervalsList for cromwell
-    print(json.dumps({"intervalsList": intervals}))
-    CODE
+    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
   >>>
 
   output {
-    # cromwell doesn't support read_json where the json is an array of objects...
-    #Array[Intervals] intervals = read_json(stdout())
-    IntervalsList intervalsList = read_json(stdout())
+    Array[Array[String]] out = read_tsv(stdout())
   }
 
   runtime {
@@ -291,25 +244,12 @@ task preprocessBam {
     Array[String] readFilters = []
     String? splitNCigarReadsAdditionalParams
 
-    RuntimeAttributes? runtimeAttributes
-    DefaultRuntimeAttributes defaultRuntimeAttributes = {
-      "memory": 24,
-      "overhead": 6,
-      "cores": 1,
-      "timeout": 6,
-      "modules": "samtools/1.9 gatk/4.1.6.0"
-    }
+    Int jobMemory = 24
+    Int overhead = 6
+    Int cores = 1
+    Int timeout = 6
+    String modules = "samtools/1.9 gatk/4.1.6.0"
   }
-
-  # select_first doesn't like struct?.field? and winstanley doesn't like empty object "{}"
-  RuntimeAttributes optionalRuntimeAttributes = select_first([runtimeAttributes, {"id":"using_defaults"}])
-
-  # get provided runtime attributes or use defaults
-  Int memory = select_first([optionalRuntimeAttributes.memory, defaultRuntimeAttributes.memory])
-  Int overhead = select_first([optionalRuntimeAttributes.overhead, defaultRuntimeAttributes.overhead])
-  Int cores = select_first([optionalRuntimeAttributes.cores, defaultRuntimeAttributes.cores])
-  Int timeout = select_first([optionalRuntimeAttributes.timeout, defaultRuntimeAttributes.timeout])
-  String modules = select_first([optionalRuntimeAttributes.modules, defaultRuntimeAttributes.modules])
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
 
@@ -394,7 +334,7 @@ task preprocessBam {
     if [ "~{doMarkDuplicates}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{memory - overhead}G" MarkDuplicates \
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
       ${inputBams[@]/#/--INPUT } \
       --OUTPUT="~{markDuplicatesFilePath}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
@@ -414,7 +354,7 @@ task preprocessBam {
     if [ "~{doSplitNCigarReads}" = true ]; then
       outputBams=()
       outputBamIndexes=()
-      gatk --java-options "-Xmx~{memory - overhead}G" SplitNCigarReads \
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
       ${inputBams[@]/#/--input=} \
       --output="~{splitNCigarReadsFilePath}.bam" \
       --reference ~{reference} \
@@ -432,7 +372,7 @@ task preprocessBam {
 
     # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
     if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-      gatk --java-options "-Xmx~{memory - overhead}G" MergeSamFiles \
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
       ${inputBams[@]/#/--INPUT=} \
       --OUTPUT="~{filteredFileName}.bam" \
       --CREATE_INDEX=true \
@@ -462,7 +402,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{memory} GB"
+    memory: "~{jobMemory} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -490,8 +430,11 @@ task preprocessBam {
     refactorCigarString: "SplitNCigarReads refactor cigar string?"
     readFilters: "SplitNCigarReads read filters"
     splitNCigarReadsAdditionalParams: "Additional parameters to pass to GATK SplitNCigarReads."
-    runtimeAttributes: "Override default runtime attributes using this parameter (see parameter defaultRuntimeAttributes)."
-    defaultRuntimeAttributes: "Default runtime attributes (memory in GB, overhead in GB, cores in cpu count, timeout in hours, modules are environment modules to load before the task executes)."
+    jobMemory:  "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
@@ -995,30 +938,4 @@ struct OutputGroup {
   String outputIdentifier
   File bam
   File bamIndex
-}
-
-struct RuntimeAttributes {
-  Int? memory
-  Int? overhead
-  Int? cores
-  Int? timeout
-  String? modules
-  String? id # optional internal id
-}
-
-struct DefaultRuntimeAttributes {
-  Int memory
-  Int overhead
-  Int cores
-  Int timeout
-  String modules
-}
-
-struct Intervals {
-  String id
-  Array[String] intervalsList
-}
-
-struct IntervalsList {
-  Array[Intervals] intervalsList
 }
