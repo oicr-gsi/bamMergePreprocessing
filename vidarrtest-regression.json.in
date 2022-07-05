@@ -185,32 +185,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "PCSI0022.chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -467,32 +441,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -749,32 +697,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1036,32 +958,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "PCSI0022_P.chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "PCSI0022_R.chr1",
-                    "memory": 22,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1342,16 +1238,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1632,24 +1518,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr17+chr18",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1930,16 +1798,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2220,24 +2078,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr21+chr22+chrY+chrM",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2513,16 +2353,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2779,16 +2609,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2967,16 +2787,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -3181,16 +2991,6 @@
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
