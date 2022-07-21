@@ -5,7 +5,7 @@ set -o pipefail
 
 cd $1
 
-module load samtools 2>/dev/null >/dev/null
+module load samtools/1.15 2>/dev/null >/dev/null
 for each in $(find . -name '*.bam' -printf "%p "); do
 	samtools flagstat ${each} | tr '\n' '\t'
 	echo
