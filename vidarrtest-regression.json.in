@@ -171,46 +171,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "PCSI0022.chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -231,7 +209,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test1",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -453,46 +434,25 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": 60,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -513,7 +473,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test2",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -735,46 +698,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "chr2",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -795,7 +736,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bamMergePreprocessing workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test3",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1022,46 +966,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "PCSI0022_P.chr1",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "PCSI0022_R.chr1",
-                    "memory": 22,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1082,7 +1004,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "MultipleOutputGroups",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1328,30 +1253,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1372,7 +1291,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test4",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1618,38 +1540,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr17+chr18",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1670,7 +1578,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + chr_size grouping test + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test5",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -1916,30 +1827,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -1960,7 +1865,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test6",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2206,38 +2114,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "chr21+chr22+chrY+chrM",
-                    "memory": 21,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                },
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2258,7 +2152,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + chr_size grouping test + multiple output groups",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test7",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2499,30 +2396,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2543,7 +2434,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "bqsr + chr_size grouping test + merge all inputs",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test8",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2765,30 +2659,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2809,7 +2697,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "no bqsr + chr_size grouping test + merge all inputs",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test9",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -2953,30 +2844,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -2997,7 +2882,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "split trim test on full star bams",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test10",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
@@ -3167,30 +3055,24 @@
             "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
             "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
-            "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
+            "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
+            "bamMergePreprocessing.preprocessBam.jobMemory": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.markDuplicatesSuffix": null,
             "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.opticalDuplicatePixelDistance": null,
+            "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
             "bamMergePreprocessing.preprocessBam.refactorCigarString": null,
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
             "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
-            "bamMergePreprocessing.preprocessingBamRuntimeAttributes": [
-                {
-                    "cores": null,
-                    "id": "*",
-                    "memory": 18,
-                    "modules": null,
-                    "overhead": null,
-                    "timeout": 1
-                }
-            ],
+            "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
             "bamMergePreprocessing.realignerTargetCreator.downsamplingType": null,
@@ -3211,7 +3093,10 @@
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
         "description": "split trim test on star bams",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "Test11",
         "metadata": {
             "bamMergePreprocessing.outputGroups": [
