@@ -2,7 +2,9 @@
     "names": [
         "bamMergePreprocessing",
         "bamMergePreprocessing_by_tumor_group",
-	"bamMergePreprocessing_by_sample"
+	"bamMergePreprocessing_by_sample",
+	"bamMergePreprocessing_noMarkDup",
+	"bamMergePreprocessing_merge_only"
     ],
     "wdl": "bamMergePreprocessing.wdl"
 }
