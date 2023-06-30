@@ -27,9 +27,6 @@ Parameter|Value|Description
 `inputGroups`|Array[InputGroup]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
 `intervalsToParallelizeByString`|String|Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4).
 `reference`|String|Path to reference file.
-`realignerTargetCreator.knownIndels`|Array[String]|Array of input VCF files with known indels.
-`indelRealign.knownAlleles`|Array[String]|Array of input VCF files with known indels.
-`baseQualityScoreRecalibration.knownSites`|Array[String]|Array of VCF with known polymorphic sites used to exclude regions around known polymorphisms from analysis.
 
 
 #### Optional workflow parameters:
@@ -141,7 +138,7 @@ Output | Type | Description
  
  * Running bamMergePreprocessing workflow
  
-### Parsing Records
+ ### Parsing Records
  
  ```
      set -euo pipefail

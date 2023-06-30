@@ -1,5 +1,11 @@
 version 1.0
 
+struct GenomeResources {
+  Array[String] known_indels
+  Array[String] known_alleles
+  Array[String] known_sites
+}
+
 workflow bamMergePreprocessing {
 
   input {
@@ -53,6 +59,24 @@ workflow bamMergePreprocessing {
     }
   }
 
+  Map[String,GenomeResources] resources = {
+    "hg19": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"]
+    },
+    "hg38": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"]
+    },
+    "hgmm10": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"]
+    }
+  }
+
   call splitStringToArray {
     input:
       str = intervalsToParallelizeByString
@@ -89,7 +113,8 @@ workflow bamMergePreprocessing {
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
-          reference = reference
+          reference = reference,
+          knownIndels = resources[reference].known_indels
       }
 
       call indelRealign {
@@ -98,7 +123,8 @@ workflow bamMergePreprocessing {
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
           targetIntervals = realignerTargetCreator.targetIntervals,
-          reference = reference
+          reference = reference,
+          knownAlleles = resources[reference].known_alleles
       }
       Array[File] indelRealignedBams = indelRealign.indelRealignedBams
       Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
@@ -108,7 +134,8 @@ workflow bamMergePreprocessing {
       call baseQualityScoreRecalibration {
         input:
           bams = select_first([indelRealignedBams, preprocessedBams]),
-          reference = reference
+          reference = reference,
+          knownSites = resources[reference].known_sites
       }
     }
     Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])
