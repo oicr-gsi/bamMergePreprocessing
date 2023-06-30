@@ -1,9 +1,9 @@
 version 1.0
 
 struct GenomeResources {
-  Array[String] known_indels
-  Array[String] known_alleles
-  Array[String] known_sites
+  String known_indels
+  Array known_alleles
+  Array known_sites
 }
 
 workflow bamMergePreprocessing {
