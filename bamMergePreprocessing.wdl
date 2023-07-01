@@ -114,7 +114,7 @@ workflow bamMergePreprocessing {
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
           reference = reference,
-          knownIndels = resources[reference].known_indels[0]
+          knownIndels = resources[reference].known_indels
       }
 
       call indelRealign {
@@ -124,7 +124,7 @@ workflow bamMergePreprocessing {
           intervals = intervals,
           targetIntervals = realignerTargetCreator.targetIntervals,
           reference = reference,
-          knownAlleles = resources[reference].known_alleles[0]
+          knownAlleles = resources[reference].known_alleles
       }
       Array[File] indelRealignedBams = indelRealign.indelRealignedBams
       Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
@@ -135,7 +135,7 @@ workflow bamMergePreprocessing {
         input:
           bams = select_first([indelRealignedBams, preprocessedBams]),
           reference = reference,
-          knownSites = resources[reference].known_sites[0]
+          knownSites = resources[reference].known_sites
       }
     }
     Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])
