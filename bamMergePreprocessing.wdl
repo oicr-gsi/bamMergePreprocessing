@@ -17,6 +17,7 @@ workflow bamMergePreprocessing {
     Boolean doIndelRealignment = true
     Boolean doBqsr = true
     String reference
+    String reference_genome
   }
 
   parameter_meta {
@@ -28,6 +29,7 @@ workflow bamMergePreprocessing {
     doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
     doBqsr: "Enable/disable GATK4 BQSR."
     reference: "Path to reference file."
+    reference_genome: "reference genome of input sample"
   }
 
   meta {
@@ -114,7 +116,7 @@ workflow bamMergePreprocessing {
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
           reference = reference,
-          knownIndels = resources[reference].known_indels
+          knownIndels = resources[reference_genome].known_indels
       }
 
       call indelRealign {
@@ -124,7 +126,7 @@ workflow bamMergePreprocessing {
           intervals = intervals,
           targetIntervals = realignerTargetCreator.targetIntervals,
           reference = reference,
-          knownAlleles = resources[reference].known_alleles
+          knownAlleles = resources[reference_genome].known_alleles
       }
       Array[File] indelRealignedBams = indelRealign.indelRealignedBams
       Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
@@ -135,7 +137,7 @@ workflow bamMergePreprocessing {
         input:
           bams = select_first([indelRealignedBams, preprocessedBams]),
           reference = reference,
-          knownSites = resources[reference].known_sites
+          knownSites = resources[reference_genome].known_sites
       }
     }
     Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])
