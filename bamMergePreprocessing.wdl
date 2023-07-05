@@ -1,5 +1,11 @@
 version 1.0
 
+struct GenomeResources {
+  Array[String] known_indels
+  Array[String] known_alleles
+  Array[String] known_sites
+}
+
 workflow bamMergePreprocessing {
 
   input {
@@ -11,6 +17,7 @@ workflow bamMergePreprocessing {
     Boolean doIndelRealignment = true
     Boolean doBqsr = true
     String reference
+    String reference_genome
   }
 
   parameter_meta {
@@ -22,6 +29,7 @@ workflow bamMergePreprocessing {
     doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
     doBqsr: "Enable/disable GATK4 BQSR."
     reference: "Path to reference file."
+    reference_genome: "reference genome of input sample"
   }
 
   meta {
@@ -50,6 +58,24 @@ workflow bamMergePreprocessing {
       outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
       recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
       recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
+    }
+  }
+
+  Map[String,GenomeResources] resources = {
+    "hg19": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/hg19-dbsnp-leftaligned-138/dbsnp_138.hg19.leftAligned.vcf.gz"]
+    },
+    "hg38": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"]
+    },
+    "hgmm10": {
+      "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
+      "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
+      "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"]
     }
   }
 
@@ -89,7 +115,8 @@ workflow bamMergePreprocessing {
           bams = preprocessedBams,
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
-          reference = reference
+          reference = reference,
+          knownIndels = resources[reference_genome].known_indels
       }
 
       call indelRealign {
@@ -98,7 +125,8 @@ workflow bamMergePreprocessing {
           bamIndexes = preprocessedBamIndexes,
           intervals = intervals,
           targetIntervals = realignerTargetCreator.targetIntervals,
-          reference = reference
+          reference = reference,
+          knownAlleles = resources[reference_genome].known_alleles
       }
       Array[File] indelRealignedBams = indelRealign.indelRealignedBams
       Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
@@ -108,7 +136,8 @@ workflow bamMergePreprocessing {
       call baseQualityScoreRecalibration {
         input:
           bams = select_first([indelRealignedBams, preprocessedBams]),
-          reference = reference
+          reference = reference,
+          knownSites = resources[reference_genome].known_sites
       }
     }
     Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])

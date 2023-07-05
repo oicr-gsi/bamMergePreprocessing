@@ -1,3 +1,5 @@
+## 2.1.0 -- 2023-07-04
+Moved assembly-specific code in olive to wdl
 ## 2.0.2 -- 2020-05-31
 - Migrate to Vidarr
 ## 2.0 - Unreleased
