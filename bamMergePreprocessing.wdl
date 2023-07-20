@@ -55,7 +55,12 @@ workflow bamMergePreprocessing {
        name: "python/3.7",
        url: "https://www.python.org"
       }
-    ]
+    ],
+    output_meta: {
+      bamFiles: "the final merged bam and bamIndex.",
+      recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
+      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
+    }
 
   }
 
@@ -142,13 +147,13 @@ workflow bamMergePreprocessing {
       suffix = "" # collectFilesBySample task generates the file name
   }
 
-    bamFiles outputBamfiles = { 
+    bamFiles outputBamfile = { 
                               "bam": mergeBams.mergedBam,
                               "bamIndex": mergeBams.mergedBamIndex
                             }
 
   output {
-    Array[bamFiles] outputBamFile = outputBamfiles
+    bamFiles outputBamFile = outputBamfile
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
