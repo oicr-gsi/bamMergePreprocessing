@@ -5,11 +5,6 @@ struct bamFiles {
   File bamIndex
 }
 
-struct outputGroup {
-  File bam
-  File bamIndex
-}
-
 struct GenomeResources {
   Array[String] known_indels
   Array[String] known_alleles
@@ -60,13 +55,12 @@ workflow bamMergePreprocessing {
        name: "python/3.7",
        url: "https://www.python.org"
       }
-    ],
+    ]
     output_meta: {
       outputBamFile: "the final merged bam and bamIndex.",
       recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
       recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
     }
-
   }
 
   Map[String,GenomeResources] resources = {
@@ -152,13 +146,13 @@ workflow bamMergePreprocessing {
       suffix = "" # collectFilesBySample task generates the file name
   }
 
-    outputGroup outputBamfile = { 
+    bamFiles outputBamfile = { 
                               "bam": mergeBams.mergedBam,
                               "bamIndex": mergeBams.mergedBamIndex
                             }
 
   output {
-    outputGroup outputBamFile = outputBamfile
+    bamFiles outputBamFile = outputBamfile
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
