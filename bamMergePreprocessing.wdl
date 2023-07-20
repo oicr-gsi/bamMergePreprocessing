@@ -5,6 +5,11 @@ struct bamFiles {
   File bamIndex
 }
 
+struct outputBamFiles {
+  File bam
+  File bamIndex
+}
+
 struct GenomeResources {
   Array[String] known_indels
   Array[String] known_alleles
@@ -142,13 +147,13 @@ workflow bamMergePreprocessing {
       suffix = "" # collectFilesBySample task generates the file name
   }
 
-    bamFiles outputGroup = { 
+    outputBamFiles outputGroup = { 
                               "bam": mergeBams.mergedBam,
                               "bamIndex": mergeBams.mergedBamIndex
                             }
 
   output {
-    bamFiles outputBamFiles = outputGroup
+    outputBamFiles outputBamFiles = outputGroup
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
