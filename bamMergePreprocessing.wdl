@@ -153,7 +153,7 @@ workflow bamMergePreprocessing {
                             }
 
   output {
-    outputBamFiles outputBamFiles = outputGroup
+    outputBamFiles outputBamFile = outputGroup
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
