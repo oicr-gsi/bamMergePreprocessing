@@ -1,5 +1,10 @@
 version 1.0
 
+struct bamFiles {
+  File bam
+  File bamIndex
+}
+
 struct GenomeResources {
   Array[String] known_indels
   Array[String] known_alleles
@@ -9,27 +14,24 @@ struct GenomeResources {
 workflow bamMergePreprocessing {
 
   input {
-    Array[InputGroup] inputGroups
+    Array[bamFiles] inputBamFiles
+    String outputFileNamePrefix
     String intervalsToParallelizeByString
     Boolean doFilter = true
     Boolean doMarkDuplicates = true
     Boolean doSplitNCigarReads = false
-    Boolean doIndelRealignment = true
-    Boolean doBqsr = true
+    Boolean doBqsr = false
     String reference
     String reference_genome
   }
 
   parameter_meta {
-    inputGroups: "Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name)."
+    inputBamFiles: "Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name)."
     intervalsToParallelizeByString: "Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4)."
     doFilter: "Enable/disable Samtools filtering."
     doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
     doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
-    doIndelRealignment: "Enable/disable GATK3 RealignerTargetCreator + IndelRealigner."
-    doBqsr: "Enable/disable GATK4 BQSR."
     reference: "Path to reference file."
-    reference_genome: "reference genome of input sample"
   }
 
   meta {
@@ -54,11 +56,7 @@ workflow bamMergePreprocessing {
        url: "https://www.python.org"
       }
     ]
-    output_meta: {
-      outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
-      recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
-      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
-    }
+
   }
 
   Map[String,GenomeResources] resources = {
@@ -85,20 +83,14 @@ workflow bamMergePreprocessing {
   }
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
-  scatter (intervals in intervalsToParallelizeBy) {
-    scatter (i in inputGroups) {
-      scatter(bamAndBamIndexInput in i.bamAndBamIndexInputs) {
-        File inputGroupBam = bamAndBamIndexInput.bam
-        File inputGroupBamIndex = bamAndBamIndexInput.bamIndex
-      }
-      Array[File] inputGroupBams = inputGroupBam
-      Array[File] inputGroupBamIndexes = inputGroupBamIndex
+  scatter (i in inputBamFiles) {
+    scatter (intervals in intervalsToParallelizeBy) {
       call preprocessBam {
         input:
-          bams = inputGroupBams,
-          bamIndexes = inputGroupBamIndexes,
+          inputBam = i.bam,
+          inputBamIndex = i.bamIndex,
+          outputFileName = outputFileNamePrefix,
           intervals = intervals,
-          outputFileName = i.outputIdentifier,
           reference = reference,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates,
@@ -108,49 +100,23 @@ workflow bamMergePreprocessing {
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
     Array[File] preprocessedBamIndexes = preprocessBam.preprocessedBamIndex
 
-    # indel realignment combines samples (nWayOut) and is parallized by chromosome
-    if(doIndelRealignment) {
-      call realignerTargetCreator {
-        input:
-          bams = preprocessedBams,
-          bamIndexes = preprocessedBamIndexes,
-          intervals = intervals,
-          reference = reference,
-          knownIndels = resources[reference_genome].known_indels
-      }
-
-      call indelRealign {
-        input:
-          bams = preprocessedBams,
-          bamIndexes = preprocessedBamIndexes,
-          intervals = intervals,
-          targetIntervals = realignerTargetCreator.targetIntervals,
-          reference = reference,
-          knownAlleles = resources[reference_genome].known_alleles
-      }
-      Array[File] indelRealignedBams = indelRealign.indelRealignedBams
-      Array[File] indelRealignedBamIndexes = indelRealign.indelRealignedBamIndexes
-    }
-
     if(doBqsr) {
       call baseQualityScoreRecalibration {
         input:
-          bams = select_first([indelRealignedBams, preprocessedBams]),
+          bams = preprocessedBams,
           reference = reference,
           knownSites = resources[reference_genome].known_sites
       }
     }
-    Array[File] processedBamsByInterval = select_first([indelRealignedBams, preprocessedBams])
-    Array[File] processedBamIndexesByInterval = select_first([indelRealignedBamIndexes, preprocessedBamIndexes])
-    File? recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
+    File? recalibrationTableByLane = baseQualityScoreRecalibration.recalibrationTable
   }
-  Array[File] processedBams = flatten(processedBamsByInterval)
-  Array[File] processedBamIndexes = flatten(processedBamIndexesByInterval)
+  Array[File] processedBams = flatten(preprocessedBams)
+  Array[File] processedBamIndexes = flatten(preprocessedBamIndexes)
 
   if(doBqsr) {
     call gatherBQSRReports {
       input:
-        recalibrationTables = select_all(recalibrationTableByInterval)
+        recalibrationTables = select_all(recalibrationTableByLane)
     }
 
     call analyzeCovariates {
@@ -169,33 +135,25 @@ workflow bamMergePreprocessing {
     Array[File] recalibratedBamIndexes = applyBaseQualityScoreRecalibration.recalibratedBamIndex
   }
 
-  call collectFilesBySample {
+  call mergeBams {
     input:
-      inputGroups = inputGroups,
       bams = select_first([recalibratedBams, processedBams]),
-      bamIndexes = select_first([recalibratedBamIndexes, processedBamIndexes])
+      outputFileName = outputFileNamePrefix,
+      suffix = "" # collectFilesBySample task generates the file name
   }
 
-  scatter(o in collectFilesBySample.filesByOutputIdentifier.collectionGroups) {
-    if(length(o.bams) > 1) {
-      call mergeBams as mergeSplitByIntervalBams {
-        input:
-          bams = o.bams,
-          outputFileName = o.outputFileName,
-          suffix = "" # collectFilesBySample task generates the file name
-      }
-    }
-    OutputGroup outputGroup = { "outputIdentifier": o.outputIdentifier,
-                                "bam": select_first([mergeSplitByIntervalBams.mergedBam, o.bams[0]]),
-                                "bamIndex": select_first([mergeSplitByIntervalBams.mergedBamIndex, o.bamIndexes[0]])}
-  }
+    bamFiles outputGroup = { 
+                              "bam": mergeBams.mergedBam,
+                              "bamIndex": mergeBams.mergedBamIndex
+                            }
 
   output {
-    Array[OutputGroup] outputGroups = outputGroup
+    bamFiles outputBamFiles = outputGroup
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
 }
+
 
 task splitStringToArray {
   input {
@@ -250,8 +208,8 @@ task preprocessBam {
     # $TMP is set by Univa
     String temporaryWorkingDir = ""
 
-    Array[File] bams
-    Array[File] bamIndexes
+    File inputBam
+    File inputBamIndex
     Array[String] intervals
 
     # filter parameters
@@ -285,7 +243,7 @@ task preprocessBam {
   String baseFileName = "~{outputFileName}"
 
   String filteredFileName = if doFilter then
-                            "~{baseFileName}.filter"
+                            "~{baseFileName}.filtered"
                            else
                             "~{baseFileName}"
   String filteredFilePath = if doMarkDuplicates || doSplitNCigarReads then
@@ -316,55 +274,39 @@ task preprocessBam {
 
   command <<<
     set -euxo pipefail
-    inputBams="~{sep=" " bams}"
-    inputBamIndexes="~{sep=" " bamIndexes}"
 
     # filter
     if [ "~{doFilter}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
-      for inputBam in $inputBams; do
-        filename="$(basename $inputBam ".bam")"
-        outputBam="~{workingDir}${filename}.filtered.bam"
-        outputBamIndex="~{workingDir}${filename}.filtered.bai"
-        samtools view -b \
-        -F ~{filterFlags} \
-        ~{"-q " + minMapQuality} \
-        ~{filterAdditionalParams} \
-        $inputBam \
-        ~{sep=" " intervals} > $outputBam
-        samtools index $outputBam $outputBamIndex
-        outputBams+=("$outputBam")
-        outputBamIndexes+=("$outputBamIndex")
-      done
+      outputBam="~{workingDir}~{baseFileName}.filtered.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}.filtered.bai"
+      samtools view -b \
+      -F ~{filterFlags} \
+      ~{"-q " + minMapQuality} \
+      ~{filterAdditionalParams} \
+      ~{inputBam} \
+      ~{sep=" " intervals} > $outputBam
+      samtools index $outputBam $outputBamIndex
+
       # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
+      inputBam=$outputBam
+      inputBamIndex=$outputBamIndex
     else
-      outputBams=()
-      outputBamIndexes=()
-      for inputBam in $inputBams; do
-        filename="$(basename $inputBam ".bam")"
-        outputBam="~{workingDir}${filename}.bam"
-        outputBamIndex="~{workingDir}${filename}.bai"
-        samtools view -b \
-        $inputBam \
-        ~{sep=" " intervals} > $outputBam
-        samtools index $outputBam $outputBamIndex
-        outputBams+=("$outputBam")
-        outputBamIndexes+=("$outputBamIndex")
-      done
+      outputBam="~{workingDir}~{baseFileName}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}.bai"
+      samtools view -b \
+      ~{inputBam} \
+      ~{sep=" " intervals} > $outputBam
+      samtools index $outputBam $outputBamIndex
+
       # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
+      inputBam=$outputBam
+      inputBamIndex=$outputBamIndex
     fi
 
     # mark duplicates
     if [ "~{doMarkDuplicates}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ${inputBams[@]/#/--INPUT } \
+      --INPUT $inputBam \
       --OUTPUT="~{markDuplicatesFilePath}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
       --VALIDATION_STRINGENCY=SILENT \
@@ -372,19 +314,16 @@ task preprocessBam {
       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
       --CREATE_INDEX=true \
       ~{markDuplicatesAdditionalParams}
-      outputBams+=("~{markDuplicatesFilePath}.bam")
-      outputBamIndexes+=("~{markDuplicatesFilePath}.bai")
+
       # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
+      inputBam=$outputBam
+      inputBamIndex=$outputBamIndex
     fi
 
     # split N cigar reads
     if [ "~{doSplitNCigarReads}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
       gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      ${inputBams[@]/#/--input=} \
+      --input $inputBam \
       --output="~{splitNCigarReadsFilePath}.bam" \
       --reference ~{reference} \
       ~{sep=" " prefix("--intervals ", intervals)} \
@@ -392,24 +331,8 @@ task preprocessBam {
       --create-output-bam-index true \
       --refactor-cigar-string ~{refactorCigarString} \
       ~{splitNCigarReadsAdditionalParams}
-      outputBams+=("~{splitNCigarReadsFilePath}.bam")
-      outputBamIndexes+=("~{splitNCigarReadsFilePath}.bai")
-      # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
     fi
 
-    # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
-    if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
-      ${inputBams[@]/#/--INPUT=} \
-      --OUTPUT="~{filteredFileName}.bam" \
-      --CREATE_INDEX=true \
-      --SORT_ORDER=coordinate \
-      --ASSUME_SORTED=false \
-      --USE_THREADING=true \
-      --VALIDATION_STRINGENCY=SILENT
-    fi
   >>>
 
   output {
@@ -443,8 +366,8 @@ task preprocessBam {
     doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
     outputFileName: "Output files will be prefixed with this."
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
-    bams: "Array of bam files to merge together."
-    bamIndexes: "Array of index files for input bams."
+    inputBam: "bam files to process."
+    inputBamIndex: "index files for input bam."
     intervals: "One or more genomic intervals over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
     filterFlags: "Samtools filter flags to apply."
@@ -516,149 +439,6 @@ task mergeBams {
     cores: "The number of cores to allocate to the job."
     timeout: "Maximum amount of time (in hours) the task can run for."
     modules: "Environment module name and version to load (space separated) before command execution."
-  }
-}
-
-task realignerTargetCreator {
-  input {
-    Array[File] bams
-    Array[File] bamIndexes
-    String reference
-    Array[String] knownIndels
-    Array[String] intervals
-    String? downsamplingType
-    String? additionalParams
-
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-
-    # use gatk3 for now: https://github.com/broadinstitute/gatk/issues/3104
-    String modules = "gatk/3.6-0"
-    String gatkJar = "$GATK_ROOT/GenomeAnalysisTK.jar"
-  }
-
-  command <<<
-    set -euo pipefail
-
-    java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type RealignerTargetCreator \
-    --reference_sequence ~{reference} \
-    ~{sep=" " prefix("--intervals ", intervals)} \
-    ~{sep=" " prefix("--input_file ", bams)} \
-    ~{sep=" " prefix("--known ", knownIndels)} \
-    --out realignerTargetCreator.intervals \
-    ~{"--downsampling_type " + downsamplingType} \
-    ~{additionalParams}
-  >>>
-
-  output {
-    File targetIntervals = "realignerTargetCreator.intervals"
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-    bams: "Array of bam files to produce RTC intervals for."
-    bamIndexes: "Array of index files for input bams."
-    reference: "Path to reference file."
-    knownIndels: "Array of input VCF files with known indels."
-    intervals: "One or more genomic intervals over which to operate."
-    downsamplingType: "Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE)."
-    additionalParams: "Additional parameters to pass to GATK RealignerTargetCreator."
-    jobMemory:  "Memory allocated to job (in GB)."
-    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
-    cores: "The number of cores to allocate to the job."
-    timeout: "Maximum amount of time (in hours) the task can run for."
-    modules: "Environment module name and version to load (space separated) before command execution."
-    gatkJar: "Path to GATK jar."
-  }
-}
-
-task indelRealign {
-  input {
-    Array[File] bams
-    Array[File] bamIndexes
-    Array[String] intervals
-    String reference
-    Array[String] knownAlleles
-    File targetIntervals
-    String? additionalParams
-
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-
-    # use gatk3 for now: https://github.com/broadinstitute/gatk/issues/3104
-    String modules = "python/3.7 gatk/3.6-0"
-    String gatkJar = "$GATK_ROOT/GenomeAnalysisTK.jar"
-  }
-
-  command <<<
-    set -euo pipefail
-
-    # generate gatk nWayOut file
-    python3 <<CODE
-    import os
-    import csv
-
-    with open('~{write_lines(bams)}') as f:
-        bamFiles = f.read().splitlines()
-
-    nWayOut = []
-    for bam in bamFiles:
-        fileName = os.path.basename(bam)
-        realignedFileName = os.path.splitext(fileName)[0] + ".realigned.bam"
-        nWayOut.append([fileName, realignedFileName])
-
-    with open('input_output.map', 'w') as f:
-        tsv_writer = csv.writer(f, delimiter='\t')
-        tsv_writer.writerows(nWayOut)
-    CODE
-
-    java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type IndelRealigner \
-    --reference_sequence ~{reference} \
-    ~{sep=" " prefix("--intervals ", intervals)} \
-    ~{sep=" " prefix("--input_file ", bams)} \
-    --targetIntervals ~{targetIntervals} \
-    ~{sep=" " prefix("--knownAlleles ", knownAlleles)} \
-    --bam_compression 0 \
-    --nWayOut input_output.map \
-    ~{additionalParams}
-  >>>
-
-  output {
-    Array[File] indelRealignedBams = glob("*.bam")
-    Array[File] indelRealignedBamIndexes = glob("*.bai")
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-    bams: "Array of bam files to indel realign together."
-    bamIndexes: "Array of index files for input bams."
-    intervals: "One or more genomic intervals over which to operate."
-    reference: "Path to reference file."
-    knownAlleles: "Array of input VCF files with known indels."
-    targetIntervals: "Intervals file output from RealignerTargetCreator."
-    additionalParams: "Additional parameters to pass to GATK IndelRealigner."
-    jobMemory:  "Memory allocated to job (in GB)."
-    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
-    cores: "The number of cores to allocate to the job."
-    timeout: "Maximum amount of time (in hours) the task can run for."
-    modules: "Environment module name and version to load (space separated) before command execution."
-    gatkJar: "Path to GATK jar."
   }
 }
 
@@ -861,110 +641,3 @@ task applyBaseQualityScoreRecalibration {
   }
 }
 
-task collectFilesBySample {
-  input {
-    Array[InputGroup] inputGroups
-    Array[File] bams
-    Array[File] bamIndexes
-
-    Int jobMemory = 1
-    Int cores = 1
-    Int timeout = 1
-    String modules = "python/3.7"
-  }
-
-  InputGroups wrappedInputGroups = {"inputGroups": inputGroups}
-
-  command <<<
-    set -euo pipefail
-
-    python3 <<CODE
-    import json
-    import os
-    import re
-
-    with open('~{write_json(wrappedInputGroups)}') as f:
-        inputGroups = json.load(f)
-    with open('~{write_lines(bams)}') as f:
-        bamFiles = f.read().splitlines()
-    with open('~{write_lines(bamIndexes)}') as f:
-        bamIndexFiles = f.read().splitlines()
-
-    filesByOutputIdentifier = []
-    for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
-        # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
-        bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bam))]
-        bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bai))]
-
-        fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
-        if len(fileNames) != 1:
-            raise Exception("Unable to determine unique fileName from fileNames = [" + ','.join(f for f in fileNames) + "]")
-        else:
-            fileName = fileNames[0]
-
-        filesByOutputIdentifier.append({
-            'outputIdentifier': outputIdentifier,
-            'outputFileName': fileName,
-            'bams': bams,
-            'bamIndexes': bais})
-
-    # wrap the array into collectionGroups object
-    wrappedFilesByOutputIdentifier = {'collectionGroups': filesByOutputIdentifier}
-
-    with open('filesByOutputIdentifier.json', 'w') as f:
-        json.dump(wrappedFilesByOutputIdentifier, f, indent=4)
-    CODE
-  >>>
-
-  output {
-    CollectionGroups filesByOutputIdentifier = read_json("filesByOutputIdentifier.json")
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-  parameter_meta {
-    inputGroups: "Array of objects describing output file groups. The output file group name is used to partition input bams by name."
-    bams: "Array of bams to partition by inputGroup output file name."
-    bamIndexes: "Array of index files for input bams."
-    jobMemory:  "Memory allocated to job (in GB)."
-    cores: "The number of cores to allocate to the job."
-    timeout: "Maximum amount of time (in hours) the task can run for."
-    modules: "Environment module name and version to load (space separated) before command execution."
-  }
-}
-
-struct BamAndBamIndex {
-  File bam
-  File bamIndex
-}
-
-struct InputGroup {
-  String outputIdentifier
-  Array[BamAndBamIndex]+ bamAndBamIndexInputs
-}
-
-struct InputGroups {
-  Array[InputGroup] inputGroups
-}
-
-struct CollectionGroup {
-  String outputIdentifier
-  String outputFileName
-  Array[File] bams
-  Array[File] bamIndexes
-}
-
-struct CollectionGroups {
-  Array[CollectionGroup] collectionGroups
-}
-
-struct OutputGroup {
-  String outputIdentifier
-  File bam
-  File bamIndex
-}
