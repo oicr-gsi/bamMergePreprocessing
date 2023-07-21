@@ -31,7 +31,10 @@ workflow bamMergePreprocessing {
     doFilter: "Enable/disable Samtools filtering."
     doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
     doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
+    doBqsr: "Enable/disable GATK baseQualityScoreRecalibration"
     reference: "Path to reference file."
+    outputFileNamePrefix: "Prefix of output file name"
+    reference_genome: "The reference genome version for input sample"
   }
 
   meta {

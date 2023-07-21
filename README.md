@@ -24,9 +24,11 @@ java -jar cromwell.jar run bamMergePreprocessing.wdl --inputs inputs.json
 #### Required workflow parameters:
 Parameter|Value|Description
 ---|---|---
-`inputGroups`|Array[InputGroup]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
+`inputBamFiles`|Array[bamFiles]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
+`outputFileNamePrefix`|String|Prefix of output file name
 `intervalsToParallelizeByString`|String|Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4).
 `reference`|String|Path to reference file.
+`reference_genome`|String|The reference genome version for input sample
 
 
 #### Optional workflow parameters:
@@ -35,8 +37,7 @@ Parameter|Value|Default|Description
 `doFilter`|Boolean|true|Enable/disable Samtools filtering.
 `doMarkDuplicates`|Boolean|true|Enable/disable GATK4 MarkDuplicates.
 `doSplitNCigarReads`|Boolean|false|Enable/disable GATK4 SplitNCigarReads.
-`doIndelRealignment`|Boolean|true|Enable/disable GATK3 RealignerTargetCreator + IndelRealigner.
-`doBqsr`|Boolean|true|Enable/disable GATK4 BQSR.
+`doBqsr`|Boolean|false|Enable/disable GATK baseQualityScoreRecalibration
 
 
 #### Optional task parameters:
@@ -66,21 +67,6 @@ Parameter|Value|Default|Description
 `preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
 `preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
-`realignerTargetCreator.downsamplingType`|String?|None|Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE).
-`realignerTargetCreator.additionalParams`|String?|None|Additional parameters to pass to GATK RealignerTargetCreator.
-`realignerTargetCreator.jobMemory`|Int|24|Memory allocated to job (in GB).
-`realignerTargetCreator.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`realignerTargetCreator.cores`|Int|1|The number of cores to allocate to the job.
-`realignerTargetCreator.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`realignerTargetCreator.modules`|String|"gatk/3.6-0"|Environment module name and version to load (space separated) before command execution.
-`realignerTargetCreator.gatkJar`|String|"$GATK_ROOT/GenomeAnalysisTK.jar"|Path to GATK jar.
-`indelRealign.additionalParams`|String?|None|Additional parameters to pass to GATK IndelRealigner.
-`indelRealign.jobMemory`|Int|24|Memory allocated to job (in GB).
-`indelRealign.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`indelRealign.cores`|Int|1|The number of cores to allocate to the job.
-`indelRealign.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`indelRealign.modules`|String|"python/3.7 gatk/3.6-0"|Environment module name and version to load (space separated) before command execution.
-`indelRealign.gatkJar`|String|"$GATK_ROOT/GenomeAnalysisTK.jar"|Path to GATK jar.
 `baseQualityScoreRecalibration.intervals`|Array[String]|[]|One or more genomic intervals over which to operate.
 `baseQualityScoreRecalibration.additionalParams`|String?|None|Additional parameters to pass to GATK BaseRecalibrator.
 `baseQualityScoreRecalibration.outputFileName`|String|"gatk.recalibration.csv"|Recalibration table file name.
@@ -111,23 +97,20 @@ Parameter|Value|Default|Description
 `applyBaseQualityScoreRecalibration.cores`|Int|1|The number of cores to allocate to the job.
 `applyBaseQualityScoreRecalibration.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `applyBaseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
-`collectFilesBySample.jobMemory`|Int|1|Memory allocated to job (in GB).
-`collectFilesBySample.cores`|Int|1|The number of cores to allocate to the job.
-`collectFilesBySample.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
-`collectFilesBySample.modules`|String|"python/3.7"|Environment module name and version to load (space separated) before command execution.
-`mergeSplitByIntervalBams.additionalParams`|String?|None|Additional parameters to pass to GATK MergeSamFiles.
-`mergeSplitByIntervalBams.jobMemory`|Int|24|Memory allocated to job (in GB).
-`mergeSplitByIntervalBams.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`mergeSplitByIntervalBams.cores`|Int|1|The number of cores to allocate to the job.
-`mergeSplitByIntervalBams.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`mergeSplitByIntervalBams.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`mergeBams.additionalParams`|String?|None|Additional parameters to pass to GATK MergeSamFiles.
+`mergeBams.jobMemory`|Int|24|Memory allocated to job (in GB).
+`mergeBams.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`mergeBams.cores`|Int|1|The number of cores to allocate to the job.
+`mergeBams.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`mergeBams.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
 
 
 ### Outputs
 
 Output | Type | Description
 ---|---|---
-`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.
+`mergedBam`|File|the final merged bam.
+`mergedBamIndex`|File|the final merged bam index
 `recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).
 `recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).
 
