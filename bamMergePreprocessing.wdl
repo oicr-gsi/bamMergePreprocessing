@@ -57,7 +57,8 @@ workflow bamMergePreprocessing {
       }
     ]
     output_meta: {
-      outputBamFile: "the final merged bam and bamIndex.",
+      mergedBam: "the final merged bam.",
+      mergedBamIndex: "the final merged bam index",
       recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
       recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
     }
@@ -139,20 +140,17 @@ workflow bamMergePreprocessing {
     Array[File] recalibratedBamIndexes = applyBaseQualityScoreRecalibration.recalibratedBamIndex
   }
 
+  Array[File] bamsToMerge = select_first([recalibratedBams, processedBams])
+  String outputFileName = basename(bamsToMerge[0], ".bam")
   call mergeBams {
     input:
       bams = select_first([recalibratedBams, processedBams]),
-      outputFileName = outputFileNamePrefix,
-      suffix = "" # collectFilesBySample task generates the file name
+      outputFileName = outputFileName
   }
 
-    bamFiles outputBamfile = { 
-                              "bam": mergeBams.mergedBam,
-                              "bamIndex": mergeBams.mergedBamIndex
-                            }
-
   output {
-    bamFiles outputBamFile = outputBamfile
+    File mergedBam = mergeBams.mergedBam
+    File mergedBamIndex = mergeBams.mergedBamIndex
     File? recalibrationReport = analyzeCovariates.recalibrationReport
     File? recalibrationTable = gatherBQSRReports.recalibrationTable
   }
@@ -398,9 +396,7 @@ task mergeBams {
   input {
     Array[File] bams
     String outputFileName
-    String suffix = ".merge"
     String? additionalParams
-
     Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
@@ -410,10 +406,9 @@ task mergeBams {
 
   command <<<
     set -euo pipefail
-
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
     ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}~{suffix}.bam" \
+    --OUTPUT="~{outputFileName}.bam" \
     --CREATE_INDEX=true \
     --SORT_ORDER=coordinate \
     --ASSUME_SORTED=false \
@@ -423,8 +418,8 @@ task mergeBams {
   >>>
 
   output {
-    File mergedBam = "~{outputFileName}~{suffix}.bam"
-    File mergedBamIndex = "~{outputFileName}~{suffix}.bai"
+    File mergedBam = "~{outputFileName}.bam"
+    File mergedBamIndex = "~{outputFileName}.bai"
   }
 
   runtime {

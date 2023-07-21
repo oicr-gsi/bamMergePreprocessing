@@ -31,7 +31,7 @@
             "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
             "bamMergePreprocessing.collectFilesBySample.modules": null,
             "bamMergePreprocessing.collectFilesBySample.timeout": null,
-            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doBqsr": true,
             "bamMergePreprocessing.doFilter": null,
             "bamMergePreprocessing.doMarkDuplicates": null,
             "bamMergePreprocessing.doSplitNCigarReads": null,
@@ -150,12 +150,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
@@ -172,7 +172,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -201,24 +201,21 @@
         },
         "id": "Test1",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -278,7 +275,7 @@
             "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
             "bamMergePreprocessing.collectFilesBySample.modules": null,
             "bamMergePreprocessing.collectFilesBySample.timeout": null,
-            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doBqsr": true,
             "bamMergePreprocessing.doFilter": null,
             "bamMergePreprocessing.doMarkDuplicates": null,
             "bamMergePreprocessing.doSplitNCigarReads": null,
@@ -397,12 +394,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.defaultRuntimeAttributes": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
@@ -420,7 +417,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -449,24 +446,21 @@
         },
         "id": "Test2",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test2_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -645,12 +639,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
@@ -667,7 +661,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -681,6 +675,7 @@
             "bamMergePreprocessing.realignerTargetCreator.overhead": null,
             "bamMergePreprocessing.realignerTargetCreator.timeout": 1,
             "bamMergePreprocessing.reference": "/.mounts/labs/gsi/modulator/sw/data/hg19-p13/hg19_random.fa",
+            "bamMergePreprocessing.reference_genome": "hg19",
             "bamMergePreprocessing.splitStringToArray.cores": null,
             "bamMergePreprocessing.splitStringToArray.jobMemory": null,
             "bamMergePreprocessing.splitStringToArray.lineSeparator": null,
@@ -695,24 +690,21 @@
         },
         "id": "Test3",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test3_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -772,7 +764,7 @@
             "bamMergePreprocessing.collectFilesBySample.jobMemory": null,
             "bamMergePreprocessing.collectFilesBySample.modules": null,
             "bamMergePreprocessing.collectFilesBySample.timeout": null,
-            "bamMergePreprocessing.doBqsr": null,
+            "bamMergePreprocessing.doBqsr": true,
             "bamMergePreprocessing.doFilter": null,
             "bamMergePreprocessing.doMarkDuplicates": false,
             "bamMergePreprocessing.doSplitNCigarReads": null,
@@ -891,12 +883,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
@@ -913,7 +905,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -942,24 +934,21 @@
         },
         "id": "Test8",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test8_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -1138,12 +1127,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": 256,
@@ -1160,7 +1149,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -1189,24 +1178,21 @@
         },
         "id": "Test9",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test9_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -1307,12 +1293,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "star_bam_full",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
@@ -1329,7 +1315,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -1358,24 +1344,21 @@
         },
         "id": "Test10",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test10_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
@@ -1502,12 +1485,12 @@
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "star_test",
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
-            "bamMergePreprocessing.mergeSplitByIntervalBams.additionalParams": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.cores": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.jobMemory": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.modules": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.overhead": null,
-            "bamMergePreprocessing.mergeSplitByIntervalBams.timeout": 1,
+            "bamMergePreprocessing.mergeBams.additionalParams": null,
+            "bamMergePreprocessing.mergeBams.cores": null,
+            "bamMergePreprocessing.mergeBams.jobMemory": null,
+            "bamMergePreprocessing.mergeBams.modules": null,
+            "bamMergePreprocessing.mergeBams.overhead": null,
+            "bamMergePreprocessing.mergeBams.timeout": 1,
             "bamMergePreprocessing.preprocessBam.cores": null,
             "bamMergePreprocessing.preprocessBam.filterAdditionalParams": null,
             "bamMergePreprocessing.preprocessBam.filterFlags": null,
@@ -1524,7 +1507,7 @@
             "bamMergePreprocessing.preprocessBam.removeDuplicates": false,
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsAdditionalParams": "--process-secondary-alignments true",
             "bamMergePreprocessing.preprocessBam.splitNCigarReadsSuffix": null,
-            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": "$TMP",
+            "bamMergePreprocessing.preprocessBam.temporaryWorkingDir": null,
             "bamMergePreprocessing.preprocessBam.timeout": null,
             "bamMergePreprocessing.realignerTargetCreator.additionalParams": null,
             "bamMergePreprocessing.realignerTargetCreator.cores": null,
@@ -1553,24 +1536,21 @@
         },
         "id": "Test11",
         "metadata": {
-            "bamMergePreprocessing.outputBamFile": 
-                {
-                    "bam": {
-                        "contents": [
+            "bamMergePreprocessing.mergedBam": {
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    },
-                    "bamIndex": {
-                        "contents": [
+                },
+            "bamMergePreprocessing.mergedBamIndex":{
+                "contents": [
                             {
                                 "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test11_@JENKINSID@"
                             }
                         ],
                         "type": "ALL"
-                    }
                 },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
