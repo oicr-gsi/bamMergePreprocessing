@@ -218,7 +218,7 @@ task preprocessBam {
     Array[String] intervals
 
     # filter parameters
-    String filterSuffix = ".filter"
+    String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
     String? filterAdditionalParams
@@ -248,7 +248,7 @@ task preprocessBam {
   String baseFileName = "~{outputFileName}"
 
   String filteredFileName = if doFilter then
-                            "~{baseFileName}.filtered"
+                            "~{baseFileName}~{filterSuffix}"
                            else
                             "~{baseFileName}"
   String filteredFilePath = if doMarkDuplicates || doSplitNCigarReads then
@@ -256,7 +256,7 @@ task preprocessBam {
                            else "~{filteredFileName}"
 
   String markDuplicatesFileName = if doMarkDuplicates then
-                                  "~{filteredFileName}.deduped"
+                                  "~{filteredFileName}~{markDuplicatesSuffix}"
                                  else
                                   "~{filteredFileName}"
   String markDuplicatesFilePath = if doSplitNCigarReads then
@@ -265,7 +265,7 @@ task preprocessBam {
                                   "~{markDuplicatesFileName}"
 
   String splitNCigarReadsFileName = if doSplitNCigarReads then
-                                    "~{markDuplicatesFileName}.split"
+                                    "~{markDuplicatesFileName}~{splitNCigarReadsSuffix}"
                                    else
                                     "~{markDuplicatesFileName}"
   String splitNCigarReadsFilePath = if false then # there are no downstream steps, so don't write to temp dir
@@ -282,8 +282,8 @@ task preprocessBam {
 
     # filter
     if [ "~{doFilter}" = true ]; then
-      outputBam="~{workingDir}~{baseFileName}.filtered.bam"
-      outputBamIndex="~{workingDir}~{baseFileName}.filtered.bai"
+      outputBam="~{workingDir}~{baseFileName}~{filterSuffix}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}~{filterSuffix}.bai"
       samtools view -b \
       -F ~{filterFlags} \
       ~{"-q " + minMapQuality} \
