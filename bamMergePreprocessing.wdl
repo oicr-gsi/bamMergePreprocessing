@@ -91,8 +91,8 @@ workflow bamMergePreprocessing {
   }
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
-  scatter (i in inputBamFiles) {
-    scatter (intervals in intervalsToParallelizeBy) {
+  scatter (intervals in intervalsToParallelizeBy) {
+    scatter (i in inputBamFiles) {
       call preprocessBam {
         input:
           inputBam = i.bam,
