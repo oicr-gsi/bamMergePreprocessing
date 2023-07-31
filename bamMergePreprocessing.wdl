@@ -78,7 +78,7 @@ workflow bamMergePreprocessing {
       "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"],
       "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/hg38-dbsnp-138/dbsnp_138.hg38.vcf.gz"]
     },
-    "hgmm10": {
+    "mm10": {
       "known_indels": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
       "known_alleles": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"],
       "known_sites": ["/.mounts/labs/gsi/modulator/sw/data/mm10-dbsnp-150/dbsnp_150.mm10.vcf.gz"]
@@ -101,25 +101,36 @@ workflow bamMergePreprocessing {
           intervals = intervals,
           reference = reference,
           doFilter = doFilter,
-          doMarkDuplicates = doMarkDuplicates,
           doSplitNCigarReads = doSplitNCigarReads
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
     Array[File] preprocessedBamIndexes = preprocessBam.preprocessedBamIndex
 
+    if (doMarkDuplicates) {
+      call markDuplicates {
+        input:
+        inputBams = preprocessedBams,
+        outputFileName = basename(preprocessedBams[0], ".bam")
+      }
+    }
+
+
+    Array[File] dedupedBams = select_first([markDuplicates.dedupedBam, preprocessedBams])
+    Array[File] dedupedBamIndexes = select_first([markDuplicates.dedupedBamIndex, preprocessedBamIndexes])
+
     if(doBqsr) {
       call baseQualityScoreRecalibration {
         input:
-          bams = preprocessedBams,
+          bams = dedupedBams,
           reference = reference,
           knownSites = resources[reference_genome].known_sites
       }
     }
     File? recalibrationTableByLane = baseQualityScoreRecalibration.recalibrationTable
   }
-  Array[File] processedBams = flatten(preprocessedBams)
-  Array[File] processedBamIndexes = flatten(preprocessedBamIndexes)
+  Array[File] processedBams = flatten(dedupedBams)
+  Array[File] processedBamIndexes = flatten(dedupedBamIndexes)
 
   if(doBqsr) {
     call gatherBQSRReports {
@@ -203,7 +214,6 @@ task splitStringToArray {
 task preprocessBam {
   input {
     Boolean doFilter = true
-    Boolean doMarkDuplicates = true
     Boolean doSplitNCigarReads = false
 
     String outputFileName
@@ -221,13 +231,7 @@ task preprocessBam {
     String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
-    String? filterAdditionalParams
-
-    # mark duplicates
-    String markDuplicatesSuffix = ".deduped"
-    Boolean removeDuplicates = false
-    Int opticalDuplicatePixelDistance = 100
-    String? markDuplicatesAdditionalParams
+    String? filterAdditionalParams 
 
     # split N cigar reads
     String splitNCigarReadsSuffix = ".split"
@@ -251,23 +255,14 @@ task preprocessBam {
                             "~{baseFileName}~{filterSuffix}"
                            else
                             "~{baseFileName}"
-  String filteredFilePath = if doMarkDuplicates || doSplitNCigarReads then
+  String filteredFilePath = if doSplitNCigarReads then
                             "~{workingDir}~{filteredFileName}"
                            else "~{filteredFileName}"
 
-  String markDuplicatesFileName = if doMarkDuplicates then
-                                  "~{filteredFileName}~{markDuplicatesSuffix}"
-                                 else
-                                  "~{filteredFileName}"
-  String markDuplicatesFilePath = if doSplitNCigarReads then
-                                  "~{workingDir}~{markDuplicatesFileName}"
-                                 else
-                                  "~{markDuplicatesFileName}"
-
   String splitNCigarReadsFileName = if doSplitNCigarReads then
-                                    "~{markDuplicatesFileName}~{splitNCigarReadsSuffix}"
+                                    "~{filteredFileName}~{splitNCigarReadsSuffix}"
                                    else
-                                    "~{markDuplicatesFileName}"
+                                    "~{filteredFileName}"
   String splitNCigarReadsFilePath = if false then # there are no downstream steps, so don't write to temp dir
                                     "~{workingDir}~{splitNCigarReadsFileName}"
                                    else
@@ -308,23 +303,6 @@ task preprocessBam {
       inputBamIndex=$outputBamIndex
     fi
 
-    # mark duplicates
-    if [ "~{doMarkDuplicates}" = true ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      --INPUT $inputBam \
-      --OUTPUT="~{markDuplicatesFilePath}.bam" \
-      --METRICS_FILE="~{outputFileName}.metrics" \
-      --VALIDATION_STRINGENCY=SILENT \
-      --REMOVE_DUPLICATES=~{removeDuplicates} \
-      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-      --CREATE_INDEX=true \
-      ~{markDuplicatesAdditionalParams}
-
-      # set inputs for next step
-      inputBam=$outputBam
-      inputBamIndex=$outputBamIndex
-    fi
-
     # split N cigar reads
     if [ "~{doSplitNCigarReads}" = true ]; then
       gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
@@ -343,15 +321,11 @@ task preprocessBam {
   output {
     File preprocessedBam = if doSplitNCigarReads then
                             "~{splitNCigarReadsFilePath}.bam"
-                           else if doMarkDuplicates then
-                            "~{markDuplicatesFilePath}.bam"
                            else if doFilter then
                             "~{filteredFilePath}.bam"
                            else "~{filteredFileName}.bam"
     File preprocessedBamIndex = if doSplitNCigarReads then
                                   "~{splitNCigarReadsFilePath}.bai"
-                                else if doMarkDuplicates then
-                                  "~{markDuplicatesFilePath}.bai"
                                 else if doFilter then
                                   "~{filteredFilePath}.bai"
                                 else "~{filteredFileName}.bai"
@@ -367,7 +341,6 @@ task preprocessBam {
 
   parameter_meta {
     doFilter: "Enable/disable Samtools filtering."
-    doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
     doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
     outputFileName: "Output files will be prefixed with this."
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
@@ -378,10 +351,6 @@ task preprocessBam {
     filterFlags: "Samtools filter flags to apply."
     minMapQuality: "Samtools minimum mapping quality filter to apply."
     filterAdditionalParams: "Additional parameters to pass to samtools."
-    markDuplicatesSuffix: "Suffix to use for duplicate marked bams."
-    removeDuplicates: "MarkDuplicates remove duplicates?"
-    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
-    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
     splitNCigarReadsSuffix: "Suffix to use for SplitNCigarReads bams."
     reference: "Path to reference file."
     refactorCigarString: "SplitNCigarReads refactor cigar string?"
@@ -392,6 +361,46 @@ task preprocessBam {
     cores: "The number of cores to allocate to the job."
     timeout: "Maximum amount of time (in hours) the task can run for."
     modules: "Environment module name and version to load (space separated) before command execution."
+  }
+}
+
+task markDuplicates {
+  input {
+    Array[File]inputBams
+    String outputFileName
+    Boolean removeDuplicates = false
+    Int opticalDuplicatePixelDistance = 100
+    String? markDuplicatesAdditionalParams
+    Int jobMemory = 24
+    Int overhead = 6
+    Int cores = 1
+    Int timeout = 6
+    String modules = "gatk/4.1.6.0"
+  }
+
+    command <<<
+    set -euo pipefail
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+      ~{sep=" " prefix("--INPUT=", inputBams)}  \
+      --OUTPUT="~{outputFileName}.deduped.bam"\
+      --METRICS_FILE="~{outputFileName}.metrics" \
+      --VALIDATION_STRINGENCY=SILENT \
+      --REMOVE_DUPLICATES=~{removeDuplicates} \
+      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+      --CREATE_INDEX=true \
+      ~{markDuplicatesAdditionalParams}
+    >>>
+
+  output {
+    Array[File] dedupedBam = glob("*.bam")
+    Array[File] dedupedBamIndex = glob("*.bai")
+  }
+
+  runtime {
+    memory: "~{jobMemory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+    modules: "~{modules}"
   }
 }
 
