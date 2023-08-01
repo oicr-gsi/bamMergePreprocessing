@@ -115,7 +115,6 @@ workflow bamMergePreprocessing {
       }
     }
 
-
     Array[File] dedupedBams = select_first([markDuplicates.dedupedBam, preprocessedBams])
     Array[File] dedupedBamIndexes = select_first([markDuplicates.dedupedBamIndex, preprocessedBamIndexes])
 
@@ -127,7 +126,7 @@ workflow bamMergePreprocessing {
           knownSites = resources[reference_genome].known_sites
       }
     }
-    File? recalibrationTableByLane = baseQualityScoreRecalibration.recalibrationTable
+    File? recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
   }
   Array[File] processedBams = flatten(dedupedBams)
   Array[File] processedBamIndexes = flatten(dedupedBamIndexes)
@@ -135,7 +134,7 @@ workflow bamMergePreprocessing {
   if(doBqsr) {
     call gatherBQSRReports {
       input:
-        recalibrationTables = select_all(recalibrationTableByLane)
+        recalibrationTables = select_all(recalibrationTableByInterval)
     }
 
     call analyzeCovariates {
@@ -158,7 +157,7 @@ workflow bamMergePreprocessing {
   String outputFileName = basename(bamsToMerge[0], ".bam")
   call mergeBams {
     input:
-      bams = select_first([recalibratedBams, processedBams]),
+      bams = bamsToMerge,
       outputFileName = outputFileName
   }
 
@@ -176,7 +175,6 @@ task splitStringToArray {
     String str
     String lineSeparator = ","
     String recordSeparator = "+"
-
     Int jobMemory = 1
     Int cores = 1
     Int timeout = 1
@@ -401,6 +399,18 @@ task markDuplicates {
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
+  }
+
+    parameter_meta {
+    inputBams: "Array of bam files to go through markDuplicates."
+    removeDuplicates: "MarkDuplicates remove duplicates?"
+    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
+    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
+    jobMemory: "Memory allocated to job (in GB)."
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
 
