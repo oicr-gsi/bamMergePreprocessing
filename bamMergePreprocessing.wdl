@@ -19,7 +19,6 @@ workflow bamMergePreprocessing {
     String intervalsToParallelizeByString
     Boolean doFilter = true
     Boolean doMarkDuplicates = true
-    Boolean doSplitNCigarReads = false
     Boolean doBqsr = false
     String reference
     String reference_genome
@@ -30,7 +29,6 @@ workflow bamMergePreprocessing {
     intervalsToParallelizeByString: "Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4)."
     doFilter: "Enable/disable Samtools filtering."
     doMarkDuplicates: "Enable/disable GATK4 MarkDuplicates."
-    doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
     doBqsr: "Enable/disable GATK baseQualityScoreRecalibration"
     reference: "Path to reference file."
     outputFileNamePrefix: "Prefix of output file name"
@@ -101,35 +99,24 @@ workflow bamMergePreprocessing {
           intervals = intervals,
           reference = reference,
           doFilter = doFilter,
-          doSplitNCigarReads = doSplitNCigarReads
+          doMarkDuplicates = doMarkDuplicates
       }
     }
     Array[File] preprocessedBams = preprocessBam.preprocessedBam
     Array[File] preprocessedBamIndexes = preprocessBam.preprocessedBamIndex
 
-    if (doMarkDuplicates) {
-      call markDuplicates {
-        input:
-        inputBams = preprocessedBams,
-        outputFileName = basename(preprocessedBams[0], ".bam")
-      }
-    }
-
-    Array[File] dedupedBams = select_first([markDuplicates.dedupedBam, preprocessedBams])
-    Array[File] dedupedBamIndexes = select_first([markDuplicates.dedupedBamIndex, preprocessedBamIndexes])
-
     if(doBqsr) {
       call baseQualityScoreRecalibration {
         input:
-          bams = dedupedBams,
+          bams = preprocessedBams,
           reference = reference,
           knownSites = resources[reference_genome].known_sites
       }
     }
     File? recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
   }
-  Array[File] processedBams = flatten(dedupedBams)
-  Array[File] processedBamIndexes = flatten(dedupedBamIndexes)
+  Array[File] processedBams = flatten(preprocessedBams)
+  Array[File] processedBamIndexes = flatten(preprocessedBamIndexes)
 
   if(doBqsr) {
     call gatherBQSRReports {
@@ -212,8 +199,7 @@ task splitStringToArray {
 task preprocessBam {
   input {
     Boolean doFilter = true
-    Boolean doSplitNCigarReads = false
-
+    Boolean doMarkDuplicates = true
     String outputFileName
 
     # by default write tmp files to the current working directory (cromwell task directory)
@@ -231,15 +217,15 @@ task preprocessBam {
     Int? minMapQuality
     String? filterAdditionalParams 
 
-    # split N cigar reads
-    String splitNCigarReadsSuffix = ".split"
-    String reference
-    Boolean refactorCigarString = false
-    Array[String] readFilters = []
-    String? splitNCigarReadsAdditionalParams
+    # markDuplicates parameters
+    String dedupSuffix = ".deduped"
+    Boolean removeDuplicates = false
+    Int opticalDuplicatePixelDistance = 100
+    String? markDuplicatesAdditionalParams
 
-    Int jobMemory = 24
-    Int overhead = 6
+    String reference
+    Int jobMemory = 48
+    Int overhead = 8
     Int cores = 1
     Int timeout = 6
     String modules = "samtools/1.9 gatk/4.1.6.0"
@@ -253,22 +239,14 @@ task preprocessBam {
                             "~{baseFileName}~{filterSuffix}"
                            else
                             "~{baseFileName}"
-  String filteredFilePath = if doSplitNCigarReads then
+  String filteredFilePath = if doMarkDuplicates then
                             "~{workingDir}~{filteredFileName}"
                            else "~{filteredFileName}"
 
-  String splitNCigarReadsFileName = if doSplitNCigarReads then
-                                    "~{filteredFileName}~{splitNCigarReadsSuffix}"
-                                   else
-                                    "~{filteredFileName}"
-  String splitNCigarReadsFilePath = if false then # there are no downstream steps, so don't write to temp dir
-                                    "~{workingDir}~{splitNCigarReadsFileName}"
-                                   else
-                                    "~{splitNCigarReadsFileName}"
-
-  # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
-  # ~{sep = " " prefix("--read-filter ", readFilters)}
-  Array[String] prefixedReadFilters = prefix("--read-filter ", readFilters)
+  String markDuplicatesFileName = if doMarkDuplicates then
+                                  "~{filteredFileName}~{dedupSuffix}"
+                                 else
+                                  "~{filteredFileName}"
 
   command <<<
     set -euxo pipefail
@@ -301,33 +279,33 @@ task preprocessBam {
       inputBamIndex=$outputBamIndex
     fi
 
-    # split N cigar reads
-    if [ "~{doSplitNCigarReads}" = true ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      --input $inputBam \
-      --output="~{splitNCigarReadsFilePath}.bam" \
-      --reference ~{reference} \
-      ~{sep=" " prefix("--intervals ", intervals)} \
-      ~{sep=" " prefixedReadFilters} \
-      --create-output-bam-index true \
-      --refactor-cigar-string ~{refactorCigarString} \
-      ~{splitNCigarReadsAdditionalParams}
+    # mark duplicates
+    if [ "~{doMarkDuplicates}" = true ]; then
+      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+      --INPUT=$inputBam  \
+      --OUTPUT="~{markDuplicatesFileName}.bam" \
+      --METRICS_FILE="~{outputFileName}.metrics" \
+      --VALIDATION_STRINGENCY=SILENT \
+      --REMOVE_DUPLICATES=~{removeDuplicates} \
+      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+      --CREATE_INDEX=true \
+      ~{markDuplicatesAdditionalParams}
     fi
 
   >>>
 
   output {
-    File preprocessedBam = if doSplitNCigarReads then
-                            "~{splitNCigarReadsFilePath}.bam"
+    File preprocessedBam = if doMarkDuplicates then
+                            "~{markDuplicatesFileName}.bam"
                            else if doFilter then
                             "~{filteredFilePath}.bam"
                            else "~{filteredFileName}.bam"
-    File preprocessedBamIndex = if doSplitNCigarReads then
-                                  "~{splitNCigarReadsFilePath}.bai"
+    File preprocessedBamIndex = if doMarkDuplicates then
+                                  "~{markDuplicatesFileName}.bai"
                                 else if doFilter then
                                   "~{filteredFilePath}.bai"
                                 else "~{filteredFileName}.bai"
-    File? markDuplicateMetrics = "~{outputFileName}.metrics"
+    File? markDuplicateMetrics = "~{markDuplicatesFileName}.metrics"
   }
 
   runtime {
@@ -339,7 +317,6 @@ task preprocessBam {
 
   parameter_meta {
     doFilter: "Enable/disable Samtools filtering."
-    doSplitNCigarReads: "Enable/disable GATK4 SplitNCigarReads."
     outputFileName: "Output files will be prefixed with this."
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
     inputBam: "bam files to process."
@@ -347,66 +324,11 @@ task preprocessBam {
     intervals: "One or more genomic intervals over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
     filterFlags: "Samtools filter flags to apply."
+    dedupSuffix: "Suffix to use for markDuplcated bams"
     minMapQuality: "Samtools minimum mapping quality filter to apply."
     filterAdditionalParams: "Additional parameters to pass to samtools."
-    splitNCigarReadsSuffix: "Suffix to use for SplitNCigarReads bams."
     reference: "Path to reference file."
-    refactorCigarString: "SplitNCigarReads refactor cigar string?"
-    readFilters: "SplitNCigarReads read filters"
-    splitNCigarReadsAdditionalParams: "Additional parameters to pass to GATK SplitNCigarReads."
     jobMemory:  "Memory allocated to job (in GB)."
-    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
-    cores: "The number of cores to allocate to the job."
-    timeout: "Maximum amount of time (in hours) the task can run for."
-    modules: "Environment module name and version to load (space separated) before command execution."
-  }
-}
-
-task markDuplicates {
-  input {
-    Array[File]inputBams
-    String outputFileName
-    Boolean removeDuplicates = false
-    Int opticalDuplicatePixelDistance = 100
-    String? markDuplicatesAdditionalParams
-    Int jobMemory = 24
-    Int overhead = 6
-    Int cores = 1
-    Int timeout = 6
-    String modules = "gatk/4.1.6.0"
-  }
-
-    command <<<
-    set -euo pipefail
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ~{sep=" " prefix("--INPUT=", inputBams)}  \
-      --OUTPUT="~{outputFileName}.deduped.bam"\
-      --METRICS_FILE="~{outputFileName}.metrics" \
-      --VALIDATION_STRINGENCY=SILENT \
-      --REMOVE_DUPLICATES=~{removeDuplicates} \
-      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-      --CREATE_INDEX=true \
-      ~{markDuplicatesAdditionalParams}
-    >>>
-
-  output {
-    Array[File] dedupedBam = glob("*.bam")
-    Array[File] dedupedBamIndex = glob("*.bai")
-  }
-
-  runtime {
-    memory: "~{jobMemory} GB"
-    cpu: "~{cores}"
-    timeout: "~{timeout}"
-    modules: "~{modules}"
-  }
-
-    parameter_meta {
-    inputBams: "Array of bam files to go through markDuplicates."
-    removeDuplicates: "MarkDuplicates remove duplicates?"
-    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
-    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
-    jobMemory: "Memory allocated to job (in GB)."
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
     timeout: "Maximum amount of time (in hours) the task can run for."
