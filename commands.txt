@@ -1,124 +1,124 @@
 ## Commands
-This section lists command(s) run by WORKFLOW workflow
-
-* Running bamMergePreprocessing WORKFLOW
-
-### Parsing Records
-
-```
-    set -euo pipefail
-
-    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
-```
-### Filtering and spliting N cigar reads
-```
-    set -euxo pipefail
-
-    # filter
-    if [ "~{doFilter}" = true ]; then
-      outputBam="~{workingDir}~{baseFileName}~{filterSuffix}.bam"
-      outputBamIndex="~{workingDir}~{baseFileName}~{filterSuffix}.bai"
-      samtools view -b \
-      -F ~{filterFlags} \
-      ~{"-q " + minMapQuality} \
-      ~{filterAdditionalParams} \
-      ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
-      samtools index $outputBam $outputBamIndex
-
-      # set inputs for next step
-      inputBam=$outputBam
-      inputBamIndex=$outputBamIndex
-    else
-      outputBam="~{workingDir}~{baseFileName}.bam"
-      outputBamIndex="~{workingDir}~{baseFileName}.bai"
-      samtools view -b \
-      ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
-      samtools index $outputBam $outputBamIndex
-
-      # set inputs for next step
-      inputBam=$outputBam
-      inputBamIndex=$outputBamIndex
-    fi
-
-    # split N cigar reads
-    if [ "~{doSplitNCigarReads}" = true ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      --input $inputBam \
-      --output="~{splitNCigarReadsFilePath}.bam" \
-      --reference ~{reference} \
-      ~{sep=" " prefix("--intervals ", intervals)} \
-      ~{sep=" " prefixedReadFilters} \
-      --create-output-bam-index true \
-      --refactor-cigar-string ~{refactorCigarString} \
-      ~{splitNCigarReadsAdditionalParams}
-    fi
-
-  ```
-### Marking Duplicates
-```
-    set -euo pipefail
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ~{sep=" " prefix("--INPUT=", inputBams)}  \
-      --OUTPUT="~{outputFileName}.deduped.bam"\
-      --METRICS_FILE="~{outputFileName}.metrics" \
-      --VALIDATION_STRINGENCY=SILENT \
-      --REMOVE_DUPLICATES=~{removeDuplicates} \
-      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-      --CREATE_INDEX=true \
-      ~{markDuplicatesAdditionalParams}
-```
-### Merging bam files
-```
-    set -euo pipefail
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
-    ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}.bam" \
-    --CREATE_INDEX=true \
-    --SORT_ORDER=coordinate \
-    --ASSUME_SORTED=false \
-    --USE_THREADING=true \
-    --VALIDATION_STRINGENCY=SILENT \
-    ~{additionalParams}
-  ```
-### Base Recalibration
-```
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" BaseRecalibrator \
-    --reference ~{reference} \
-    ~{sep=" " prefixedIntervals} \
-    ~{sep=" " prefix("--input=", bams)} \
-    ~{sep=" " prefix("--known-sites ", knownSites)} \
-    --output=~{outputFileName} \
-    ~{additionalParams}
-  ```
-### Gathering Base Quality Score Recalibration Reports
-```
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
-    ~{sep=" " prefix("--input=", recalibrationTables)} \
-    --output ~{outputFileName} \
-    ~{additionalParams}
-  ```
-### Analysis of Covariates
-```
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
-    --bqsr-recal-file=~{recalibrationTable} \
-    --plots-report-file ~{outputFileName} \
-    ~{additionalParams}
-  ```
-### Appliying Base Quality Score Recalibration
-```
-    set -euo pipefail
-
-    gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
-    --bqsr-recal-file=~{recalibrationTable} \
-    ~{sep=" " prefix("--input=", [bam])} \
-    --output ~{outputFileName}~{suffix}.bam \
-    ~{additionalParams}
-  ```
+ This section lists command(s) run by WORKFLOW workflow
+ 
+ * Running bamMergePreprocessing WORKFLOW
+ 
+ ### Parsing Records
+ 
+ ```
+     set -euo pipefail
+ 
+     echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+ ```
+ ### Filtering and spliting N cigar reads
+ ```
+     set -euxo pipefail
+ 
+     # filter
+     if [ "~{doFilter}" = true ]; then
+       outputBam="~{workingDir}~{baseFileName}~{filterSuffix}.bam"
+       outputBamIndex="~{workingDir}~{baseFileName}~{filterSuffix}.bai"
+       samtools view -b \
+       -F ~{filterFlags} \
+       ~{"-q " + minMapQuality} \
+       ~{filterAdditionalParams} \
+       ~{inputBam} \
+       ~{sep=" " intervals} > $outputBam
+       samtools index $outputBam $outputBamIndex
+ 
+       # set inputs for next step
+       inputBam=$outputBam
+       inputBamIndex=$outputBamIndex
+     else
+       outputBam="~{workingDir}~{baseFileName}.bam"
+       outputBamIndex="~{workingDir}~{baseFileName}.bai"
+       samtools view -b \
+       ~{inputBam} \
+       ~{sep=" " intervals} > $outputBam
+       samtools index $outputBam $outputBamIndex
+ 
+       # set inputs for next step
+       inputBam=$outputBam
+       inputBamIndex=$outputBamIndex
+     fi
+ 
+     # split N cigar reads
+     if [ "~{doSplitNCigarReads}" = true ]; then
+       gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
+       --input $inputBam \
+       --output="~{splitNCigarReadsFilePath}.bam" \
+       --reference ~{reference} \
+       ~{sep=" " prefix("--intervals ", intervals)} \
+       ~{sep=" " prefixedReadFilters} \
+       --create-output-bam-index true \
+       --refactor-cigar-string ~{refactorCigarString} \
+       ~{splitNCigarReadsAdditionalParams}
+     fi
+ 
+   ```
+ ### Marking Duplicates
+ ```
+     set -euo pipefail
+       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+       ~{sep=" " prefix("--INPUT=", inputBams)}  \
+       --OUTPUT="~{outputFileName}.deduped.bam"\
+       --METRICS_FILE="~{outputFileName}.metrics" \
+       --VALIDATION_STRINGENCY=SILENT \
+       --REMOVE_DUPLICATES=~{removeDuplicates} \
+       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+       --CREATE_INDEX=true \
+       ~{markDuplicatesAdditionalParams}
+ ```
+ ### Merging bam files
+ ```
+     set -euo pipefail
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
+     ~{sep=" " prefix("--INPUT=", bams)} \
+     --OUTPUT="~{outputFileName}.bam" \
+     --CREATE_INDEX=true \
+     --SORT_ORDER=coordinate \
+     --ASSUME_SORTED=false \
+     --USE_THREADING=true \
+     --VALIDATION_STRINGENCY=SILENT \
+     ~{additionalParams}
+   ```
+ ### Base Recalibration
+ ```
+     set -euo pipefail
+ 
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" BaseRecalibrator \
+     --reference ~{reference} \
+     ~{sep=" " prefixedIntervals} \
+     ~{sep=" " prefix("--input=", bams)} \
+     ~{sep=" " prefix("--known-sites ", knownSites)} \
+     --output=~{outputFileName} \
+     ~{additionalParams}
+   ```
+ ### Gathering Base Quality Score Recalibration Reports
+ ```
+     set -euo pipefail
+ 
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
+     ~{sep=" " prefix("--input=", recalibrationTables)} \
+     --output ~{outputFileName} \
+     ~{additionalParams}
+   ```
+ ### Analysis of Covariates
+ ```
+     set -euo pipefail
+ 
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
+     --bqsr-recal-file=~{recalibrationTable} \
+     --plots-report-file ~{outputFileName} \
+     ~{additionalParams}
+   ```
+ ### Appliying Base Quality Score Recalibration
+ ```
+     set -euo pipefail
+ 
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
+     --bqsr-recal-file=~{recalibrationTable} \
+     ~{sep=" " prefix("--input=", [bam])} \
+     --output ~{outputFileName}~{suffix}.bam \
+     ~{additionalParams}
+   ```
