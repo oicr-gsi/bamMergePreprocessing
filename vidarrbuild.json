@@ -4,7 +4,8 @@
         "bamMergePreprocessing_by_tumor_group",
 	"bamMergePreprocessing_by_sample",
 	"bamMergePreprocessing_noMarkDup",
-	"bamMergePreprocessing_merge_only"
+	"bamMergePreprocessing_merge_only",
+        "bmpp"
     ],
     "wdl": "bamMergePreprocessing.wdl"
 }
