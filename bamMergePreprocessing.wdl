@@ -21,7 +21,7 @@ workflow bamMergePreprocessing {
     Boolean doMarkDuplicates = true
     Boolean doBqsr = false
     String reference
-    String reference_genome
+    String referenceGenome
   }
 
   parameter_meta {
@@ -32,7 +32,7 @@ workflow bamMergePreprocessing {
     doBqsr: "Enable/disable GATK baseQualityScoreRecalibration"
     reference: "Path to reference file."
     outputFileNamePrefix: "Prefix of output file name"
-    reference_genome: "The reference genome version for input sample"
+    referenceGenome: "The reference genome version for input sample"
   }
 
   meta {
@@ -51,10 +51,6 @@ workflow bamMergePreprocessing {
       {
         name: "gatk/3.6-0",
         url: "https://gatk.broadinstitute.org"
-      },
-      {
-       name: "python/3.7",
-       url: "https://www.python.org"
       }
     ]
     output_meta: {
@@ -151,7 +147,7 @@ workflow bamMergePreprocessing {
         input:
           bams = processedBams,
           reference = reference,
-          knownSites = resources[reference_genome].known_sites
+          knownSites = resources[referenceGenome].known_sites
       }
     
     File recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
@@ -249,7 +245,7 @@ task preprocessBam {
     Array[String] intervals
 
     # filter parameters
-    String filterSuffix = ".filter"
+    String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
     String? filterAdditionalParams 
@@ -265,7 +261,7 @@ task preprocessBam {
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
-    String modules = "samtools/1.9 gatk/4.1.6.0 python/2.7"
+    String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
@@ -360,11 +356,11 @@ task preprocessBam {
     inputBamIndex: "index files for input bam."
     intervals: "One or more genomic intervals over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
-    filterFlags: "Samtools filter flags to apply."
     dedupSuffix: "Suffix to use for markDuplcated bams"
     removeDuplicates: "MarkDuplicates remove duplicates?"
     opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
     markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
+    filterFlags: "Samtools filter flags to apply."
     minMapQuality: "Samtools minimum mapping quality filter to apply."
     filterAdditionalParams: "Additional parameters to pass to samtools."
     reference: "Path to reference file."
@@ -401,7 +397,7 @@ task filterBam {
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
-    String modules = "samtools/1.9 gatk/4.1.6.0 python/2.7"
+    String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
@@ -515,6 +511,7 @@ task markDuplicates {
 
     parameter_meta {
     inputBams: "Array of bam files to go through markDuplicates."
+    dedupSuffix: "Suffix to use for markDuplcated bams"
     removeDuplicates: "MarkDuplicates remove duplicates?"
     opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
     markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
@@ -536,7 +533,7 @@ task mergeBams {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
   
   command <<<
@@ -568,6 +565,7 @@ task mergeBams {
 
   parameter_meta {
     bams: "Array of bam files to merge together."
+    baseName: "The base name for output files"
     outputFileName: "Output files will be prefixed with this."
     additionalParams: "Additional parameters to pass to GATK MergeSamFiles."
     jobMemory: "Memory allocated to job (in GB)."
@@ -591,7 +589,7 @@ task baseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
@@ -646,7 +644,7 @@ task gatherBQSRReports {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -691,7 +689,7 @@ task analyzeCovariates {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -738,7 +736,7 @@ task applyBaseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
