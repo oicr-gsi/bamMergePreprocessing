@@ -214,7 +214,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test1",
+        "id": "Test1, bamMergePreprocessing workflow test",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -473,7 +473,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test2",
+        "id": "Test2, bamMergePreprocessing workflow test",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -732,7 +732,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test3",
+        "id": "Test3, bamMergePreprocessing workflow test",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -991,7 +991,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test8",
+        "id": "Test8, bqsr + chr_size grouping test + merge all inputs",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -1250,7 +1250,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test9",
+        "id": "Test9, no bqsr + chr_size grouping test + merge all inputs",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -1431,7 +1431,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test10",
+        "id": "Test10, split trim test on full star bams",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
@@ -1638,7 +1638,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test11",
+        "id": "Test11, split trim test on star bams",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
