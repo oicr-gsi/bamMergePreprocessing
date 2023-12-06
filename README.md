@@ -1,6 +1,6 @@
 # bamMergePreprocessing
 
-
+Workflow to merge and preprocess lane level alignments.
 
 ## Overview
 
@@ -8,7 +8,6 @@
 
 * [samtools 1.9](http://www.htslib.org/)
 * [gatk 4.1.6.0](https://gatk.broadinstitute.org)
-* [gatk 3.6-0](https://gatk.broadinstitute.org)
 
 
 ## Usage
