@@ -38,7 +38,7 @@ workflow bamMergePreprocessing {
   meta {
     author: "Michael Laszloffy and Gavin Peng"
     email: "michael.laszloffy@oicr.on.ca and gpeng@oicr.on.ca"
-    description: ""
+    description: "Workflow to merge and preprocess lane level alignments."
     dependencies: [
       {
         name: "samtools/1.9",
@@ -46,10 +46,6 @@ workflow bamMergePreprocessing {
       },
       {
         name: "gatk/4.1.6.0",
-        url: "https://gatk.broadinstitute.org"
-      },
-      {
-        name: "gatk/3.6-0",
         url: "https://gatk.broadinstitute.org"
       }
     ]
@@ -122,7 +118,7 @@ workflow bamMergePreprocessing {
           inputBams = filteredBams,
           outputFileName = outputFileNamePrefix+".filtered"
         }
-      } 
+      }
 
       if (!doMarkDuplicates) {
         call mergeBams as mergeMultipleBam {
@@ -132,7 +128,7 @@ workflow bamMergePreprocessing {
         }
       }
       File filterDedupedBam = select_first([markDuplicates.dedupedBam, mergeMultipleBam.mergedBam])
-      File filterDedupedBamIndex = select_first([markDuplicates.dedupedBamIndex, mergeMultipleBam.mergedBamIndex])  
+      File filterDedupedBamIndex = select_first([markDuplicates.dedupedBamIndex, mergeMultipleBam.mergedBamIndex])
     }
 
     File processedBam = select_first([preprocessedBam, filterDedupedBam])
@@ -149,9 +145,9 @@ workflow bamMergePreprocessing {
           reference = reference,
           knownSites = resources[referenceGenome].known_sites
       }
-    
+
     File recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
- 
+
     call gatherBQSRReports {
       input:
         recalibrationTables = recalibrationTableByInterval
@@ -174,7 +170,7 @@ workflow bamMergePreprocessing {
   }
 
   Array[File] bamsToMerge = select_first([recalibratedBams, processedBams])
-  
+
   call mergeBams {
     input:
       bams = bamsToMerge,
@@ -248,7 +244,7 @@ task preprocessBam {
     String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
-    String? filterAdditionalParams 
+    String? filterAdditionalParams
 
     # markDuplicates parameters
     String dedupSuffix = ".deduped"
@@ -390,7 +386,7 @@ task filterBam {
     String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
-    String? filterAdditionalParams 
+    String? filterAdditionalParams
 
     String reference
     Int jobMemory = 48
@@ -408,7 +404,7 @@ task filterBam {
                             "~{baseFileName}~{filterSuffix}"
                            else
                             "~{baseFileName}"
- 
+
   command <<<
     set -euxo pipefail
 
@@ -486,15 +482,15 @@ task markDuplicates {
 
     command <<<
     set -euo pipefail
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ~{sep=" " prefix("--INPUT=", inputBams)}  \
-      --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
-      --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
-      --VALIDATION_STRINGENCY=SILENT \
-      --REMOVE_DUPLICATES=~{removeDuplicates} \
-      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-      --CREATE_INDEX=true \
-      ~{markDuplicatesAdditionalParams}
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+    ~{sep=" " prefix("--INPUT=", inputBams)}  \
+    --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
+    --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
+    --VALIDATION_STRINGENCY=SILENT \
+    --REMOVE_DUPLICATES=~{removeDuplicates} \
+    --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+    --CREATE_INDEX=true \
+    ~{markDuplicatesAdditionalParams}
     >>>
 
   output {
@@ -509,7 +505,7 @@ task markDuplicates {
     modules: "~{modules}"
   }
 
-    parameter_meta {
+  parameter_meta {
     inputBams: "Array of bam files to go through markDuplicates."
     dedupSuffix: "Suffix to use for markDuplcated bams"
     removeDuplicates: "MarkDuplicates remove duplicates?"
@@ -535,9 +531,10 @@ task mergeBams {
     Int timeout = 6
     String modules = "gatk/4.1.6.0"
   }
-  
+
   command <<<
     set -euo pipefail
+
     baseName=~{baseName}
     outputBamSuffix="${baseName#*.}"
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
@@ -774,4 +771,3 @@ task applyBaseQualityScoreRecalibration {
     modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
-
