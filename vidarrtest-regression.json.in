@@ -428,7 +428,7 @@
             "bamMergePreprocessing.filterBam.filterFlags": null,
             "bamMergePreprocessing.filterBam.filterSuffix": null,
             "bamMergePreprocessing.filterBam.jobMemory": null,
-            "bamMergePreprocessing.filterBam.minMapQuality": null,
+            "bamMergePreprocessing.filterBam.minMapQuality": 60,
             "bamMergePreprocessing.filterBam.modules": null,
             "bamMergePreprocessing.filterBam.overhead": null,
             "bamMergePreprocessing.filterBam.readFilters": null,
@@ -473,7 +473,7 @@
            "write_to_cache": false,
            "read_from_cache": false
         },
-        "id": "Test2, bamMergePreprocessing workflow test",
+        "id": "Test2, bamMergePreprocessing workflow multiple inputs test, minMapQuality 60",
         "metadata": {
             "bamMergePreprocessing.mergedBam": {
                 "contents": [
