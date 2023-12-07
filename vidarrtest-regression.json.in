@@ -408,7 +408,7 @@
             }
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
-            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr9,chr10,chr11,chr12,chr14,chr16,chr17,chr18,chr19,chrX",
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
             "bamMergePreprocessing.mergeMultipleBam.additionalParams": null,
             "bamMergePreprocessing.mergeMultipleBam.cores": null,
             "bamMergePreprocessing.mergeMultipleBam.jobMemory": null,
@@ -452,7 +452,7 @@
             "bamMergePreprocessing.preprocessBam.filterSuffix": null,
             "bamMergePreprocessing.preprocessBam.dedupSuffix": null,
             "bamMergePreprocessing.preprocessBam.jobMemory": null,
-            "bamMergePreprocessing.preprocessBam.minMapQuality": null,
+            "bamMergePreprocessing.preprocessBam.minMapQuality": 60,
             "bamMergePreprocessing.preprocessBam.modules": null,
             "bamMergePreprocessing.preprocessBam.overhead": null,
             "bamMergePreprocessing.preprocessBam.readFilters": null,
@@ -468,7 +468,7 @@
             "bamMergePreprocessing.splitStringToArray.recordSeparator": null,
             "bamMergePreprocessing.splitStringToArray.timeout": null
         },
-        "description": "bamMergePreprocessing workflow test",
+        "description": "bamMergePreprocessing workflow multiple inputs test, minMapQuality 60",
         "engineArguments": {
            "write_to_cache": false,
            "read_from_cache": false
@@ -1185,7 +1185,7 @@
             }
             ],
             "bamMergePreprocessing.outputFileNamePrefix": "PCSI0022",
-            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
+            "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
             "bamMergePreprocessing.mergeMultipleBam.additionalParams": null,
             "bamMergePreprocessing.mergeMultipleBam.cores": null,
             "bamMergePreprocessing.mergeMultipleBam.jobMemory": null,
