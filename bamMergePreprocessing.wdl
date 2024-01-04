@@ -398,7 +398,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{round(jobMemory * scaleCoefficient) + 4} GB"
+    memory: "~{round(jobMemory * scaleCoefficient) + 6} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
