@@ -312,7 +312,7 @@ task preprocessBam {
     String? markDuplicatesAdditionalParams
 
     String reference
-    Int jobMemory = 48
+    Int jobMemory = 38
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
@@ -398,7 +398,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{round(jobMemory * scaleCoefficient)} GB"
+    memory: "~{round(jobMemory * scaleCoefficient) + 4} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
