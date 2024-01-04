@@ -1,3 +1,5 @@
+## Unreleased -- 2024-01-04
+- Adding RAM scaling by chromosome
 ## 2.1.1 -- 2023-08-18
 - Fixing typo for mouse assembly ID
 ## 2.1.0 -- 2023-07-04
