@@ -81,15 +81,23 @@ workflow bamMergePreprocessing {
   }
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
-  scatter (intervals in intervalsToParallelizeBy) {
+  scatter (interval in flatten(intervalsToParallelizeBy)) {
+    
     if (length(inputBamFiles) == 1) {
+      call getChrCoefficient as coeffForPreprocess {
+        input: 
+          chromosome = interval,
+          bamFile = inputBamFiles[0].bam
+      }
+
       call preprocessBam {
         input:
           inputBam = inputBamFiles[0].bam,
           inputBamIndex = inputBamFiles[0].bamIndex,
           outputFileName = outputFileNamePrefix,
-          intervals = intervals,
+          interval = interval,
           reference = reference,
+          scaleCoefficient = coeffForPreprocess.coeff,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates
       }
@@ -98,13 +106,21 @@ workflow bamMergePreprocessing {
     }
 
     if (length(inputBamFiles) > 1) {
+      
       scatter (i in inputBamFiles) {
+        call getChrCoefficient as coeffForFilter {
+          input:
+            chromosome = interval,
+            bamFile = i.bam
+        }
+
         call filterBam {
           input:
             inputBam = i.bam,
             inputBamIndex = i.bamIndex,
             outputFileName = outputFileNamePrefix,
-            intervals = intervals,
+            interval = interval,
+            scaleCoefficient = coeffForFilter.coeff,
             reference = reference,
             doFilter = doFilter
         }
@@ -225,6 +241,49 @@ task splitStringToArray {
   }
 }
 
+# ================================================================
+#  Scaling coefficient - use to scale RAM allocation by chromosome
+# ================================================================
+task getChrCoefficient {
+  input {
+    Int memory = 2
+    Int timeout = 1
+    String chromosome
+    String modules = "samtools/1.14"
+    File bamFile
+  }
+
+  parameter_meta {
+    bamFile: ".bam file to process, we just need the header"
+    timeout: "Hours before task timeout"
+    chromosome: "Chromosome to check"
+    memory: "Memory allocated for this job"
+    modules: "Names and versions of modules to load"
+  }
+
+  command <<<
+    CHROM_LEN=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | grep -w ~{chromosome} | cut -f 2 | sed 's/LN://')
+    LARGEST=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | cut -f 2 | sed 's/LN://' | sort -n | tail -n 1)
+    echo | awk -v chrom_len=$CHROM_LEN -v largest=$LARGEST '{print int((chrom_len/largest + 0.1) * 10)/10}'
+  >>>
+
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
+
+  output {
+    String coeff = read_string(stdout())
+  }
+
+  meta {
+    output_meta: {
+      coeff: "Length ratio as relative to the largest chromosome."
+    }
+  }
+}
+
 task preprocessBam {
   input {
     Boolean doFilter = true
@@ -238,7 +297,7 @@ task preprocessBam {
 
     File inputBam
     File inputBamIndex
-    Array[String] intervals
+    String interval
 
     # filter parameters
     String filterSuffix = ".filtered"
@@ -253,10 +312,11 @@ task preprocessBam {
     String? markDuplicatesAdditionalParams
 
     String reference
-    Int jobMemory = 48
+    Int jobMemory = 36
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
+    Float scaleCoefficient = 1.0
     String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
@@ -289,7 +349,7 @@ task preprocessBam {
       ~{"-q " + minMapQuality} \
       ~{filterAdditionalParams} \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -300,7 +360,7 @@ task preprocessBam {
       outputBamIndex="~{workingDir}~{baseFileName}.bai"
       samtools view -b \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -338,7 +398,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{jobMemory} GB"
+    memory: "~{round(jobMemory * scaleCoefficient) + 8} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -350,7 +410,7 @@ task preprocessBam {
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
     inputBam: "bam files to process."
     inputBamIndex: "index files for input bam."
-    intervals: "One or more genomic intervals over which to operate."
+    interval: "Genomic interval over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
     dedupSuffix: "Suffix to use for markDuplcated bams"
     removeDuplicates: "MarkDuplicates remove duplicates?"
@@ -363,6 +423,7 @@ task preprocessBam {
     jobMemory:  "Memory allocated to job (in GB)."
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
+    scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"
     timeout: "Maximum amount of time (in hours) the task can run for."
     modules: "Environment module name and version to load (space separated) before command execution."
   }
@@ -380,7 +441,7 @@ task filterBam {
 
     File inputBam
     File inputBamIndex
-    Array[String] intervals
+    String interval
 
     # filter parameters
     String filterSuffix = ".filtered"
@@ -393,6 +454,7 @@ task filterBam {
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
+    Float scaleCoefficient = 1.0
     String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
@@ -417,7 +479,7 @@ task filterBam {
       ~{"-q " + minMapQuality} \
       ~{filterAdditionalParams} \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -428,7 +490,7 @@ task filterBam {
       outputBamIndex="~{workingDir}~{baseFileName}.bai"
       samtools view -b \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
     fi
   >>>
@@ -439,7 +501,7 @@ task filterBam {
   }
 
   runtime {
-    memory: "~{jobMemory} GB"
+    memory: "~{round(jobMemory * scaleCoefficient)} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -451,7 +513,7 @@ task filterBam {
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
     inputBam: "bam files to process."
     inputBamIndex: "index files for input bam."
-    intervals: "One or more genomic intervals over which to operate."
+    interval: "Genomic interval over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
     filterFlags: "Samtools filter flags to apply."
     minMapQuality: "Samtools minimum mapping quality filter to apply."
@@ -460,6 +522,7 @@ task filterBam {
     jobMemory:  "Memory allocated to job (in GB)."
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
+    scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"
     timeout: "Maximum amount of time (in hours) the task can run for."
     modules: "Environment module name and version to load (space separated) before command execution."
   }

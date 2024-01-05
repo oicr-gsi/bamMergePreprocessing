@@ -46,6 +46,9 @@ Parameter|Value|Default|Description
 `splitStringToArray.cores`|Int|1|The number of cores to allocate to the job.
 `splitStringToArray.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
 `splitStringToArray.modules`|String|""|Environment module name and version to load (space separated) before command execution.
+`coeffForPreprocess.memory`|Int|2|Memory allocated for this job
+`coeffForPreprocess.timeout`|Int|1|Hours before task timeout
+`coeffForPreprocess.modules`|String|"samtools/1.14"|Names and versions of modules to load
 `preprocessBam.temporaryWorkingDir`|String|""|Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp.
 `preprocessBam.filterSuffix`|String|".filtered"|Suffix to use for filtered bams.
 `preprocessBam.filterFlags`|Int|260|Samtools filter flags to apply.
@@ -60,6 +63,9 @@ Parameter|Value|Default|Description
 `preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
 `preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`coeffForFilter.memory`|Int|2|Memory allocated for this job
+`coeffForFilter.timeout`|Int|1|Hours before task timeout
+`coeffForFilter.modules`|String|"samtools/1.14"|Names and versions of modules to load
 `filterBam.temporaryWorkingDir`|String|""|Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp.
 `filterBam.filterSuffix`|String|".filtered"|Suffix to use for filtered bams.
 `filterBam.filterFlags`|Int|260|Samtools filter flags to apply.
@@ -70,6 +76,9 @@ Parameter|Value|Default|Description
 `filterBam.cores`|Int|1|The number of cores to allocate to the job.
 `filterBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `filterBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`coeffForDupMerge.memory`|Int|2|Memory allocated for this job
+`coeffForDupMerge.timeout`|Int|1|Hours before task timeout
+`coeffForDupMerge.modules`|String|"samtools/1.14"|Names and versions of modules to load
 `markDuplicates.removeDuplicates`|Boolean|false|MarkDuplicates remove duplicates?
 `markDuplicates.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
 `markDuplicates.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
@@ -140,13 +149,31 @@ Output | Type | Description
  
  * Running bamMergePreprocessing
  
+ ### Split the string with intervals
  
- <<<
+ We need this to massage the string with (usually chromosomal) intervals into Array
+ 
+ ```
      set -euo pipefail
- 
      echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
-   >>>
- <<<
+ ```
+ 
+ ### Get chromosome size-dependant coefficient for scaling RAM allocation
+ 
+ This function will read from a .bam header and then find the size for the supplied chromosome, returning the ratio of
+ its size to the size of the largest chromosome
+ 
+ ```
+     CHROM_LEN=$(samtools view -H ~{bamFile} | grep ^@SQ | grep -v _ | grep -w ~{chromosome} | cut -f 3 | sed 's/LN://')
+     LARGEST=$(samtools view -H ~{bamFile} | grep ^@SQ | grep -v _ | cut -f 3 | sed 's/LN://' | sort -n | tail -n 1)
+     echo | awk -v chrom_len=$CHROM_LEN -v largest=$LARGEST '{print int((chrom_len/largest + 0.1) * 10)/10}'
+ ```
+ 
+ ### preprocessing Bam files
+ 
+ Filtering, marking (or removing) duplicates
+ 
+ ```
      set -euxo pipefail
  
      # filter
@@ -158,7 +185,7 @@ Output | Type | Description
        ~{"-q " + minMapQuality} \
        ~{filterAdditionalParams} \
        ~{inputBam} \
-       ~{sep=" " intervals} > $outputBam
+       ~{interval} > $outputBam
        samtools index $outputBam $outputBamIndex
  
        # set inputs for next step
@@ -169,7 +196,7 @@ Output | Type | Description
        outputBamIndex="~{workingDir}~{baseFileName}.bai"
        samtools view -b \
        ~{inputBam} \
-       ~{sep=" " intervals} > $outputBam
+       ~{interval} > $outputBam
        samtools index $outputBam $outputBamIndex
  
        # set inputs for next step
@@ -190,8 +217,13 @@ Output | Type | Description
        ~{markDuplicatesAdditionalParams}
      fi
  
-   >>>
- <<<
+ ```
+ 
+ ### filter bam file with samtools
+ 
+ Stand-alone filtering function for 
+ 
+ ```
      set -euxo pipefail
  
      # filter
@@ -203,7 +235,7 @@ Output | Type | Description
        ~{"-q " + minMapQuality} \
        ~{filterAdditionalParams} \
        ~{inputBam} \
-       ~{sep=" " intervals} > $outputBam
+       ~{interval} > $outputBam
        samtools index $outputBam $outputBamIndex
  
        # set inputs for next step
@@ -214,24 +246,35 @@ Output | Type | Description
        outputBamIndex="~{workingDir}~{baseFileName}.bai"
        samtools view -b \
        ~{inputBam} \
-       ~{sep=" " intervals} > $outputBam
+       ~{interval} > $outputBam
        samtools index $outputBam $outputBamIndex
      fi
-   >>>
- <<<
+ ```
+ 
+ ### Mark Duplicate
+ 
+ Marking (or removing) duplicates for multiple input bam files
+ 
+ ```
      set -euo pipefail
-       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-       ~{sep=" " prefix("--INPUT=", inputBams)}  \
-       --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
-       --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
-       --VALIDATION_STRINGENCY=SILENT \
-       --REMOVE_DUPLICATES=~{removeDuplicates} \
-       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-       --CREATE_INDEX=true \
-       ~{markDuplicatesAdditionalParams}
-     >>>
- <<<
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+     ~{sep=" " prefix("--INPUT=", inputBams)}  \
+     --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
+     --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
+     --VALIDATION_STRINGENCY=SILENT \
+     --REMOVE_DUPLICATES=~{removeDuplicates} \
+     --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+     --CREATE_INDEX=true \
+     ~{markDuplicatesAdditionalParams}
+ ```
+ 
+ ### merge bam files
+ 
+ merge bam files from scattered pre-processing steps
+ 
+ ```
      set -euo pipefail
+ 
      baseName=~{baseName}
      outputBamSuffix="${baseName#*.}"
      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
@@ -243,8 +286,13 @@ Output | Type | Description
      --USE_THREADING=true \
      --VALIDATION_STRINGENCY=SILENT \
      ~{additionalParams}
-   >>>
- <<<
+ ```
+ 
+ ### base recalibration
+ 
+ data pre-processing step that detects systematic errors made by the sequencing machine when it estimates the accuracy of each base call.
+ 
+ ```
      set -euo pipefail
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" BaseRecalibrator \
@@ -254,24 +302,39 @@ Output | Type | Description
      ~{sep=" " prefix("--known-sites ", knownSites)} \
      --output=~{outputFileName} \
      ~{additionalParams}
-   >>>
- <<<
+ ```
+ 
+ ### Gather BQSR Reports
+ 
+ Gathers scattered BQSR recalibration reports into a single file
+ 
+ ```
      set -euo pipefail
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
      --input ~{recalibrationTables} \
      --output ~{outputFileName} \
      ~{additionalParams}
-   >>>
- <<<
+ ```
+ 
+ ### Analyze covariates
+ 
+ Evaluate and compare base quality score recalibration tables
+ 
+ ```
      set -euo pipefail
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
      --bqsr-recal-file=~{recalibrationTable} \
      --plots-report-file ~{outputFileName} \
      ~{additionalParams}
-   >>>
- <<<
+ ```
+ 
+ ### Apply Base Quality Recalibration
+ 
+ Recalibrate the base qualities of the input reads based on the recalibration table produced by the BaseRecalibrator tool, and outputs a recalibrated BAM
+ 
+ ```
      set -euo pipefail
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
@@ -279,7 +342,7 @@ Output | Type | Description
      ~{sep=" " prefix("--input=", [bam])} \
      --output ~{outputFileName}~{suffix}.bam \
      ~{additionalParams}
-   >>>
+ ```
  ## Support
 
 For support, please file an issue on the [Github project](https://github.com/oicr-gsi) or send an email to gsi@oicr.on.ca .
