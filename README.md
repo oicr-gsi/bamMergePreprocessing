@@ -58,7 +58,8 @@ Parameter|Value|Default|Description
 `preprocessBam.removeDuplicates`|Boolean|false|MarkDuplicates remove duplicates?
 `preprocessBam.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
 `preprocessBam.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
-`preprocessBam.jobMemory`|Int|48|Memory allocated to job (in GB).
+`preprocessBam.jobMemory`|Int|36|Memory allocated to job (in GB).
+`preprocessBam.minMemory`|Int|4|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
 `preprocessBam.overhead`|Int|8|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
 `preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
@@ -72,13 +73,11 @@ Parameter|Value|Default|Description
 `filterBam.minMapQuality`|Int?|None|Samtools minimum mapping quality filter to apply.
 `filterBam.filterAdditionalParams`|String?|None|Additional parameters to pass to samtools.
 `filterBam.jobMemory`|Int|48|Memory allocated to job (in GB).
+`filterBam.minMemory`|Int|4|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
 `filterBam.overhead`|Int|8|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `filterBam.cores`|Int|1|The number of cores to allocate to the job.
 `filterBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `filterBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
-`coeffForDupMerge.memory`|Int|2|Memory allocated for this job
-`coeffForDupMerge.timeout`|Int|1|Hours before task timeout
-`coeffForDupMerge.modules`|String|"samtools/1.14"|Names and versions of modules to load
 `markDuplicates.removeDuplicates`|Boolean|false|MarkDuplicates remove duplicates?
 `markDuplicates.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
 `markDuplicates.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
