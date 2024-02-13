@@ -21,7 +21,7 @@ workflow bamMergePreprocessing {
     Boolean doMarkDuplicates = true
     Boolean doBqsr = false
     String reference
-    String reference_genome
+    String referenceGenome
   }
 
   parameter_meta {
@@ -32,13 +32,13 @@ workflow bamMergePreprocessing {
     doBqsr: "Enable/disable GATK baseQualityScoreRecalibration"
     reference: "Path to reference file."
     outputFileNamePrefix: "Prefix of output file name"
-    reference_genome: "The reference genome version for input sample"
+    referenceGenome: "The reference genome version for input sample"
   }
 
   meta {
-    author: "Michael Laszloffy"
-    email: "michael.laszloffy@oicr.on.ca"
-    description: ""
+    author: "Michael Laszloffy and Gavin Peng"
+    email: "michael.laszloffy@oicr.on.ca and gpeng@oicr.on.ca"
+    description: "Workflow to merge and preprocess lane level alignments."
     dependencies: [
       {
         name: "samtools/1.9",
@@ -47,14 +47,6 @@ workflow bamMergePreprocessing {
       {
         name: "gatk/4.1.6.0",
         url: "https://gatk.broadinstitute.org"
-      },
-      {
-        name: "gatk/3.6-0",
-        url: "https://gatk.broadinstitute.org"
-      },
-      {
-       name: "python/3.7",
-       url: "https://www.python.org"
       }
     ]
     output_meta: {
@@ -89,39 +81,92 @@ workflow bamMergePreprocessing {
   }
   Array[Array[String]] intervalsToParallelizeBy = splitStringToArray.out
 
-  scatter (intervals in intervalsToParallelizeBy) {
-    scatter (i in inputBamFiles) {
+  scatter (interval in flatten(intervalsToParallelizeBy)) {
+    
+    if (length(inputBamFiles) == 1) {
+      call getChrCoefficient as coeffForPreprocess {
+        input: 
+          chromosome = interval,
+          bamFile = inputBamFiles[0].bam
+      }
+
       call preprocessBam {
         input:
-          inputBam = i.bam,
-          inputBamIndex = i.bamIndex,
+          inputBam = inputBamFiles[0].bam,
+          inputBamIndex = inputBamFiles[0].bamIndex,
           outputFileName = outputFileNamePrefix,
-          intervals = intervals,
+          interval = interval,
           reference = reference,
+          scaleCoefficient = coeffForPreprocess.coeff,
           doFilter = doFilter,
           doMarkDuplicates = doMarkDuplicates
       }
+      File preprocessedBam = preprocessBam.preprocessedBam
+      File preprocessedBamIndex = preprocessBam.preprocessedBamIndex
     }
-    Array[File] preprocessedBams = preprocessBam.preprocessedBam
-    Array[File] preprocessedBamIndexes = preprocessBam.preprocessedBamIndex
 
-    if(doBqsr) {
-      call baseQualityScoreRecalibration {
-        input:
-          bams = preprocessedBams,
-          reference = reference,
-          knownSites = resources[reference_genome].known_sites
+    if (length(inputBamFiles) > 1) {
+      
+      scatter (i in inputBamFiles) {
+        call getChrCoefficient as coeffForFilter {
+          input:
+            chromosome = interval,
+            bamFile = i.bam
+        }
+
+        call filterBam {
+          input:
+            inputBam = i.bam,
+            inputBamIndex = i.bamIndex,
+            outputFileName = outputFileNamePrefix,
+            interval = interval,
+            scaleCoefficient = coeffForFilter.coeff,
+            reference = reference,
+            doFilter = doFilter
+        }
       }
+      Array[File] filteredBams = filterBam.filteredBam
+      Array[File] filteredBamIndexes = filterBam.filteredBamIndex
+
+      if (doMarkDuplicates) {
+        call markDuplicates {
+          input:
+          inputBams = filteredBams,
+          outputFileName = outputFileNamePrefix+".filtered"
+        }
+      }
+
+      if (!doMarkDuplicates) {
+        call mergeBams as mergeMultipleBam {
+        input:
+          bams = filteredBams,
+          outputFileName = outputFileNamePrefix
+        }
+      }
+      File filterDedupedBam = select_first([markDuplicates.dedupedBam, mergeMultipleBam.mergedBam])
+      File filterDedupedBamIndex = select_first([markDuplicates.dedupedBamIndex, mergeMultipleBam.mergedBamIndex])
     }
-    File? recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
+
+    File processedBam = select_first([preprocessedBam, filterDedupedBam])
+    File processedBamIndex = select_first([preprocessedBamIndex, filterDedupedBamIndex])
   }
-  Array[File] processedBams = flatten(preprocessedBams)
-  Array[File] processedBamIndexes = flatten(preprocessedBamIndexes)
+
+  Array[File] processedBams = processedBam
+  Array[File] processedBamIndexes = processedBamIndex
 
   if(doBqsr) {
+      call baseQualityScoreRecalibration {
+        input:
+          bams = processedBams,
+          reference = reference,
+          knownSites = resources[referenceGenome].known_sites
+      }
+
+    File recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
+
     call gatherBQSRReports {
       input:
-        recalibrationTables = select_all(recalibrationTableByInterval)
+        recalibrationTables = recalibrationTableByInterval
     }
 
     call analyzeCovariates {
@@ -141,11 +186,11 @@ workflow bamMergePreprocessing {
   }
 
   Array[File] bamsToMerge = select_first([recalibratedBams, processedBams])
-  String outputFileName = basename(bamsToMerge[0], ".bam")
+
   call mergeBams {
     input:
       bams = bamsToMerge,
-      outputFileName = outputFileName
+      outputFileName = outputFileNamePrefix
   }
 
   output {
@@ -196,6 +241,49 @@ task splitStringToArray {
   }
 }
 
+# ================================================================
+#  Scaling coefficient - use to scale RAM allocation by chromosome
+# ================================================================
+task getChrCoefficient {
+  input {
+    Int memory = 2
+    Int timeout = 1
+    String chromosome
+    String modules = "samtools/1.14"
+    File bamFile
+  }
+
+  parameter_meta {
+    bamFile: ".bam file to process, we just need the header"
+    timeout: "Hours before task timeout"
+    chromosome: "Chromosome to check"
+    memory: "Memory allocated for this job"
+    modules: "Names and versions of modules to load"
+  }
+
+  command <<<
+    CHROM_LEN=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | grep -w ~{chromosome} | cut -f 2 | sed 's/LN://')
+    LARGEST=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | cut -f 2 | sed 's/LN://' | sort -n | tail -n 1)
+    echo | awk -v chrom_len=$CHROM_LEN -v largest=$LARGEST '{print int((chrom_len/largest + 0.1) * 10)/10}'
+  >>>
+
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
+
+  output {
+    String coeff = read_string(stdout())
+  }
+
+  meta {
+    output_meta: {
+      coeff: "Length ratio as relative to the largest chromosome."
+    }
+  }
+}
+
 task preprocessBam {
   input {
     Boolean doFilter = true
@@ -209,13 +297,13 @@ task preprocessBam {
 
     File inputBam
     File inputBamIndex
-    Array[String] intervals
+    String interval
 
     # filter parameters
     String filterSuffix = ".filtered"
     Int filterFlags = 260
     Int? minMapQuality
-    String? filterAdditionalParams 
+    String? filterAdditionalParams
 
     # markDuplicates parameters
     String dedupSuffix = ".deduped"
@@ -224,17 +312,17 @@ task preprocessBam {
     String? markDuplicatesAdditionalParams
 
     String reference
-    Int jobMemory = 48
+    Int jobMemory = 36
+    Int minMemory = 12
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
-    String modules = "samtools/1.9 gatk/4.1.6.0 python/2.7"
+    Float scaleCoefficient = 1.0
+    String modules = "samtools/1.9 gatk/4.1.6.0"
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
-
   String baseFileName = "~{outputFileName}"
-
   String filteredFileName = if doFilter then
                             "~{baseFileName}~{filterSuffix}"
                            else
@@ -247,6 +335,7 @@ task preprocessBam {
                                   "~{filteredFileName}~{dedupSuffix}"
                                  else
                                   "~{filteredFileName}"
+  Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
 
   command <<<
     set -euxo pipefail
@@ -260,7 +349,7 @@ task preprocessBam {
       ~{"-q " + minMapQuality} \
       ~{filterAdditionalParams} \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -271,7 +360,7 @@ task preprocessBam {
       outputBamIndex="~{workingDir}~{baseFileName}.bai"
       samtools view -b \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -309,7 +398,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{jobMemory} GB"
+    memory: "~{allocatedMemory} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -321,14 +410,173 @@ task preprocessBam {
     temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
     inputBam: "bam files to process."
     inputBamIndex: "index files for input bam."
-    intervals: "One or more genomic intervals over which to operate."
+    interval: "Genomic interval over which to operate."
     filterSuffix: "Suffix to use for filtered bams."
-    filterFlags: "Samtools filter flags to apply."
     dedupSuffix: "Suffix to use for markDuplcated bams"
+    removeDuplicates: "MarkDuplicates remove duplicates?"
+    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
+    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
+    filterFlags: "Samtools filter flags to apply."
     minMapQuality: "Samtools minimum mapping quality filter to apply."
     filterAdditionalParams: "Additional parameters to pass to samtools."
     reference: "Path to reference file."
     jobMemory:  "Memory allocated to job (in GB)."
+    minMemory: "A minimum amount of memory allocated to the task, overrides the scaled RAM setting"
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
+  }
+}
+
+task filterBam {
+  input {
+    Boolean doFilter = true
+    String outputFileName
+
+    # by default write tmp files to the current working directory (cromwell task directory)
+    # $TMPDIR is set by Cromwell
+    # $TMP is set by Univa
+    String temporaryWorkingDir = ""
+
+    File inputBam
+    File inputBamIndex
+    String interval
+
+    # filter parameters
+    String filterSuffix = ".filtered"
+    Int filterFlags = 260
+    Int? minMapQuality
+    String? filterAdditionalParams
+
+    String reference
+    Int jobMemory = 48
+    Int minMemory = 4
+    Int overhead = 8
+    Int cores = 1
+    Int timeout = 6
+    Float scaleCoefficient = 1.0
+    String modules = "samtools/1.9 gatk/4.1.6.0"
+  }
+
+  String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
+  String baseFileName = "~{outputFileName}"
+  String filteredFileName = if doFilter then
+                            "~{baseFileName}~{filterSuffix}"
+                           else
+                            "~{baseFileName}"
+  Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
+
+  command <<<
+    set -euxo pipefail
+
+    # filter
+    if [ "~{doFilter}" = true ]; then
+      outputBam="~{workingDir}~{baseFileName}~{filterSuffix}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}~{filterSuffix}.bai"
+      samtools view -b \
+      -F ~{filterFlags} \
+      ~{"-q " + minMapQuality} \
+      ~{filterAdditionalParams} \
+      ~{inputBam} \
+      ~{interval} > $outputBam
+      samtools index $outputBam $outputBamIndex
+
+      # set inputs for next step
+      inputBam=$outputBam
+      inputBamIndex=$outputBamIndex
+    else
+      outputBam="~{workingDir}~{baseFileName}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}.bai"
+      samtools view -b \
+      ~{inputBam} \
+      ~{interval} > $outputBam
+      samtools index $outputBam $outputBamIndex
+    fi
+  >>>
+
+  output {
+    File filteredBam = "~{filteredFileName}.bam"
+    File filteredBamIndex = "~{filteredFileName}.bai"
+  }
+
+  runtime {
+    memory: "~{allocatedMemory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+    modules: "~{modules}"
+  }
+
+  parameter_meta {
+    doFilter: "Enable/disable Samtools filtering."
+    outputFileName: "Output files will be prefixed with this."
+    temporaryWorkingDir: "Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp."
+    inputBam: "bam files to process."
+    inputBamIndex: "index files for input bam."
+    interval: "Genomic interval over which to operate."
+    filterSuffix: "Suffix to use for filtered bams."
+    filterFlags: "Samtools filter flags to apply."
+    minMapQuality: "Samtools minimum mapping quality filter to apply."
+    filterAdditionalParams: "Additional parameters to pass to samtools."
+    reference: "Path to reference file."
+    jobMemory:  "Memory allocated to job (in GB)."
+    minMemory: "A minimum amount of memory allocated to the task, overrides the scaled RAM setting"
+    overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
+    cores: "The number of cores to allocate to the job."
+    scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"
+    timeout: "Maximum amount of time (in hours) the task can run for."
+    modules: "Environment module name and version to load (space separated) before command execution."
+  }
+}
+
+task markDuplicates {
+  input {
+    Array[File]inputBams
+    String outputFileName
+    Boolean removeDuplicates = false
+    Int opticalDuplicatePixelDistance = 100
+    String? markDuplicatesAdditionalParams
+    Int jobMemory = 24
+    Int overhead = 6
+    Int cores = 1
+    Int timeout = 6
+    String modules = "gatk/4.1.6.0"
+    String dedupSuffix = ".deduped"
+  }
+
+    command <<<
+    set -euo pipefail
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+    ~{sep=" " prefix("--INPUT=", inputBams)}  \
+    --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
+    --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
+    --VALIDATION_STRINGENCY=SILENT \
+    --REMOVE_DUPLICATES=~{removeDuplicates} \
+    --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+    --CREATE_INDEX=true \
+    ~{markDuplicatesAdditionalParams}
+    >>>
+
+  output {
+    File dedupedBam = outputFileName + dedupSuffix + ".bam"
+    File dedupedBamIndex = outputFileName + dedupSuffix + ".bai"
+  }
+
+  runtime {
+    memory: "~{jobMemory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+    modules: "~{modules}"
+  }
+
+  parameter_meta {
+    inputBams: "Array of bam files to go through markDuplicates."
+    dedupSuffix: "Suffix to use for markDuplcated bams"
+    removeDuplicates: "MarkDuplicates remove duplicates?"
+    opticalDuplicatePixelDistance: "MarkDuplicates optical distance."
+    markDuplicatesAdditionalParams: "Additional parameters to pass to GATK MarkDuplicates."
+    jobMemory: "Memory allocated to job (in GB)."
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
     timeout: "Maximum amount of time (in hours) the task can run for."
@@ -339,20 +587,24 @@ task preprocessBam {
 task mergeBams {
   input {
     Array[File] bams
+    String baseName = basename(bams[0])
     String outputFileName
     String? additionalParams
     Int jobMemory = 24
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
     set -euo pipefail
+
+    baseName=~{baseName}
+    outputBamSuffix="${baseName#*.}"
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
     ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}.bam" \
+    --OUTPUT="~{outputFileName}.$outputBamSuffix" \
     --CREATE_INDEX=true \
     --SORT_ORDER=coordinate \
     --ASSUME_SORTED=false \
@@ -362,8 +614,8 @@ task mergeBams {
   >>>
 
   output {
-    File mergedBam = "~{outputFileName}.bam"
-    File mergedBamIndex = "~{outputFileName}.bai"
+    File mergedBam = glob("*.bam")[0]
+    File mergedBamIndex = glob("*.bai")[0]
   }
 
   runtime {
@@ -375,6 +627,7 @@ task mergeBams {
 
   parameter_meta {
     bams: "Array of bam files to merge together."
+    baseName: "The base name for output files"
     outputFileName: "Output files will be prefixed with this."
     additionalParams: "Additional parameters to pass to GATK MergeSamFiles."
     jobMemory: "Memory allocated to job (in GB)."
@@ -398,7 +651,7 @@ task baseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   # workaround for this issue https://github.com/broadinstitute/cromwell/issues/5092
@@ -445,7 +698,7 @@ task baseQualityScoreRecalibration {
 
 task gatherBQSRReports {
   input {
-    Array[File] recalibrationTables
+    File recalibrationTables
     String? additionalParams
     String outputFileName = "gatk.recalibration.csv"
 
@@ -453,14 +706,14 @@ task gatherBQSRReports {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
-    ~{sep=" " prefix("--input=", recalibrationTables)} \
+    --input ~{recalibrationTables} \
     --output ~{outputFileName} \
     ~{additionalParams}
   >>>
@@ -477,7 +730,7 @@ task gatherBQSRReports {
   }
 
   parameter_meta {
-    recalibrationTables: "Array of recalibration tables to merge."
+    recalibrationTables: "Recalibration tables to merge."
     additionalParams: "Additional parameters to pass to GATK GatherBQSRReports."
     outputFileName: "Recalibration table file name."
     jobMemory:  "Memory allocated to job (in GB)."
@@ -498,7 +751,7 @@ task analyzeCovariates {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -545,7 +798,7 @@ task applyBaseQualityScoreRecalibration {
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
-    String modules = "gatk/4.1.6.0 python/2.7"
+    String modules = "gatk/4.1.6.0"
   }
 
   command <<<
@@ -583,4 +836,3 @@ task applyBaseQualityScoreRecalibration {
     modules: "Environment module name and version to load (space separated) before command execution."
   }
 }
-

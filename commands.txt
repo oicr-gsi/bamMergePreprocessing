@@ -1,16 +1,32 @@
 ## Commands
-This section lists command(s) run by WORKFLOW workflow
+This section lists command(s) run by bamMergePreprocessing workflow
 
-* Running bamMergePreprocessing WORKFLOW
+* Running bamMergePreprocessing
 
-### Parsing Records
+### Split the string with intervals
+
+We need this to massage the string with (usually chromosomal) intervals into Array
 
 ```
     set -euo pipefail
-
     echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
 ```
-### Filtering and spliting N cigar reads
+
+### Get chromosome size-dependant coefficient for scaling RAM allocation
+
+This function will read from a .bam header and then find the size for the supplied chromosome, returning the ratio of
+its size to the size of the largest chromosome
+
+```
+    CHROM_LEN=$(samtools view -H ~{bamFile} | grep ^@SQ | grep -v _ | grep -w ~{chromosome} | cut -f 3 | sed 's/LN://')
+    LARGEST=$(samtools view -H ~{bamFile} | grep ^@SQ | grep -v _ | cut -f 3 | sed 's/LN://' | sort -n | tail -n 1)
+    echo | awk -v chrom_len=$CHROM_LEN -v largest=$LARGEST '{print int((chrom_len/largest + 0.1) * 10)/10}'
+```
+
+### preprocessing Bam files
+
+Filtering, marking (or removing) duplicates
+
 ```
     set -euxo pipefail
 
@@ -23,7 +39,7 @@ This section lists command(s) run by WORKFLOW workflow
       ~{"-q " + minMapQuality} \
       ~{filterAdditionalParams} \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -34,7 +50,7 @@ This section lists command(s) run by WORKFLOW workflow
       outputBamIndex="~{workingDir}~{baseFileName}.bai"
       samtools view -b \
       ~{inputBam} \
-      ~{sep=" " intervals} > $outputBam
+      ~{interval} > $outputBam
       samtools index $outputBam $outputBamIndex
 
       # set inputs for next step
@@ -42,47 +58,94 @@ This section lists command(s) run by WORKFLOW workflow
       inputBamIndex=$outputBamIndex
     fi
 
-    # split N cigar reads
-    if [ "~{doSplitNCigarReads}" = true ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      --input $inputBam \
-      --output="~{splitNCigarReadsFilePath}.bam" \
-      --reference ~{reference} \
-      ~{sep=" " prefix("--intervals ", intervals)} \
-      ~{sep=" " prefixedReadFilters} \
-      --create-output-bam-index true \
-      --refactor-cigar-string ~{refactorCigarString} \
-      ~{splitNCigarReadsAdditionalParams}
-    fi
-
-  ```
-### Marking Duplicates
-```
-    set -euo pipefail
+    # mark duplicates
+    if [ "~{doMarkDuplicates}" = true ]; then
       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ~{sep=" " prefix("--INPUT=", inputBams)}  \
-      --OUTPUT="~{outputFileName}.deduped.bam"\
+      --INPUT=$inputBam  \
+      --OUTPUT="~{markDuplicatesFileName}.bam" \
       --METRICS_FILE="~{outputFileName}.metrics" \
       --VALIDATION_STRINGENCY=SILENT \
       --REMOVE_DUPLICATES=~{removeDuplicates} \
       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
       --CREATE_INDEX=true \
       ~{markDuplicatesAdditionalParams}
+    fi
+
 ```
-### Merging bam files
+
+### filter bam file with samtools
+
+Stand-alone filtering function for 
+
+```
+    set -euxo pipefail
+
+    # filter
+    if [ "~{doFilter}" = true ]; then
+      outputBam="~{workingDir}~{baseFileName}~{filterSuffix}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}~{filterSuffix}.bai"
+      samtools view -b \
+      -F ~{filterFlags} \
+      ~{"-q " + minMapQuality} \
+      ~{filterAdditionalParams} \
+      ~{inputBam} \
+      ~{interval} > $outputBam
+      samtools index $outputBam $outputBamIndex
+
+      # set inputs for next step
+      inputBam=$outputBam
+      inputBamIndex=$outputBamIndex
+    else
+      outputBam="~{workingDir}~{baseFileName}.bam"
+      outputBamIndex="~{workingDir}~{baseFileName}.bai"
+      samtools view -b \
+      ~{inputBam} \
+      ~{interval} > $outputBam
+      samtools index $outputBam $outputBamIndex
+    fi
+```
+
+### Mark Duplicate
+
+Marking (or removing) duplicates for multiple input bam files
+
 ```
     set -euo pipefail
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+    ~{sep=" " prefix("--INPUT=", inputBams)}  \
+    --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
+    --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
+    --VALIDATION_STRINGENCY=SILENT \
+    --REMOVE_DUPLICATES=~{removeDuplicates} \
+    --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+    --CREATE_INDEX=true \
+    ~{markDuplicatesAdditionalParams}
+```
+
+### merge bam files
+
+merge bam files from scattered pre-processing steps
+
+```
+    set -euo pipefail
+
+    baseName=~{baseName}
+    outputBamSuffix="${baseName#*.}"
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
     ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}.bam" \
+    --OUTPUT="~{outputFileName}.$outputBamSuffix" \
     --CREATE_INDEX=true \
     --SORT_ORDER=coordinate \
     --ASSUME_SORTED=false \
     --USE_THREADING=true \
     --VALIDATION_STRINGENCY=SILENT \
     ~{additionalParams}
-  ```
-### Base Recalibration
+```
+
+### base recalibration
+
+data pre-processing step that detects systematic errors made by the sequencing machine when it estimates the accuracy of each base call.
+
 ```
     set -euo pipefail
 
@@ -93,17 +156,25 @@ This section lists command(s) run by WORKFLOW workflow
     ~{sep=" " prefix("--known-sites ", knownSites)} \
     --output=~{outputFileName} \
     ~{additionalParams}
-  ```
-### Gathering Base Quality Score Recalibration Reports
+```
+
+### Gather BQSR Reports
+
+Gathers scattered BQSR recalibration reports into a single file
+
 ```
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
-    ~{sep=" " prefix("--input=", recalibrationTables)} \
+    --input ~{recalibrationTables} \
     --output ~{outputFileName} \
     ~{additionalParams}
-  ```
-### Analysis of Covariates
+```
+
+### Analyze covariates
+
+Evaluate and compare base quality score recalibration tables
+
 ```
     set -euo pipefail
 
@@ -111,8 +182,12 @@ This section lists command(s) run by WORKFLOW workflow
     --bqsr-recal-file=~{recalibrationTable} \
     --plots-report-file ~{outputFileName} \
     ~{additionalParams}
-  ```
-### Appliying Base Quality Score Recalibration
+```
+
+### Apply Base Quality Recalibration
+
+Recalibrate the base qualities of the input reads based on the recalibration table produced by the BaseRecalibrator tool, and outputs a recalibrated BAM
+
 ```
     set -euo pipefail
 
@@ -121,4 +196,4 @@ This section lists command(s) run by WORKFLOW workflow
     ~{sep=" " prefix("--input=", [bam])} \
     --output ~{outputFileName}~{suffix}.bam \
     ~{additionalParams}
-  ```
+```
