@@ -313,6 +313,7 @@ task preprocessBam {
 
     String reference
     Int jobMemory = 36
+    Int minMemory = 12
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
@@ -321,9 +322,7 @@ task preprocessBam {
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
-
   String baseFileName = "~{outputFileName}"
-
   String filteredFileName = if doFilter then
                             "~{baseFileName}~{filterSuffix}"
                            else
@@ -336,6 +335,7 @@ task preprocessBam {
                                   "~{filteredFileName}~{dedupSuffix}"
                                  else
                                   "~{filteredFileName}"
+  Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
 
   command <<<
     set -euxo pipefail
@@ -398,7 +398,7 @@ task preprocessBam {
   }
 
   runtime {
-    memory: "~{round(jobMemory * scaleCoefficient) + 8} GB"
+    memory: "~{allocatedMemory} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -421,6 +421,7 @@ task preprocessBam {
     filterAdditionalParams: "Additional parameters to pass to samtools."
     reference: "Path to reference file."
     jobMemory:  "Memory allocated to job (in GB)."
+    minMemory: "A minimum amount of memory allocated to the task, overrides the scaled RAM setting"
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
     scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"
@@ -451,6 +452,7 @@ task filterBam {
 
     String reference
     Int jobMemory = 48
+    Int minMemory = 4
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
@@ -459,13 +461,12 @@ task filterBam {
   }
 
   String workingDir = if temporaryWorkingDir == "" then "" else "~{temporaryWorkingDir}/"
-
   String baseFileName = "~{outputFileName}"
-
   String filteredFileName = if doFilter then
                             "~{baseFileName}~{filterSuffix}"
                            else
                             "~{baseFileName}"
+  Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
 
   command <<<
     set -euxo pipefail
@@ -501,7 +502,7 @@ task filterBam {
   }
 
   runtime {
-    memory: "~{round(jobMemory * scaleCoefficient)} GB"
+    memory: "~{allocatedMemory} GB"
     cpu: "~{cores}"
     timeout: "~{timeout}"
     modules: "~{modules}"
@@ -520,6 +521,7 @@ task filterBam {
     filterAdditionalParams: "Additional parameters to pass to samtools."
     reference: "Path to reference file."
     jobMemory:  "Memory allocated to job (in GB)."
+    minMemory: "A minimum amount of memory allocated to the task, overrides the scaled RAM setting"
     overhead: "Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory."
     cores: "The number of cores to allocate to the job."
     scaleCoefficient: "Chromosome-dependent RAM scaling coefficient"

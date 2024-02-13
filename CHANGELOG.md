@@ -1,3 +1,5 @@
+## Unreleased -- 2024-02-12
+- Adding minMemory to RAM-scaling tasks
 ## Unreleased -- 2024-01-04
 - Adding RAM scaling by chromosome
 ## 2.1.1 -- 2023-08-18
