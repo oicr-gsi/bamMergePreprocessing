@@ -313,7 +313,7 @@ task preprocessBam {
 
     String reference
     Int jobMemory = 36
-    Int minMemory = 18
+    Int minMemory = 12
     Int overhead = 8
     Int cores = 1
     Int timeout = 6
