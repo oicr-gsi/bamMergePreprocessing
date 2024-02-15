@@ -19,7 +19,8 @@ workflow bamMergePreprocessing {
     String intervalsToParallelizeByString
     Boolean doFilter = true
     Boolean doMarkDuplicates = true
-    Boolean doBqsr = false
+    Boolean doBqsr = true
+    Boolean provisionBqsr = false
     String reference
     String referenceGenome
   }
@@ -33,6 +34,15 @@ workflow bamMergePreprocessing {
     reference: "Path to reference file."
     outputFileNamePrefix: "Prefix of output file name"
     referenceGenome: "The reference genome version for input sample"
+    provisionBqsr: "Enable/disable provision out bqsr report and table"
+  }
+
+  output {
+    File mergedBam = mergeBams.mergedBam
+    File mergedBamIndex = mergeBams.mergedBamIndex
+    File? recalibrationReport = recalibrationResult
+    File? recalibrationTable = recalibrationTableResult
+    File? markDuplicateMetrics = makeZip.zippedMarkDuplicatesMetrics
   }
 
   meta {
@@ -53,7 +63,8 @@ workflow bamMergePreprocessing {
       mergedBam: "the final merged bam.",
       mergedBamIndex: "the final merged bam index",
       recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
-      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
+      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled).",
+      markDuplicateMetrics: "A tarball of markDuplicates metrics file of all chromsomes"
     }
   }
 
@@ -103,6 +114,7 @@ workflow bamMergePreprocessing {
       }
       File preprocessedBam = preprocessBam.preprocessedBam
       File preprocessedBamIndex = preprocessBam.preprocessedBamIndex
+      File markDupMetrics = preprocessBam.markDuplicateMetrics
     }
 
     if (length(inputBamFiles) > 1) {
@@ -132,9 +144,11 @@ workflow bamMergePreprocessing {
         call markDuplicates {
           input:
           inputBams = filteredBams,
+          interval = interval,
           outputFileName = outputFileNamePrefix+".filtered"
         }
       }
+      File? filterMarkDupMetrics = markDuplicates.markDuplicateMetrics
 
       if (!doMarkDuplicates) {
         call mergeBams as mergeMultipleBam {
@@ -143,16 +157,34 @@ workflow bamMergePreprocessing {
           outputFileName = outputFileNamePrefix
         }
       }
+
       File filterDedupedBam = select_first([markDuplicates.dedupedBam, mergeMultipleBam.mergedBam])
       File filterDedupedBamIndex = select_first([markDuplicates.dedupedBamIndex, mergeMultipleBam.mergedBamIndex])
     }
 
     File processedBam = select_first([preprocessedBam, filterDedupedBam])
     File processedBamIndex = select_first([preprocessedBamIndex, filterDedupedBamIndex])
+    
+    if (doMarkDuplicates) {
+      File markDuplicatesMetrics = select_first([markDupMetrics, filterMarkDupMetrics])
+    }
   }
 
   Array[File] processedBams = processedBam
   Array[File] processedBamIndexes = processedBamIndex
+  Array[File?] markDuplicatesMetricArray = markDuplicatesMetrics
+
+  if (size(markDuplicatesMetricArray) > 0 ) {
+    scatter (file in markDuplicatesMetricArray) {
+      File markDuplicatesMetric_ = select_first([file])
+    }
+    Array[File]markDuplicatesMetricArray_  = markDuplicatesMetric_
+    
+    call makeZip {
+      input: 
+        inputFiles = markDuplicatesMetricArray_
+      }
+  }
 
   if(doBqsr) {
       call baseQualityScoreRecalibration {
@@ -164,14 +196,20 @@ workflow bamMergePreprocessing {
 
     File recalibrationTableByInterval = baseQualityScoreRecalibration.recalibrationTable
 
+
     call gatherBQSRReports {
       input:
         recalibrationTables = recalibrationTableByInterval
     }
-
+  
     call analyzeCovariates {
       input:
         recalibrationTable = gatherBQSRReports.recalibrationTable
+    }
+    
+    if (provisionBqsr) {
+      File? recalibrationResult = analyzeCovariates.recalibrationReport
+      File? recalibrationTableResult = gatherBQSRReports.recalibrationTable
     }
 
     scatter(bam in processedBams) {
@@ -192,15 +230,7 @@ workflow bamMergePreprocessing {
       bams = bamsToMerge,
       outputFileName = outputFileNamePrefix
   }
-
-  output {
-    File mergedBam = mergeBams.mergedBam
-    File mergedBamIndex = mergeBams.mergedBamIndex
-    File? recalibrationReport = analyzeCovariates.recalibrationReport
-    File? recalibrationTable = gatherBQSRReports.recalibrationTable
-  }
 }
-
 
 task splitStringToArray {
   input {
@@ -373,7 +403,7 @@ task preprocessBam {
       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
       --INPUT=$inputBam  \
       --OUTPUT="~{markDuplicatesFileName}.bam" \
-      --METRICS_FILE="~{outputFileName}.metrics" \
+      --METRICS_FILE="~{interval}.~{outputFileName}.metrics" \
       --VALIDATION_STRINGENCY=SILENT \
       --REMOVE_DUPLICATES=~{removeDuplicates} \
       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
@@ -394,7 +424,7 @@ task preprocessBam {
                                 else if doFilter then
                                   "~{filteredFilePath}.bai"
                                 else "~{filteredFileName}.bai"
-    File? markDuplicateMetrics = "~{markDuplicatesFileName}.metrics"
+    File markDuplicateMetrics = "~{interval}.~{outputFileName}.metrics"
   }
 
   runtime {
@@ -534,6 +564,7 @@ task markDuplicates {
   input {
     Array[File]inputBams
     String outputFileName
+    String interval
     Boolean removeDuplicates = false
     Int opticalDuplicatePixelDistance = 100
     String? markDuplicatesAdditionalParams
@@ -550,7 +581,7 @@ task markDuplicates {
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
     ~{sep=" " prefix("--INPUT=", inputBams)}  \
     --OUTPUT ~{outputFileName}~{dedupSuffix}.bam \
-    --METRICS_FILE="~{outputFileName}~{dedupSuffix}.metrics" \
+    --METRICS_FILE="~{interval}.~{outputFileName}~{dedupSuffix}.metrics" \
     --VALIDATION_STRINGENCY=SILENT \
     --REMOVE_DUPLICATES=~{removeDuplicates} \
     --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
@@ -561,6 +592,7 @@ task markDuplicates {
   output {
     File dedupedBam = outputFileName + dedupSuffix + ".bam"
     File dedupedBamIndex = outputFileName + dedupSuffix + ".bai"
+    File markDuplicateMetrics = interval + "." + outputFileName + dedupSuffix + ".metrics"
   }
 
   runtime {
@@ -581,6 +613,44 @@ task markDuplicates {
     cores: "The number of cores to allocate to the job."
     timeout: "Maximum amount of time (in hours) the task can run for."
     modules: "Environment module name and version to load (space separated) before command execution."
+  }
+}
+
+task makeZip {
+  input {
+    Array[File] inputFiles
+    Int jobMemory = 4
+    Int cores = 1
+    Int timeout = 1
+  }
+
+  command <<<
+    set -euo pipefail
+    mkdir ./markDuplicatesMetrics/
+    files="~{sep="," inputFiles}"    
+    IFS=',' read -ra metrics <<< "$files"
+    for metrics in ${metrics[@]}
+    do
+      cp $metrics ./markDuplicatesMetrics/
+    done
+    tar czf  markDuplicatesMetrics.tar.gz ./markDuplicatesMetrics/*
+  >>>
+
+  output {
+    File zippedMarkDuplicatesMetrics = "./markDuplicatesMetrics.tar.gz"
+  }
+
+  runtime {
+    memory: "~{jobMemory} GB"
+    cpu: "~{cores}"
+    timeout: "~{timeout}"
+  }
+
+  parameter_meta {
+    inputFiles: "Array of input files to zip together."
+    jobMemory: "Memory allocated to job (in GB)."
+    cores: "The number of cores to allocate to the job."
+    timeout: "Maximum amount of time (in hours) the task can run for."
   }
 }
 

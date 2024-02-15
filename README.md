@@ -34,7 +34,8 @@ Parameter|Value|Default|Description
 ---|---|---|---
 `doFilter`|Boolean|true|Enable/disable Samtools filtering.
 `doMarkDuplicates`|Boolean|true|Enable/disable GATK4 MarkDuplicates.
-`doBqsr`|Boolean|false|Enable/disable GATK baseQualityScoreRecalibration
+`doBqsr`|Boolean|true|Enable/disable GATK baseQualityScoreRecalibration
+`provisionBqsr`|Boolean|false|Enable/disable provision out bqsr report and table
 
 
 #### Optional task parameters:
@@ -59,7 +60,7 @@ Parameter|Value|Default|Description
 `preprocessBam.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
 `preprocessBam.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
 `preprocessBam.jobMemory`|Int|36|Memory allocated to job (in GB).
-`preprocessBam.minMemory`|Int|4|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
+`preprocessBam.minMemory`|Int|12|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
 `preprocessBam.overhead`|Int|8|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
 `preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
@@ -94,6 +95,9 @@ Parameter|Value|Default|Description
 `mergeMultipleBam.cores`|Int|1|The number of cores to allocate to the job.
 `mergeMultipleBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
 `mergeMultipleBam.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`makeZip.jobMemory`|Int|4|Memory allocated to job (in GB).
+`makeZip.cores`|Int|1|The number of cores to allocate to the job.
+`makeZip.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
 `baseQualityScoreRecalibration.intervals`|Array[String]|[]|One or more genomic intervals over which to operate.
 `baseQualityScoreRecalibration.additionalParams`|String?|None|Additional parameters to pass to GATK BaseRecalibrator.
 `baseQualityScoreRecalibration.outputFileName`|String|"gatk.recalibration.csv"|Recalibration table file name.
@@ -141,6 +145,7 @@ Output | Type | Description
 `mergedBamIndex`|File|the final merged bam index
 `recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).
 `recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).
+`markDuplicateMetrics`|File?|A tarball of markDuplicates metrics file of all chromsomes
 
 
 ## Commands
