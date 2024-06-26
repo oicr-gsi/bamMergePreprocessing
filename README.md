@@ -27,6 +27,7 @@ Parameter|Value|Description
 `inputGroups`|Array[InputGroup]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
 `intervalsToParallelizeByString`|String|Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4).
 `reference`|String|Path to reference file.
+`reference_genome`|String|reference genome of input sample
 
 
 #### Optional workflow parameters:
@@ -65,7 +66,7 @@ Parameter|Value|Default|Description
 `preprocessBam.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
 `preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 `realignerTargetCreator.downsamplingType`|String?|None|Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE).
 `realignerTargetCreator.additionalParams`|String?|None|Additional parameters to pass to GATK RealignerTargetCreator.
 `realignerTargetCreator.jobMemory`|Int|24|Memory allocated to job (in GB).
@@ -88,21 +89,21 @@ Parameter|Value|Default|Description
 `baseQualityScoreRecalibration.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `baseQualityScoreRecalibration.cores`|Int|1|The number of cores to allocate to the job.
 `baseQualityScoreRecalibration.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`baseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`baseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 `gatherBQSRReports.additionalParams`|String?|None|Additional parameters to pass to GATK GatherBQSRReports.
 `gatherBQSRReports.outputFileName`|String|"gatk.recalibration.csv"|Recalibration table file name.
 `gatherBQSRReports.jobMemory`|Int|24|Memory allocated to job (in GB).
 `gatherBQSRReports.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `gatherBQSRReports.cores`|Int|1|The number of cores to allocate to the job.
 `gatherBQSRReports.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`gatherBQSRReports.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`gatherBQSRReports.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 `analyzeCovariates.additionalParams`|String?|None|Additional parameters to pass to GATK AnalyzeCovariates
 `analyzeCovariates.outputFileName`|String|"gatk.recalibration.pdf"|Recalibration report file name.
 `analyzeCovariates.jobMemory`|Int|24|Memory allocated to job (in GB).
 `analyzeCovariates.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `analyzeCovariates.cores`|Int|1|The number of cores to allocate to the job.
 `analyzeCovariates.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`analyzeCovariates.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`analyzeCovariates.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 `applyBaseQualityScoreRecalibration.outputFileName`|String|basename(bam,".bam")|Output files will be prefixed with this.
 `applyBaseQualityScoreRecalibration.suffix`|String|".recalibrated"|Suffix to use for recalibrated bams.
 `applyBaseQualityScoreRecalibration.additionalParams`|String?|None|Additional parameters to pass to GATK ApplyBQSR.
@@ -110,7 +111,7 @@ Parameter|Value|Default|Description
 `applyBaseQualityScoreRecalibration.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `applyBaseQualityScoreRecalibration.cores`|Int|1|The number of cores to allocate to the job.
 `applyBaseQualityScoreRecalibration.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`applyBaseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`applyBaseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 `collectFilesBySample.jobMemory`|Int|1|Memory allocated to job (in GB).
 `collectFilesBySample.cores`|Int|1|The number of cores to allocate to the job.
 `collectFilesBySample.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
@@ -120,16 +121,16 @@ Parameter|Value|Default|Description
 `mergeSplitByIntervalBams.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `mergeSplitByIntervalBams.cores`|Int|1|The number of cores to allocate to the job.
 `mergeSplitByIntervalBams.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`mergeSplitByIntervalBams.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`mergeSplitByIntervalBams.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
 
 
 ### Outputs
 
-Output | Type | Description
----|---|---
-`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.
-`recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).
-`recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).
+Output | Type | Description | Labels
+---|---|---|---
+`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.|vidarr_label: outputGroups
+`recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).|vidarr_label: recalibrationReport
+`recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).|vidarr_label: recalibrationTable
 
 
 ## Commands

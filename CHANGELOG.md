@@ -1,3 +1,5 @@
+## 2.2.0 - 2024-06-25
+[GRD-797](https://jira.oicr.on.ca/browse/GRD-797) - add vidarr labels to outputs (changes to medata only)
 ## 2.1.1 -- 2023-08-18
 - Fixing typo for mouse assembly ID
 ## 2.1.0 -- 2023-07-04
