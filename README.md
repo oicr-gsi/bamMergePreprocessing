@@ -128,7 +128,7 @@ Parameter|Value|Default|Description
 
 Output | Type | Description | Labels
 ---|---|---|---
-`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.|vidarr_label: outputGroups
+`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.|
 `recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).|vidarr_label: recalibrationReport
 `recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).|vidarr_label: recalibrationTable
 

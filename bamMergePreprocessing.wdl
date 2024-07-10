@@ -55,10 +55,7 @@ workflow bamMergePreprocessing {
       }
     ]
     output_meta: {
-    outputGroups: {
-        description: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
-        vidarr_label: "outputGroups"
-    },
+    outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
     recalibrationReport: {
         description: "Recalibration report pdf (if BQSR enabled).",
         vidarr_label: "recalibrationReport"
