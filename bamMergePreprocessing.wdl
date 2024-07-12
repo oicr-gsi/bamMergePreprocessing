@@ -55,10 +55,16 @@ workflow bamMergePreprocessing {
       }
     ]
     output_meta: {
-      outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
-      recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
-      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled)."
+    outputGroups: "Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.",
+    recalibrationReport: {
+        description: "Recalibration report pdf (if BQSR enabled).",
+        vidarr_label: "recalibrationReport"
+    },
+    recalibrationTable: {
+        description: "Recalibration csv that was used by BQSR (if BQSR enabled).",
+        vidarr_label: "recalibrationTable"
     }
+}
   }
 
   Map[String,GenomeResources] resources = {
