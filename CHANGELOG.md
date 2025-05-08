@@ -32,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - created bmpp_by_sample alias
  
 ### [2.0.3] - 2022-07-26
- on Jul 26, 2022  2813b3b  zip  tar.gz  CHECK
 ### Changed
 - [GP-3049](https://jira.oicr.on.ca/browse/GP-3049) removed preprocessingBamRuntimeAttributes
 
