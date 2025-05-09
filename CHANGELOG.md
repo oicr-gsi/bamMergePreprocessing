@@ -17,6 +17,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Moved assembly-specific code in olive to wdl.
 
+## [2.0.5t] - 2023-06-14
+### Added
+- bamMergePreprocessing_noMarkDup alias
+- bamMergePreprocessing_merge_only alias
+ 
+## [2.0.5] - 2022-11-07
+### Added
+- (this is probably an extra tag, no changes from the previous version)
+- created bmpp_by_sample alias
+  
+## [2.0.4] - 2022-11-07
+### Added
+- created bmpp_by_sample alias
+ 
+## [2.0.3] - 2022-07-26
+### Changed
+- [GP-3049](https://jira.oicr.on.ca/browse/GP-3049) removed preprocessingBamRuntimeAttributes
+
 ## [2.0.2] - 2020-05-31
 ### Changed
 - Migrate to Vidarr.
