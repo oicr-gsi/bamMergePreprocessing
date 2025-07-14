@@ -59,7 +59,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -71,7 +71,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -85,7 +85,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -97,7 +97,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -111,7 +111,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -123,7 +123,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -137,7 +137,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -149,7 +149,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -161,7 +161,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -234,7 +234,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -258,7 +258,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test1.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_01.metrics",
                 "type": "script"
             }
         ]
@@ -323,7 +323,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -335,7 +335,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -349,7 +349,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -361,7 +361,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -375,7 +375,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -387,7 +387,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -401,7 +401,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -413,7 +413,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -425,7 +425,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -499,7 +499,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -523,7 +523,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test2.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_02.metrics",
                 "type": "script"
             }
         ]
@@ -589,7 +589,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -601,7 +601,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -615,7 +615,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -627,7 +627,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -641,7 +641,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -653,7 +653,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -667,7 +667,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -679,7 +679,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -691,7 +691,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -763,7 +763,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -787,7 +787,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test3.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_03.metrics",
                 "type": "script"
             }
         ]
@@ -853,7 +853,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -865,7 +865,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -879,7 +879,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -891,7 +891,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -905,7 +905,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -917,7 +917,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -929,14 +929,14 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bamAndBamIndexInputs": [
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -948,7 +948,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -960,7 +960,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1032,7 +1032,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bam": {
@@ -1051,7 +1051,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1075,7 +1075,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/MultipleOutputGroups.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_04.metrics",
                 "type": "script"
             }
         ]
@@ -1140,7 +1140,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1152,7 +1152,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1166,7 +1166,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1178,7 +1178,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1192,7 +1192,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1204,7 +1204,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1216,14 +1216,14 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bamAndBamIndexInputs": [
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1235,7 +1235,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1247,7 +1247,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1320,7 +1320,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bam": {
@@ -1339,7 +1339,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1363,7 +1363,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test4.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_05.metrics",
                 "type": "script"
             }
         ]
@@ -1428,7 +1428,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1440,7 +1440,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1454,7 +1454,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1466,7 +1466,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1480,7 +1480,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1492,7 +1492,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1504,14 +1504,14 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bamAndBamIndexInputs": [
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1523,7 +1523,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1535,7 +1535,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -1608,7 +1608,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bam": {
@@ -1627,7 +1627,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1651,7 +1651,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test5.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_06.metrics",
                 "type": "script"
             }
         ]
@@ -1716,7 +1716,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1728,7 +1728,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1742,7 +1742,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1754,7 +1754,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1768,7 +1768,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1780,7 +1780,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1792,14 +1792,14 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bamAndBamIndexInputs": [
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1811,7 +1811,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -1823,7 +1823,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1896,7 +1896,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bam": {
@@ -1915,7 +1915,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1939,7 +1939,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test6.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_07.metrics",
                 "type": "script"
             }
         ]
@@ -2004,7 +2004,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2016,7 +2016,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2030,7 +2030,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2042,7 +2042,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2056,7 +2056,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2068,7 +2068,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2080,14 +2080,14 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bamAndBamIndexInputs": [
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2099,7 +2099,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2111,7 +2111,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2184,7 +2184,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_P"
+                    "outputIdentifier": "PCSI_Test"
                 },
                 {
                     "bam": {
@@ -2203,7 +2203,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022_R"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2227,7 +2227,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test7.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_08.metrics",
                 "type": "script"
             }
         ]
@@ -2292,7 +2292,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2304,7 +2304,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2318,7 +2318,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2330,7 +2330,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2344,7 +2344,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2356,7 +2356,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2370,7 +2370,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2382,7 +2382,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2394,7 +2394,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2467,7 +2467,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2491,7 +2491,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test8.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_09.metrics",
                 "type": "script"
             }
         ]
@@ -2556,7 +2556,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2568,7 +2568,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022C.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test01.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2582,7 +2582,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2594,7 +2594,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022P.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test02.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2608,7 +2608,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2620,7 +2620,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022R.val.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test03.val.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2634,7 +2634,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2646,7 +2646,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/PCSI0022X.val.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/PCSI_Test04.val.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2658,7 +2658,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2731,7 +2731,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI0022"
+                    "outputIdentifier": "PCSI_Test"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2755,7 +2755,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test9.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_10.metrics",
                 "type": "script"
             }
         ]
@@ -2820,7 +2820,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/TGL_Test01.Aligned.sortedByCoord.out.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2832,7 +2832,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/TGL01_X022_Ov_M_PE_302_WT.Aligned.sortedByCoord.out.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/TGL_Test01.Aligned.sortedByCoord.out.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -2941,7 +2941,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test10.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_11.metrics",
                 "type": "script"
             }
         ]
@@ -3006,7 +3006,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/star_test1.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -3018,7 +3018,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test1.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/star_test1.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -3032,7 +3032,7 @@
                         {
                             "bam": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/star_test2.bam",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -3044,7 +3044,7 @@
                             },
                             "bamIndex": {
                                 "contents": {
-                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/input_data/star_test2.bam.bai",
+                                    "configuration": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/test_inputs/star_test2.bam.bai",
                                     "externalIds": [
                                         {
                                             "id": "TEST",
@@ -3153,7 +3153,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metrics/Test11.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/bamMergePreprocessing/output_metric/workflow_test_12.metrics",
                 "type": "script"
             }
         ]
