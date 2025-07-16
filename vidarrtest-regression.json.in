@@ -161,7 +161,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -234,7 +234,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -425,7 +425,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -499,7 +499,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -691,7 +691,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -763,7 +763,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -929,7 +929,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bamAndBamIndexInputs": [
@@ -960,7 +960,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1032,7 +1032,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bam": {
@@ -1051,7 +1051,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1216,7 +1216,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bamAndBamIndexInputs": [
@@ -1247,7 +1247,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1320,7 +1320,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bam": {
@@ -1339,7 +1339,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1504,7 +1504,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bamAndBamIndexInputs": [
@@ -1535,7 +1535,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -1608,7 +1608,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bam": {
@@ -1627,7 +1627,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -1792,7 +1792,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bamAndBamIndexInputs": [
@@ -1823,7 +1823,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM",
@@ -1896,7 +1896,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bam": {
@@ -1915,7 +1915,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2080,7 +2080,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bamAndBamIndexInputs": [
@@ -2111,7 +2111,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2184,7 +2184,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_2"
                 },
                 {
                     "bam": {
@@ -2203,7 +2203,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI_3"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2394,7 +2394,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2467,7 +2467,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
@@ -2658,7 +2658,7 @@
                             }
                         }
                     ],
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.intervalsToParallelizeByString": "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13+chr14,chr15+chr16,chr17+chr18,chr19+chr20,chr21+chr22+chrY+chrM,chrX",
@@ -2731,7 +2731,7 @@
                         ],
                         "type": "ALL"
                     },
-                    "outputIdentifier": "PCSI_Test"
+                    "outputIdentifier": "PCSI"
                 }
             ],
             "bamMergePreprocessing.recalibrationReport": {
