@@ -60,11 +60,11 @@ workflow bamMergePreprocessing {
       }
     ]
     output_meta: {
-      mergedBam: "the final merged bam.",
-      mergedBamIndex: "the final merged bam index",
-      recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
-      recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled).",
-      markDuplicateMetrics: "A tarball of markDuplicates metrics file of all chromsomes"
+    mergedBam: "the final merged bam.",
+    mergedBamIndex: "the final merged bam index",
+    recalibrationReport: "Recalibration report pdf (if BQSR enabled).",
+    recalibrationTable: "Recalibration csv that was used by BQSR (if BQSR enabled).",
+    markDuplicateMetrics: "A tarball of markDuplicates metrics file of all chromsomes"
     }
   }
 
