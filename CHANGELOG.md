@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased] - 2025-05-26
+- this is a major reorganiztion based off initial work in the GRD-671 branch to remove co-cleaning and indel realignment, both of which are no longer part of gatk best practices
+- [GRD-1000](https://jira.oicr.on.ca/browse/GRD-1000)
+- implementation of a revised parallelization strategy to address issues identified in duplicate marking. Chromosome intervals subset only with paired reads on the same contig.  Additional intervals are identified by keywords NC : subsets with all non-conanonical chromosomes in the build ( un,random,alt,fix), with paired reads on the same contig.  SPLIT : subsets paired reads on different contigs UNALIGNED : subsets paired reads both unaligned 
+- subsetAndFilter task introduced, which divides by interval and filters, replacing perProcessing, using interval strategy described above
+- BQSR run on per interval, per input bam subset (previously on the merged within interval)
+- withinInterval, crossInput merges either through markduplicates or meregeBams (as before)
+- splitNCigarString requires libType="rna" parameter.  This follows duplicate marking
+- BQSR Application on perInterval merged bams
+- doBamMetrics option will run additional task bamMetrics to generated samtools stats + flagstats, + chrpair counts for ALL input, intermediate, and final bams.  This is useful for troubleshooting, but should not be used in production
+- moved memory coefficient preparation to an initial task, prepareIntervals (run once), instead of running within intervals. 
+- included "comment" tag, that will insert a comment into the header of the final merged bam, to indicated process for callready bam creation
+- general cleanup and reorganization for consistency, readability and comprehenshion
+- NOTE this version is not yet tagged.   It needs to incorporate some of the changes that had vollowed GRD-671
+
 ## [2.2.1] - 2025-05-26
 - Re-deployment to enable labels for optional outputs
 - [GRD-948](https://jira.oicr.on.ca/browse/GRD-948)
