@@ -609,7 +609,8 @@ task subsetAndFilter  {
 
   ### use the interval unless one of these keywords   SPLIT UNALIGNED NC
   String samtoolsInterval = if (interval == "SPLIT" || interval == "UNALIGNED" || interval == "NC") then "" else interval
-  String intervalsString = if interval == "NC" then "-L nc.bed" else ""
+  #String intervalsString = if interval == "NC" then "-L nc.bed" else ""
+  String intervalsString = if interval == "NC" then "-L ~{ncBed}" else ""
 
   Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
 
@@ -619,8 +620,7 @@ task subsetAndFilter  {
     ### write to local file
     #### dev fix to get rid of canonical chromosome
 
-    cat ~{ncBed} > nc.bed
-    
+    #cat ~{ncBed} > nc.bed
     #sleep 10
 
     samtools view -b ~{exprString} ~{filterString} ~{intervalsString} ~{inputBam} ~{samtoolsInterval} > ~{outputFileNamePrefix}.bam
