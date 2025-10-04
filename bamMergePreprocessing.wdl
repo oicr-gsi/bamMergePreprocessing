@@ -98,15 +98,15 @@ workflow bamMergePreprocessingMOD {
             refFai = "~{reference + '.fai'}"
         }
     
+
     String suffixFilter = if doFilter then ".filtered" else ""
     String suffixDupMarked = if doMarkDuplicates then ".dupmarked" else ".dupunmarked"
     String suffixRecalibrated = if doBqsr then ".recalibrated" else ""	
     String suffixSplitNCigarString = if libType == "rna" then ".split" else ""	
-    Array[Array[String]] intervalsToParallelizeBy = prepareIntervals.out
+    #Array[Array[String]] intervalsToParallelizeBy = prepareIntervals.intervals
+    String WorkflowVersion = "v2.1"
+    String header_comment = "CallReady BAM file generated from the bamMergePreprocessing ~{WorkflowVersion} Workflow. Filtering=~{doFilter},DuplicateMarking=~{doMarkDuplicates},BQSR=~{doBqsr},libType=~{libType}"
 
-
-  #   ### if samstats is requested, then go through the input bams and generate a samstats file for each
-  #   ### this is not currently part of the output, but rather available in the working directory for review
     if(doBamMetrics){
        scatter (inputBamFile in inputBamFiles){
            call bamMetrics as inputBamMetrics {
@@ -122,17 +122,18 @@ workflow bamMergePreprocessingMOD {
     ### baseQualityRecalibration will process each filtered per interval bam file to generate a recalibration table
     ###
     ##################################################
-    scatter (interval in flatten(intervalsToParallelizeBy)) {
+    Array[String] intervals =  flatten(prepareIntervals.intervals)
+    scatter (interval in intervals){
         scatter (i in inputBamFiles) {
             String bamId = basename(i.bam,".bam")
             String filterPrefix = "~{bamId + suffixFilter + "." + interval}"
 
             ### this is repetitive and should give the same results, do once before scattering with the reference information
-            call getChrCoefficient as coeffForPreprocess {
-                input:
-                chromosome = interval,
-                bamFile = i.bam
-            }
+            #call getChrCoefficient as coeffForPreprocess {
+            #    input:
+            #    chromosome = interval,
+            #    bamFile = i.bam
+            #}
   
             ###################################################
             ### subsetAndFilter will subset the input bam by interval
@@ -152,7 +153,7 @@ workflow bamMergePreprocessingMOD {
                     interval = interval,
                     ncBed = prepareIntervals.ncbed,
                     reference = reference,
-                    scaleCoefficient = coeffForPreprocess.coeff,
+                    scaleCoefficient = prepareIntervals.intervalCoefficients[interval],
                     doFilter = doFilter
             }
 
@@ -186,7 +187,8 @@ workflow bamMergePreprocessingMOD {
             call markDuplicates {
                 input:
                 inputBams = subsetAndFilter.bam,
-                outputFileNamePrefix = markdupPrefix
+                outputFileNamePrefix = markdupPrefix,
+                scaleCoefficient = prepareIntervals.intervalCoefficients[interval]
            }
         }
         if(!doMarkDuplicates) {
@@ -238,8 +240,10 @@ workflow bamMergePreprocessingMOD {
     } ### END by Interval scatter  ###
 
 
+    ###################################################
     ### run bamMetrics on any bams generated in the scatter
-    ### this will include, subsetAndFilter, markDuplicates, mergeWithinInterval and splitNCigarString
+    ### tthis will include, subsetAndFilter, markDuplicates, mergeWithinInterval and splitNCigarString
+    ##################################################
     if(doBamMetrics){
         ### collect all bam output
         Array[File] subsetAndFilterBams = flatten(subsetAndFilterBams_byInterval)
@@ -283,9 +287,10 @@ workflow bamMergePreprocessingMOD {
     }
 
 
-    ####### all per interval, per input processing done, producing a merged bam file
-    ####### recalibration still needs to be applied, and summary of the recalibration
-    ####
+    ###################################################
+    ### all per interval, per input processing done, producing a merged bam file
+    ### recalibration still needs to be applied (if requested), and summary of the recalibration
+    ##################################################
     if(doBqsr) {
         ####  each byInterval, byInputbam should have a recalibration tabl
         ##### these can now be gathered together
@@ -330,7 +335,12 @@ workflow bamMergePreprocessingMOD {
     }
 
 
-    ### now merge across the intervals, this is selecting the output from either markDuplicates.bam or mergeWitihinInterval.bam
+    ###################################################
+    ### merge across intervals
+    ### recalibration still needs to be applied (if requested), and summary of the recalibration
+    ### this is selecting the output from either applyBQSR or the gathered mergeWitiinIntervalBam 
+    ### (either markDups.ba or mergedWithinInterval.bam)
+    ##################################################
     String finalPrefix = "~{outputFileNamePrefix + suffixFilter + suffixDupMarked + suffixSplitNCigarString + suffixRecalibrated + ".merged"}"
     call mergeBams as mergeAcrossIntervals {
         input:
@@ -391,12 +401,12 @@ workflow bamMergePreprocessingMOD {
   
 }
 
-# ================================================================
+# =========================================================================
 #  run samstats on a bam file
 #  this is primarily used for the input bams
 #  it possibly be repurposed for other bam files generated in the workflow
 #     which are currently paired with the samtools stats command
-# ================================================================
+# =========================================================================
 task bamMetrics {
   input{
     File inputBam
@@ -431,11 +441,12 @@ task bamMetrics {
 
 
 
-# ================================================================
+# =============================================================================
 #  split the string of intervals to an array
 #  review intervals for keywords
 #  prepare the NC list from the index.fai
-# ================================================================
+#. generated coefficients from the interval size to use for memory management
+# =============================================================================
 task prepareIntervals {
   input {
     String str
@@ -451,25 +462,72 @@ task prepareIntervals {
   command <<<
     set -euo pipefail
 
-    ### print intervals to a file
+    ### intervals are separated by line or record separator, 
     echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t' > intervals
+    
+    ## this will generate a list of chrosomes or keywords in the intervals, removing any position information
+    cat intervals | sed 's/\t/\n/g' | sed 's/:.*//' | sort -u > interval_contigs
+    
+    ### create a bed file from all contigs in the reference
+    cat ~{refFai} | awk -v OFS="\t" '{ print $1, 1, $2 }' > contigs.bed
+    
+    ### create a file with the allowed keywords 
+    echo -e "NC\nSPLIT\nUNALIGNED" > keywords
 
-    ## print contigs to a file
-    cut -f1 "~{refFai}" > build.contigs
-    cat "~{refFai}" | awk -v OFS="\t" '{ print $1, 1, $2 }' > contigs.bed
+    ### are there any contigs in the supplied intervals that are NOT in the reference build.  if so, this should rais an concern
+    #cat interval_contigs | grep -v -f <(cut -f 1 contigs.bed) | grep -v -f keywords > unknown_contigs
+
+    ### nc.contigs.bed includes intervals NOT in the interval_contigs.
+    ### this is returned by the task, and is used to subset the bam file with samtools view -L on the NC interval
+    #cat contigs.bed | grep -vFw -f interval_contigs > nc.contigs.bed
     cat contigs.bed | grep "_" > nc.contigs.bed
+    
 
-    ### not sure why i can't pull this from the intervals file with read_lines???
-    ### back to the original implementation
-    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+    ### this is now being read from a file, instead of from stdout
+    ####echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
 
-    #### changes to output
-    #Array[Array[String]] out = read_lines("intervals")
+    #### the python code block will read in the intervals and determine the size of each based on the contigs
+    python3 <<CODE
+    import re
+    contigs={}
 
+    total=0
+    with open("contigs.bed","r") as contigbed:
+        for line in contigbed:
+            contig,start,end=line.strip().split("\t")
+            contigs[contig]=int(end)-int(start)+1
+            total=total + contigs[contig]
+
+    cout=open("coefficients.txt","w")
+  
+    with open("intervals","r") as interval_set:
+        for line in interval_set:
+            intervals=line.strip().split(" ")
+            interval_size=0
+            for interval in intervals:
+                if ":" in interval:
+                    contig,start,end=re.split(r'[:-]',interval)
+                    size=int(end)-int(start)+1
+                    interval_size=interval_size+size
+                elif interval == "NC":
+                    with open("nc.contigs.bed","r") as ncbed:
+                        for ncline in ncbed:
+                            nc_contig,start,end=ncline.strip().split("\t")
+                            interval_size=interval_size + int(end)-int(start)+1
+                else:
+                    ## the interval should be a full contig
+                    size=contigs.get(interval,0)
+                    interval_size=interval_size+size
+            coeff=interval_size/total
+            cout.write(line.strip() + "\t" + str(coeff) + "\n")
+    cout.close()
+    CODE
   >>>
 
   output {
-    Array[Array[String]] out = read_tsv(stdout())
+    ### WDL 1.0 does not support keys function, otherwise the intervals could be extracted from intervalCoefficients
+    Array[Array[String]] intervals = read_tsv("intervals")
+    Map[String,String] intervalCoefficients = read_map("coefficients.txt")
     File ncbed = "nc.contigs.bed" 
   }
 
@@ -492,48 +550,6 @@ task prepareIntervals {
   }
 }
 
-# ================================================================
-#  Scaling coefficient - use to scale RAM allocation by chromosome
-# ================================================================
-task getChrCoefficient {
-  input {
-    Int memory = 2
-    Int timeout = 1
-    String chromosome
-    String modules = "samtools/1.15"
-    File bamFile
-  }
-
-  parameter_meta {
-    bamFile: ".bam file to process, we just need the header"
-    timeout: "Hours before task timeout"
-    chromosome: "Chromosome to check"
-    memory: "Memory allocated for this job"
-    modules: "Names and versions of modules to load"
-  }
-
-  command <<<
-    CHROM_LEN=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | grep -w ~{chromosome} | cut -f 2 | sed 's/LN://')
-    LARGEST=$(samtools view -H ~{bamFile} | grep ^@SQ | cut -f 2,3 | grep -v _ | cut -f 2 | sed 's/LN://' | sort -n | tail -n 1)
-    echo | awk -v chrom_len=$CHROM_LEN -v largest=$LARGEST '{print int((chrom_len/largest + 0.1) * 10)/10}'
-  >>>
-
-  runtime {
-    memory:  "~{memory} GB"
-    modules: "~{modules}"
-    timeout: "~{timeout}"
-  }
-
-  output {
-    String coeff = read_string(stdout())
-  }
-
-  meta {
-    output_meta: {
-      coeff: "Length ratio as relative to the largest chromosome."
-    }
-  }
-}
 
 
 
@@ -660,12 +676,16 @@ task markDuplicates {
     Boolean removeDuplicates = false
     Int opticalDuplicatePixelDistance = 100
     String? markDuplicatesAdditionalParams
-    Int jobMemory = 24
+    Int jobMemory = 36
+    Int minMemory = 12
     Int overhead = 6
     Int cores = 1
     Int timeout = 6
     String modules = "gatk/4.1.6.0 samtools/1.15"
+    Float scaleCoefficient = 1.0
   }
+
+    Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
 
     command <<<
     set -euo pipefail
