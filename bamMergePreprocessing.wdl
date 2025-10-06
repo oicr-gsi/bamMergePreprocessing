@@ -11,7 +11,7 @@ struct GenomeResources {
   Array[String] known_sites
 }
 
-workflow bamMergePreprocessingMOD {
+workflow bamMergePreprocessing {
 
     input {
         Array[bamFiles] inputBamFiles
@@ -103,7 +103,10 @@ workflow bamMergePreprocessingMOD {
     String suffixDupMarked = if doMarkDuplicates then ".dupmarked" else ".dupunmarked"
     String suffixRecalibrated = if doBqsr then ".recalibrated" else ""	
     String suffixSplitNCigarString = if libType == "rna" then ".split" else ""	
-    #Array[Array[String]] intervalsToParallelizeBy = prepareIntervals.intervals
+
+    #########
+    ### the comment line to add to the header of the final merged bam file
+    ### i would like to add a url but GATK seems to fail when including : character, calling it a tagged argument.  Its not clear how to escape
     String WorkflowVersion = "v2.1"
     String header_comment = "CallReady BAM file generated from the bamMergePreprocessing ~{WorkflowVersion} Workflow. Filtering=~{doFilter},DuplicateMarking=~{doMarkDuplicates},BQSR=~{doBqsr},libType=~{libType}"
 
@@ -346,8 +349,7 @@ workflow bamMergePreprocessingMOD {
         input:
             bams = select_first([applyBaseQualityScoreRecalibration.recalibratedBam,mergedIntervalBam]),
             outputFileNamePrefix = finalPrefix,
-            ### i would like to add a url but GATK seems to fail when including : character, calling it a tagged argument.  Its not clear how to escape
-            comment = "CallReady BAM file generated from the bamMergePreprocessingWorkflow. Filtering=~{doFilter},DuplicateMarking=~{doMarkDuplicates},BQSR=~{doBqsr},libType=~{libType}"
+            comment = header_comment
     }
     
     ### metrics on the final merge, and zip everything together
