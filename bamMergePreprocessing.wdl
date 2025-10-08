@@ -759,11 +759,11 @@ task splitNCigarString {
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-    --INPUT= ~{inputBam}  \
-    --OUTPUT ~{outputFileNamePrefix}.bam \
-    --REFERENCE ~{reference} \
-    --CREATE_INDEX=true \
-    --REFACTOR-CIGAR-STRING ~{refactorCigarString} \
+    --input ~{inputBam}  \
+    --output ~{outputFileNamePrefix}.bam \
+    --reference ~{reference} \
+    --create-output-bam-index true \
+    --refactor-cigar-string ~{refactorCigarString} \
     ~{splitNCigarReadsAdditionalParams}
 
     
