@@ -127,7 +127,7 @@
             "bamMergePreprocessing.prepareIntervals.cores": null,
             "bamMergePreprocessing.prepareIntervals.jobMemory": null,
             "bamMergePreprocessing.prepareIntervals.lineSeparator": null,
-            "bamMergePreprocessing.prepareIntervals.modules": "null,
+            "bamMergePreprocessing.prepareIntervals.modules": null,
             "bamMergePreprocessing.prepareIntervals.recordSeparator": null,
             "bamMergePreprocessing.prepareIntervals.timeout": 1,
             "bamMergePreprocessing.provisionBqsr": null,
