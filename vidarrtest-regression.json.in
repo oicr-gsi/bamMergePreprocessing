@@ -26,7 +26,7 @@
             "bamMergePreprocessing.doMarkDuplicates": null,
             "bamMergePreprocessing.duplicateMarkedBamMetrics.cores": null,
             "bamMergePreprocessing.duplicateMarkedBamMetrics.jobMemory": null,
-            "bamMergePreprocessing.duplicateMarkedBamMetrics.modules": null",
+            "bamMergePreprocessing.duplicateMarkedBamMetrics.modules": null,
             "bamMergePreprocessing.duplicateMarkedBamMetrics.timeout": null,
             "bamMergePreprocessing.finalBamMetrics.cores": null,
             "bamMergePreprocessing.finalBamMetrics.jobMemory": null,
