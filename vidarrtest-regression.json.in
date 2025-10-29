@@ -120,7 +120,7 @@
             "bamMergePreprocessing.mergeWithinInterval.additionalParams": null,
             "bamMergePreprocessing.mergeWithinInterval.comment": null,
             "bamMergePreprocessing.mergeWithinInterval.cores": null,
-            "bamMergePreprocessing.mergeWithinInterval.jobMemory": null",
+            "bamMergePreprocessing.mergeWithinInterval.jobMemory": null,
             "bamMergePreprocessing.mergeWithinInterval.modules": null,
             "bamMergePreprocessing.mergeWithinInterval.overhead": null,
             "bamMergePreprocessing.mergeWithinInterval.timeout": 1,   
