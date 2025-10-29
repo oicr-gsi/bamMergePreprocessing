@@ -180,7 +180,7 @@
         },
         "id": "Test1",
         "metadata": {
-            "bamMergePreprocessing.mergedBam": [
+            "bamMergePreprocessing.mergedBam": {
                 "contents": [
                     {
                         "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
