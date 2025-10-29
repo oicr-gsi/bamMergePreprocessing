@@ -16,7 +16,7 @@
             "bamMergePreprocessing.baseQualityScoreRecalibration.additionalParams": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.cores": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.intervals": null,
-            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": "null,
+            "bamMergePreprocessing.baseQualityScoreRecalibration.jobMemory": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.modules": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
