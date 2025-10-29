@@ -147,7 +147,7 @@
             "bamMergePreprocessing.splitNCigarString.modules": null,
             "bamMergePreprocessing.splitNCigarString.overhead": null,
             "bamMergePreprocessing.splitNCigarString.readFilters": null,
-            "bamMergePreprocessing.splitNCigarString.refactorCigarString": null",
+            "bamMergePreprocessing.splitNCigarString.refactorCigarString": null,
             "bamMergePreprocessing.splitNCigarString.splitNCigarReadsAdditionalParams": null,
             "bamMergePreprocessing.splitNCigarString.timeout": 1,
             "bamMergePreprocessing.subsetAndFilterBamMetrics.cores": null,
