@@ -183,21 +183,19 @@
             "bamMergePreprocessing.mergedBam": [
                 "contents": [
                     {
-                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
                     }
-                        ],
-                        "type": "ALL"
-                    },
+                ],
+                "type": "ALL"
+            },
             "bamMergePreprocessing.mergedBamIndex": {
-                        "contents": [
-                            {
-                                "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
-                            }
-                        ],
-                        "type": "ALL"
-                    },
-                }
-            ],
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
             "bamMergePreprocessing.recalibrationReport": {
                 "contents": [
                     {
@@ -210,7 +208,10 @@
                 "contents": [
                     {
                         "outputDirectory": "@SCRATCH@/@DATE@_Workflow_bamMergePreprocessing_Test1_@JENKINSID@"
-                    }
+                    },
+                ],
+                "type": "ALL"
+            },
             "bamMergePreprocessing.markDuplicateMetrics": {
                 "contents": [
                     {
