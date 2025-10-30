@@ -356,10 +356,10 @@ workflow bamMergePreprocessing {
     if(doBamMetrics){
         ##### generated the metrics for the final output
         Array[File] finalBams = [mergeAcrossIntervals.bam]
-        scatter (finalBam in finalBams){
+        scatter (finalBam1 in finalBams){
             call bamMetrics as finalBamMetrics{
                 input:
-                    inputBam = finalBam
+                    inputBam = finalBam1
             }
         }
 
