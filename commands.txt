@@ -4,113 +4,142 @@ This section lists command(s) run by bamMergePreprocessing
 
 * Running bamMergePreprocessing workflow
 
-### Parsing Records
+### Running samstats on input bam files
+
+```
+    set -euo pipefail
+    ### pipe the SAM file through flagstat (tee), stats (tee) and a counting operation
+    samtools view -h ~{inputBam} |  tee >(samtools flagstat - > ~{prefix}.flagstats.txt) | tee >(samtools stats - > ~{prefix}.samstats.txt) | samtools view - | cut -f 2,3,7 | sort | uniq -c > ~{prefix}.mapcounts.txt
+```
+
+### Preparing intervals 
 
 ```
     set -euo pipefail
 
-    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+    ### intervals are separated by line or record separator, 
+    echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t' > intervals
+    
+    ## this will generate a list of chrosomes or keywords in the intervals, removing any position information
+    cat intervals | sed 's/\t/\n/g' | sed 's/:.*//' | sort -u > interval_contigs
+    
+    ### create a bed file from all contigs in the reference
+    cat ~{refFai} | awk -v OFS="\t" '{ print $1, 1, $2 }' > contigs.bed
+    
+    ### create a file with the allowed keywords 
+    echo -e "NC\nSPLIT\nUNALIGNED" > keywords
+
+    ### are there any contigs in the supplied intervals that are NOT in the reference build.  if so, this should rais an concern
+    #cat interval_contigs | grep -v -f <(cut -f 1 contigs.bed) | grep -v -f keywords > unknown_contigs
+
+    ### nc.contigs.bed includes intervals NOT in the interval_contigs.
+    ### this is returned by the task, and is used to subset the bam file with samtools view -L on the NC interval
+    #cat contigs.bed | grep -vFw -f interval_contigs > nc.contigs.bed
+    cat contigs.bed | grep "_" > nc.contigs.bed
+    
+
+    ### this is now being read from a file, instead of from stdout
+    ####echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+
+    #### the python code block will read in the intervals and determine the size of each based on the contigs
+    python3 <<CODE
+    import re
+    contigs={}
+
+    total=0
+    with open("contigs.bed","r") as contigbed:
+        for line in contigbed:
+            contig,start,end=line.strip().split("\t")
+            contigs[contig]=int(end)-int(start)+1
+            total=total + contigs[contig]
+
+    cout=open("coefficients.txt","w")
+  
+    with open("intervals","r") as interval_set:
+        for line in interval_set:
+            intervals=line.strip().split(" ")
+            interval_size=0
+            for interval in intervals:
+                if ":" in interval:
+                    contig,start,end=re.split(r'[:-]',interval)
+                    size=int(end)-int(start)+1
+                    interval_size=interval_size+size
+                elif interval == "NC":
+                    with open("nc.contigs.bed","r") as ncbed:
+                        for ncline in ncbed:
+                            nc_contig,start,end=ncline.strip().split("\t")
+                            interval_size=interval_size + int(end)-int(start)+1
+                else:
+                    ## the interval should be a full contig
+                    size=contigs.get(interval,0)
+                    interval_size=interval_size+size
+            coeff=interval_size/total
+            cout.write(line.strip() + "\t" + str(coeff) + "\n")
+    cout.close()
+    CODE
 ```
 
-### Filtering and marking Duplicates
+### Subsetting and filtering bam files, given an interval
 
 ```
     set -euxo pipefail
-    inputBams="~{sep=" " bams}"
-    inputBamIndexes="~{sep=" " bamIndexes}"
+    
+    ### write to local file
+    #### dev fix to get rid of canonical chromosome
 
-    # filter
-    if [ "~{doFilter}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
-      for inputBam in $inputBams; do
-        filename="$(basename $inputBam ".bam")"
-        outputBam="~{workingDir}${filename}.filtered.bam"
-        outputBamIndex="~{workingDir}${filename}.filtered.bai"
-        samtools view -b \
-        -F ~{filterFlags} \
-        ~{"-q " + minMapQuality} \
-        ~{filterAdditionalParams} \
-        $inputBam \
-        ~{sep=" " intervals} > $outputBam
-        samtools index $outputBam $outputBamIndex
-        outputBams+=("$outputBam")
-        outputBamIndexes+=("$outputBamIndex")
-      done
-      # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
-    else
-      outputBams=()
-      outputBamIndexes=()
-      for inputBam in $inputBams; do
-        filename="$(basename $inputBam ".bam")"
-        outputBam="~{workingDir}${filename}.bam"
-        outputBamIndex="~{workingDir}${filename}.bai"
-        samtools view -b \
-        $inputBam \
-        ~{sep=" " intervals} > $outputBam
-        samtools index $outputBam $outputBamIndex
-        outputBams+=("$outputBam")
-        outputBamIndexes+=("$outputBamIndex")
-      done
-      # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
-    fi
+    #cat ~{ncBed} > nc.bed
+    #sleep 10
 
-    # mark duplicates
-    if [ "~{doMarkDuplicates}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-      ${inputBams[@]/#/--INPUT } \
-      --OUTPUT="~{markDuplicatesFilePath}.bam" \
-      --METRICS_FILE="~{outputFileName}.metrics" \
-      --VALIDATION_STRINGENCY=SILENT \
-      --REMOVE_DUPLICATES=~{removeDuplicates} \
-      --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-      --CREATE_INDEX=true \
-      ~{markDuplicatesAdditionalParams}
-      outputBams+=("~{markDuplicatesFilePath}.bam")
-      outputBamIndexes+=("~{markDuplicatesFilePath}.bai")
-      # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
-    fi
-
-    # split N cigar reads
-    if [ "~{doSplitNCigarReads}" = true ]; then
-      outputBams=()
-      outputBamIndexes=()
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-      ${inputBams[@]/#/--input=} \
-      --output="~{splitNCigarReadsFilePath}.bam" \
-      --reference ~{reference} \
-      ~{sep=" " prefix("--intervals ", intervals)} \
-      ~{sep=" " prefixedReadFilters} \
-      --create-output-bam-index true \
-      --refactor-cigar-string ~{refactorCigarString} \
-      ~{splitNCigarReadsAdditionalParams}
-      outputBams+=("~{splitNCigarReadsFilePath}.bam")
-      outputBamIndexes+=("~{splitNCigarReadsFilePath}.bai")
-      # set inputs for next step
-      inputBams=("${outputBams[@]}")
-      inputBamIndexes=("${outputBamIndexes[@]}")
-    fi
-
-    # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
-    if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
-      ${inputBams[@]/#/--INPUT=} \
-      --OUTPUT="~{filteredFileName}.bam" \
-      --CREATE_INDEX=true \
-      --SORT_ORDER=coordinate \
-      --ASSUME_SORTED=false \
-      --USE_THREADING=true \
-      --VALIDATION_STRINGENCY=SILENT
-    fi
+    samtools view -b ~{exprString} ~{filterString} ~{intervalsString} ~{inputBam} ~{samtoolsInterval} > ~{outputFileNamePrefix}.bam
+    samtools index ~{outputFileNamePrefix}.bam ~{outputFileNamePrefix}.bai
 ```
+
+### Marking Duplicates
+
+```
+    set -euo pipefail
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+    ~{sep=" " prefix("--INPUT=", inputBams)}  \
+    --OUTPUT ~{outputFileNamePrefix}.bam \
+    --METRICS_FILE="~{outputFileNamePrefix}.metrics" \
+    --VALIDATION_STRINGENCY=SILENT \
+    --REMOVE_DUPLICATES=~{removeDuplicates} \
+    --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+    --CREATE_INDEX=true \
+    ~{markDuplicatesAdditionalParams}
+
+```
+
+### Splitting reads based on cigar string
+
+```
+    set -euo pipefail
+
+    gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
+    --input ~{inputBam}  \
+    --output ~{outputFileNamePrefix}.bam \
+    --reference ~{reference} \
+    --create-output-bam-index true \
+    --refactor-cigar-string ~{refactorCigarString} \
+    ~{splitNCigarReadsAdditionalParams}
+
+```
+
+### Creating a tarball
+
+```
+    set -euo pipefail
+    mkdir ./files/
+    files="~{sep="," inputFiles}"    
+    IFS=',' read -ra f <<< "$files"
+    for f in ${f[@]}
+    do
+      cp $f ./files/
+    done
+    tar czf  ~{zipName}.tar.gz ./files/*
+
+```
+
 
 ### Merging bam files
 
@@ -119,62 +148,13 @@ This section lists command(s) run by bamMergePreprocessing
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
     ~{sep=" " prefix("--INPUT=", bams)} \
-    --OUTPUT="~{outputFileName}~{suffix}.bam" \
+    --OUTPUT="~{outputFileNamePrefix}.bam" \
     --CREATE_INDEX=true \
     --SORT_ORDER=coordinate \
     --ASSUME_SORTED=false \
     --USE_THREADING=true \
+    --COMMENT="'~{comment}'" \
     --VALIDATION_STRINGENCY=SILENT \
-    ~{additionalParams}
-```
-
-### realignerTargetCreator processing
-
-```
-    set -euo pipefail
-
-    java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type RealignerTargetCreator \
-    --reference_sequence ~{reference} \
-    ~{sep=" " prefix("--intervals ", intervals)} \
-    ~{sep=" " prefix("--input_file ", bams)} \
-    ~{sep=" " prefix("--known ", knownIndels)} \
-    --out realignerTargetCreator.intervals \
-    ~{"--downsampling_type " + downsamplingType} \
-    ~{additionalParams}
-```
-
-### 
-
-```
-    set -euo pipefail
-
-    # generate gatk nWayOut file
-    python3 <<CODE
-    import os
-    import csv
-
-    with open('~{write_lines(bams)}') as f:
-        bamFiles = f.read().splitlines()
-
-    nWayOut = []
-    for bam in bamFiles:
-        fileName = os.path.basename(bam)
-        realignedFileName = os.path.splitext(fileName)[0] + ".realigned.bam"
-        nWayOut.append([fileName, realignedFileName])
-
-    with open('input_output.map', 'w') as f:
-        tsv_writer = csv.writer(f, delimiter='\t')
-        tsv_writer.writerows(nWayOut)
-    CODE
-
-    java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type IndelRealigner \
-    --reference_sequence ~{reference} \
-    ~{sep=" " prefix("--intervals ", intervals)} \
-    ~{sep=" " prefix("--input_file ", bams)} \
-    --targetIntervals ~{targetIntervals} \
-    ~{sep=" " prefix("--knownAlleles ", knownAlleles)} \
-    --bam_compression 0 \
-    --nWayOut input_output.map \
     ~{additionalParams}
 ```
 
@@ -188,7 +168,7 @@ This section lists command(s) run by bamMergePreprocessing
     ~{sep=" " prefixedIntervals} \
     ~{sep=" " prefix("--input=", bams)} \
     ~{sep=" " prefix("--known-sites ", knownSites)} \
-    --output=~{outputFileName} \
+    --output=gatk.recalibration.csv \
     ~{additionalParams}
 ```
 
@@ -198,9 +178,9 @@ This section lists command(s) run by bamMergePreprocessing
     set -euo pipefail
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
-    ~{sep=" " prefix("--input=", recalibrationTables)} \
-    --output ~{outputFileName} \
-    ~{additionalParams}
+        ~{sep=" " prefix("--input=", recalibrationTables)} \
+        --output ~{outputFileNamePrefix}.gatk.recalibration.csv \
+        ~{additionalParams}
 ```
 
 ### Analysis of Covariates
@@ -210,7 +190,7 @@ This section lists command(s) run by bamMergePreprocessing
 
     gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
     --bqsr-recal-file=~{recalibrationTable} \
-    --plots-report-file ~{outputFileName} \
+    --plots-report-file ~{outputFileNamePrefix}.gatk.recalibration.pdf \
     ~{additionalParams}
 ```
 
@@ -222,49 +202,8 @@ This section lists command(s) run by bamMergePreprocessing
     gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
     --bqsr-recal-file=~{recalibrationTable} \
     ~{sep=" " prefix("--input=", [bam])} \
-    --output ~{outputFileName}~{suffix}.bam \
+    --output ~{outputFileNamePrefix}.bam \
     ~{additionalParams}
 
 ```
-### Assemble a list of files by Identifier
 
-```
-    set -euo pipefail
-
-    python3 <<CODE
-    import json
-    import os
-    import re
-
-    with open('~{write_json(wrappedInputGroups)}') as f:
-        inputGroups = json.load(f)
-    with open('~{write_lines(bams)}') as f:
-        bamFiles = f.read().splitlines()
-    with open('~{write_lines(bamIndexes)}') as f:
-        bamIndexFiles = f.read().splitlines()
-
-    filesByOutputIdentifier = []
-    for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
-        # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
-        bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bam))]
-        bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bai))]
-
-        fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
-        if len(fileNames) != 1:
-            raise Exception("Unable to determine unique fileName from fileNames = [" + ','.join(f for f in fileNames) + "]")
-        else:
-            fileName = fileNames[0]
-
-        filesByOutputIdentifier.append({
-            'outputIdentifier': outputIdentifier,
-            'outputFileName': fileName,
-            'bams': bams,
-            'bamIndexes': bais})
-
-    # wrap the array into collectionGroups object
-    wrappedFilesByOutputIdentifier = {'collectionGroups': filesByOutputIdentifier}
-
-    with open('filesByOutputIdentifier.json', 'w') as f:
-        json.dump(wrappedFilesByOutputIdentifier, f, indent=4)
-    CODE
-```
