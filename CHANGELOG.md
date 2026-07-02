@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.1] - 2026-06-30
+## [3.0.1] - 2026-07-02
+### Added
+- [GRD-1175](https://jira.oicr.on.ca/browse/GRD-1175) - Retagging from v3.0.0 to add hg38_noAlt assembly
+- Fixed issues with missing metadata in wdl
+- Updated commands.txt, regression test and README file
+
+## [3.0.0] - 2025-10-29
 ### Modified
 - [GRD-1000](https://jira.oicr.on.ca/browse/GRD-1000)
 - This is a major reorganiztion based off initial work in the GRD-671 branch to remove co-cleaning and indel realignment, both of which are no longer part of gatk best practices
