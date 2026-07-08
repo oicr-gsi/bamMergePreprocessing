@@ -131,7 +131,7 @@ workflow bamMergePreprocessing {
     }
 
     ###################################################
-    ### scatter TWICE, first across the set of intervalsm then the set of input bam files
+    ### scatter TWICE, first across the set of intervals then the set of input bam files
     ### subsetAndFilter will process each input bam splitting to the intervals before filtering
     ### baseQualityRecalibration will process each filtered per interval bam file to generate a recalibration table
     ###
@@ -141,13 +141,6 @@ workflow bamMergePreprocessing {
         scatter (i in inputBamFiles) {
             String bamId = basename(i.bam,".bam")
             String filterPrefix = "~{bamId + suffixFilter + "." + interval}"
-
-            ### this is repetitive and should give the same results, do once before scattering with the reference information
-            #call getChrCoefficient as coeffForPreprocess {
-            #    input:
-            #    chromosome = interval,
-            #    bamFile = i.bam
-            #}
   
             ###################################################
             ### subsetAndFilter will subset the input bam by interval
@@ -268,7 +261,6 @@ workflow bamMergePreprocessing {
             }
         }
         if(doMarkDuplicates){
-           #Array[File] duplicateMarkedBam = [select_first(markDuplicates.bam)]
            Array[File] duplicateMarkedBams = select_all(markDuplicates.bam)
            scatter(duplicateMarkedBam in duplicateMarkedBams){
                call bamMetrics as duplicateMarkedBamMetrics{
@@ -278,7 +270,6 @@ workflow bamMergePreprocessing {
            }
         }
         if(!doMarkDuplicates){
-            #Array[File] mergedWithinIntervalBams = [select_first(mergeWithinInterval.bam)]
             Array[File] mergedWithinIntervalBams = select_all(mergeWithinInterval.bam)
             scatter(mergeWithinIntervalBam in mergedWithinIntervalBams){
                 call bamMetrics as mergedWithinIntervalBamMetrics{
@@ -289,7 +280,6 @@ workflow bamMergePreprocessing {
         }
 
         if(libType == "rna"){
-            #Array[File] splitNCigarStringBams = [select_first(splitNCigarString.bam)]
             Array[File] splitNCigarStringBams = select_all(splitNCigarString.bam)
             scatter(splitNCigarStringBam in splitNCigarStringBams){
                 call bamMetrics as splitNCigarStringBamMetrics{
@@ -406,12 +396,6 @@ workflow bamMergePreprocessing {
                 zipName = "~{outputFileNamePrefix + '.markDuplicatesMetrics'}"
         }
     }
-  
-  
-  ### for debugging
-  #File finalBam = inputBamFiles[0].bam
-  #File finalBamIndex = inputBamFiles[0].bamIndex
-  
 }
 
 # =========================================================================
@@ -494,18 +478,10 @@ task prepareIntervals {
     ### create a file with the allowed keywords 
     echo -e "NC\nSPLIT\nUNALIGNED" > keywords
 
-    ### are there any contigs in the supplied intervals that are NOT in the reference build.  if so, this should rais an concern
-    #cat interval_contigs | grep -v -f <(cut -f 1 contigs.bed) | grep -v -f keywords > unknown_contigs
-
     ### nc.contigs.bed includes intervals NOT in the interval_contigs.
     ### this is returned by the task, and is used to subset the bam file with samtools view -L on the NC interval
-    #cat contigs.bed | grep -vFw -f interval_contigs > nc.contigs.bed
     cat contigs.bed | grep "_" > nc.contigs.bed
     
-
-    ### this is now being read from a file, instead of from stdout
-    ####echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
-
     #### the python code block will read in the intervals and determine the size of each based on the contigs
     python3 <<CODE
     import re
@@ -570,9 +546,6 @@ task prepareIntervals {
   }
 }
 
-
-
-
 # ================================================================
 #  given an interval, subset the bam files using samtools
 #  if filtering is required, apply the filters here
@@ -629,7 +602,6 @@ task subsetAndFilter  {
 
   ### use the interval unless one of these keywords   SPLIT UNALIGNED NC
   String samtoolsInterval = if (interval == "SPLIT" || interval == "UNALIGNED" || interval == "NC") then "" else interval
-  #String intervalsString = if interval == "NC" then "-L nc.bed" else ""
   String intervalsString = if interval == "NC" then "-L ~{ncBed}" else ""
 
   Int allocatedMemory = if minMemory > round(jobMemory * scaleCoefficient) then minMemory else round(jobMemory * scaleCoefficient)
@@ -639,9 +611,6 @@ task subsetAndFilter  {
     
     ### write to local file
     #### dev fix to get rid of canonical chromosome
-
-    #cat ~{ncBed} > nc.bed
-    #sleep 10
 
     samtools view -b ~{exprString} ~{filterString} ~{intervalsString} ~{inputBam} ~{samtoolsInterval} > ~{outputFileNamePrefix}.bam
     samtools index ~{outputFileNamePrefix}.bam ~{outputFileNamePrefix}.bai
@@ -755,13 +724,10 @@ task markDuplicates {
 # ================================================================
 #  given an set of bam files, reds with N in the cigar string are
 #  split into multiple reads
-#  
-# 
 # ================================================================
 
 task splitNCigarString {
   input {
-    #Array[File]inputBams
     File inputBam
     File inputBamIndex
     String outputFileNamePrefix

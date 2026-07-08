@@ -29,18 +29,10 @@ This section lists command(s) run by bamMergePreprocessing
     ### create a file with the allowed keywords 
     echo -e "NC\nSPLIT\nUNALIGNED" > keywords
 
-    ### are there any contigs in the supplied intervals that are NOT in the reference build.  if so, this should rais an concern
-    #cat interval_contigs | grep -v -f <(cut -f 1 contigs.bed) | grep -v -f keywords > unknown_contigs
-
     ### nc.contigs.bed includes intervals NOT in the interval_contigs.
     ### this is returned by the task, and is used to subset the bam file with samtools view -L on the NC interval
-    #cat contigs.bed | grep -vFw -f interval_contigs > nc.contigs.bed
     cat contigs.bed | grep "_" > nc.contigs.bed
     
-
-    ### this is now being read from a file, instead of from stdout
-    ####echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
-
     #### the python code block will read in the intervals and determine the size of each based on the contigs
     python3 <<CODE
     import re
@@ -86,9 +78,6 @@ This section lists command(s) run by bamMergePreprocessing
     
     ### write to local file
     #### dev fix to get rid of canonical chromosome
-
-    #cat ~{ncBed} > nc.bed
-    #sleep 10
 
     samtools view -b ~{exprString} ~{filterString} ~{intervalsString} ~{inputBam} ~{samtoolsInterval} > ~{outputFileNamePrefix}.bam
     samtools index ~{outputFileNamePrefix}.bam ~{outputFileNamePrefix}.bai
