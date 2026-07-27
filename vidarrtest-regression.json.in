@@ -21,6 +21,7 @@
             "bamMergePreprocessing.baseQualityScoreRecalibration.overhead": null,
             "bamMergePreprocessing.baseQualityScoreRecalibration.timeout": 1,
             "bamMergePreprocessing.doBamMetrics": null,
+            "bamMergePreprocessing.WorkflowVersion": null,
             "bamMergePreprocessing.doBqsr": null,
             "bamMergePreprocessing.doFilter": null,
             "bamMergePreprocessing.doMarkDuplicates": null,

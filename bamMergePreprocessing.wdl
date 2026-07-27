@@ -22,6 +22,7 @@ workflow bamMergePreprocessing {
         Boolean doBqsr = true
         Boolean provisionBqsr = false
         String libType = "dna"
+        String WorkflowVersion = "v2.1"
         String reference
         String referenceGenome
         Boolean doBamMetrics = false
@@ -38,6 +39,7 @@ workflow bamMergePreprocessing {
         referenceGenome: "The reference genome version for input sample"
         provisionBqsr: "Enable/disable provision out bqsr report and table"
         libType: "Sequencing library type, e.g. 'dna' or 'rna'"
+        WorkflowVersion: "Current version of the workflow"
         doBamMetrics: "Enable/disable generation of bam metrics (samtools stats/flagstat/counts) at each processing stage."
     }
 
@@ -118,7 +120,6 @@ workflow bamMergePreprocessing {
     #########
     ### the comment line to add to the header of the final merged bam file
     ### i would like to add a url but GATK seems to fail when including : character, calling it a tagged argument.  Its not clear how to escape
-    String WorkflowVersion = "v2.1"
     String header_comment = "CallReady BAM file generated from the bamMergePreprocessing ~{WorkflowVersion} Workflow. Filtering=~{doFilter},DuplicateMarking=~{doMarkDuplicates},BQSR=~{doBqsr},libType=~{libType}"
 
     if(doBamMetrics){
