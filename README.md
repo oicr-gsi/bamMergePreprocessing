@@ -1,15 +1,13 @@
 # bamMergePreprocessing
 
-
+Workflow to merge and preprocess lane level alignments.
 
 ## Overview
 
 ## Dependencies
 
-* [samtools 1.9](http://www.htslib.org/)
+* [samtools 1.15](http://www.htslib.org/)
 * [gatk 4.1.6.0](https://gatk.broadinstitute.org)
-* [gatk 3.6-0](https://gatk.broadinstitute.org)
-* [python 3.7](https://www.python.org)
 
 
 ## Usage
@@ -24,228 +22,280 @@ java -jar cromwell.jar run bamMergePreprocessing.wdl --inputs inputs.json
 #### Required workflow parameters:
 Parameter|Value|Description
 ---|---|---
-`inputGroups`|Array[InputGroup]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
-`intervalsToParallelizeByString`|String|Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4).
+`inputBamFiles`|Array[bamFiles]|Array of objects describing sets of bams to merge together and the merged file name. These merged bams will be cocleaned together and output separately (by merged name).
+`outputFileNamePrefix`|String|Prefix of output file name
 `reference`|String|Path to reference file.
-`reference_genome`|String|reference genome of input sample
+`referenceGenome`|String|The reference genome version for input sample
 
 
 #### Optional workflow parameters:
 Parameter|Value|Default|Description
 ---|---|---|---
+`intervalsToParallelizeByString`|String|"chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM,NC,SPLIT,UNALIGNED"|Comma separated list of intervals to split by (e.g. chr1,chr2,chr3+chr4).
 `doFilter`|Boolean|true|Enable/disable Samtools filtering.
 `doMarkDuplicates`|Boolean|true|Enable/disable GATK4 MarkDuplicates.
-`doSplitNCigarReads`|Boolean|false|Enable/disable GATK4 SplitNCigarReads.
-`doIndelRealignment`|Boolean|true|Enable/disable GATK3 RealignerTargetCreator + IndelRealigner.
-`doBqsr`|Boolean|true|Enable/disable GATK4 BQSR.
+`doBqsr`|Boolean|true|Enable/disable GATK baseQualityScoreRecalibration
+`provisionBqsr`|Boolean|false|Enable/disable provision out bqsr report and table
+`libType`|String|"dna"|Sequencing library type, e.g. 'dna' or 'rna'
+`doBamMetrics`|Boolean|false|Enable/disable generation of bam metrics (samtools stats/flagstat/counts) at each processing stage.
 
 
 #### Optional task parameters:
 Parameter|Value|Default|Description
 ---|---|---|---
-`splitStringToArray.lineSeparator`|String|","|Interval group separator - these are the intervals to split by.
-`splitStringToArray.recordSeparator`|String|"+"|Interval interval group separator - this can be used to combine multiple intervals into one group.
-`splitStringToArray.jobMemory`|Int|1|Memory allocated to job (in GB).
-`splitStringToArray.cores`|Int|1|The number of cores to allocate to the job.
-`splitStringToArray.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
-`splitStringToArray.modules`|String|""|Environment module name and version to load (space separated) before command execution.
-`preprocessBam.temporaryWorkingDir`|String|""|Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp.
-`preprocessBam.filterSuffix`|String|".filter"|Suffix to use for filtered bams.
-`preprocessBam.filterFlags`|Int|260|Samtools filter flags to apply.
-`preprocessBam.minMapQuality`|Int?|None|Samtools minimum mapping quality filter to apply.
-`preprocessBam.filterAdditionalParams`|String?|None|Additional parameters to pass to samtools.
-`preprocessBam.markDuplicatesSuffix`|String|".deduped"|Suffix to use for duplicate marked bams.
-`preprocessBam.removeDuplicates`|Boolean|false|MarkDuplicates remove duplicates?
-`preprocessBam.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
-`preprocessBam.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
-`preprocessBam.splitNCigarReadsSuffix`|String|".split"|Suffix to use for SplitNCigarReads bams.
-`preprocessBam.refactorCigarString`|Boolean|false|SplitNCigarReads refactor cigar string?
-`preprocessBam.readFilters`|Array[String]|[]|SplitNCigarReads read filters
-`preprocessBam.splitNCigarReadsAdditionalParams`|String?|None|Additional parameters to pass to GATK SplitNCigarReads.
-`preprocessBam.jobMemory`|Int|24|Memory allocated to job (in GB).
-`preprocessBam.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`preprocessBam.cores`|Int|1|The number of cores to allocate to the job.
-`preprocessBam.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`preprocessBam.modules`|String|"samtools/1.9 gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
-`realignerTargetCreator.downsamplingType`|String?|None|Type of read downsampling to employ at a given locus (NONE|ALL_READS|BY_SAMPLE).
-`realignerTargetCreator.additionalParams`|String?|None|Additional parameters to pass to GATK RealignerTargetCreator.
-`realignerTargetCreator.jobMemory`|Int|24|Memory allocated to job (in GB).
-`realignerTargetCreator.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`realignerTargetCreator.cores`|Int|1|The number of cores to allocate to the job.
-`realignerTargetCreator.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`realignerTargetCreator.modules`|String|"gatk/3.6-0"|Environment module name and version to load (space separated) before command execution.
-`realignerTargetCreator.gatkJar`|String|"$GATK_ROOT/GenomeAnalysisTK.jar"|Path to GATK jar.
-`indelRealign.additionalParams`|String?|None|Additional parameters to pass to GATK IndelRealigner.
-`indelRealign.jobMemory`|Int|24|Memory allocated to job (in GB).
-`indelRealign.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`indelRealign.cores`|Int|1|The number of cores to allocate to the job.
-`indelRealign.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`indelRealign.modules`|String|"python/3.7 gatk/3.6-0"|Environment module name and version to load (space separated) before command execution.
-`indelRealign.gatkJar`|String|"$GATK_ROOT/GenomeAnalysisTK.jar"|Path to GATK jar.
+`prepareIntervals.lineSeparator`|String|","|Interval group separator - these are the intervals to split by.
+`prepareIntervals.recordSeparator`|String|"+"|Interval interval group separator - this can be used to combine multiple intervals into one group.
+`prepareIntervals.jobMemory`|Int|1|Memory allocated to job (in GB).
+`prepareIntervals.cores`|Int|1|The number of cores to allocate to the job.
+`prepareIntervals.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
+`prepareIntervals.modules`|String|""|Environment module name and version to load (space separated) before command execution.
+`inputBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`inputBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`inputBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`inputBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`subsetAndFilter.temporaryWorkingDir`|String|""|Where to write out intermediary bam files. Only the final preprocessed bam will be written to task working directory if this is set to local tmp.
+`subsetAndFilter.filterSuffix`|String|".filtered"|Suffix to append to output file name when filtering is applied.
+`subsetAndFilter.filterFlags`|Int|256|Samtools filter flags to apply.
+`subsetAndFilter.minMapQuality`|Int?|None|Samtools minimum mapping quality filter to apply.
+`subsetAndFilter.filterAdditionalParams`|String?|None|Additional parameters to pass to samtools.
+`subsetAndFilter.oldStyle`|Boolean|false|Hidden option to revert to the previous dupMarking strategy, for assessment purposes.
+`subsetAndFilter.jobMemory`|Int|36|Memory allocated to job (in GB).
+`subsetAndFilter.minMemory`|Int|12|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
+`subsetAndFilter.overhead`|Int|8|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`subsetAndFilter.cores`|Int|1|The number of cores to allocate to the job.
+`subsetAndFilter.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`subsetAndFilter.modules`|String|"samtools/1.15"|Environment module name and version to load (space separated) before command execution.
 `baseQualityScoreRecalibration.intervals`|Array[String]|[]|One or more genomic intervals over which to operate.
 `baseQualityScoreRecalibration.additionalParams`|String?|None|Additional parameters to pass to GATK BaseRecalibrator.
-`baseQualityScoreRecalibration.outputFileName`|String|"gatk.recalibration.csv"|Recalibration table file name.
 `baseQualityScoreRecalibration.jobMemory`|Int|24|Memory allocated to job (in GB).
 `baseQualityScoreRecalibration.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `baseQualityScoreRecalibration.cores`|Int|1|The number of cores to allocate to the job.
 `baseQualityScoreRecalibration.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`baseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
+`baseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
+`markDuplicates.removeDuplicates`|Boolean|false|MarkDuplicates remove duplicates?
+`markDuplicates.opticalDuplicatePixelDistance`|Int|100|MarkDuplicates optical distance.
+`markDuplicates.markDuplicatesAdditionalParams`|String?|None|Additional parameters to pass to GATK MarkDuplicates.
+`markDuplicates.jobMemory`|Int|36|Memory allocated to job (in GB).
+`markDuplicates.minMemory`|Int|12|A minimum amount of memory allocated to the task, overrides the scaled RAM setting
+`markDuplicates.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`markDuplicates.cores`|Int|1|The number of cores to allocate to the job.
+`markDuplicates.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`markDuplicates.modules`|String|"gatk/4.1.6.0 samtools/1.15"|Environment module name and version to load (space separated) before command execution.
+`mergeWithinInterval.additionalParams`|String?|None|Additional parameters to pass to GATK MergeSamFiles.
+`mergeWithinInterval.comment`|String|""|Comment to add to the header of the merged bam file.
+`mergeWithinInterval.jobMemory`|Int|24|Memory allocated to job (in GB).
+`mergeWithinInterval.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`mergeWithinInterval.cores`|Int|1|The number of cores to allocate to the job.
+`mergeWithinInterval.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`mergeWithinInterval.modules`|String|"gatk/4.1.6.0 samtools/1.15"|Environment module name and version to load (space separated) before command execution.
+`splitNCigarString.refactorCigarString`|String|false|SplitNCigarReads refactor-cigar-string option.
+`splitNCigarString.splitNCigarReadsAdditionalParams`|String?|None|Additional parameters to pass to GATK SplitNCigarReads.
+`splitNCigarString.readFilters`|String?|None|Optional GATK read filters to apply.
+`splitNCigarString.jobMemory`|Int|24|Memory allocated to job (in GB).
+`splitNCigarString.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`splitNCigarString.cores`|Int|1|The number of cores to allocate to the job.
+`splitNCigarString.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`splitNCigarString.modules`|String|"gatk/4.1.6.0 samtools/1.15"|Environment module name and version to load (space separated) before command execution.
+`subsetAndFilterBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`subsetAndFilterBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`subsetAndFilterBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`subsetAndFilterBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`duplicateMarkedBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`duplicateMarkedBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`duplicateMarkedBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`duplicateMarkedBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`mergedWithinIntervalBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`mergedWithinIntervalBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`mergedWithinIntervalBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`mergedWithinIntervalBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`splitNCigarStringBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`splitNCigarStringBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`splitNCigarStringBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`splitNCigarStringBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
 `gatherBQSRReports.additionalParams`|String?|None|Additional parameters to pass to GATK GatherBQSRReports.
-`gatherBQSRReports.outputFileName`|String|"gatk.recalibration.csv"|Recalibration table file name.
 `gatherBQSRReports.jobMemory`|Int|24|Memory allocated to job (in GB).
 `gatherBQSRReports.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `gatherBQSRReports.cores`|Int|1|The number of cores to allocate to the job.
 `gatherBQSRReports.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`gatherBQSRReports.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
+`gatherBQSRReports.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
 `analyzeCovariates.additionalParams`|String?|None|Additional parameters to pass to GATK AnalyzeCovariates
-`analyzeCovariates.outputFileName`|String|"gatk.recalibration.pdf"|Recalibration report file name.
 `analyzeCovariates.jobMemory`|Int|24|Memory allocated to job (in GB).
 `analyzeCovariates.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `analyzeCovariates.cores`|Int|1|The number of cores to allocate to the job.
 `analyzeCovariates.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`analyzeCovariates.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
-`applyBaseQualityScoreRecalibration.outputFileName`|String|basename(bam,".bam")|Output files will be prefixed with this.
-`applyBaseQualityScoreRecalibration.suffix`|String|".recalibrated"|Suffix to use for recalibrated bams.
+`analyzeCovariates.modules`|String|"gatk/4.1.6.0"|Environment module name and version to load (space separated) before command execution.
 `applyBaseQualityScoreRecalibration.additionalParams`|String?|None|Additional parameters to pass to GATK ApplyBQSR.
 `applyBaseQualityScoreRecalibration.jobMemory`|Int|24|Memory allocated to job (in GB).
 `applyBaseQualityScoreRecalibration.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
 `applyBaseQualityScoreRecalibration.cores`|Int|1|The number of cores to allocate to the job.
 `applyBaseQualityScoreRecalibration.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`applyBaseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
-`collectFilesBySample.jobMemory`|Int|1|Memory allocated to job (in GB).
-`collectFilesBySample.cores`|Int|1|The number of cores to allocate to the job.
-`collectFilesBySample.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
-`collectFilesBySample.modules`|String|"python/3.7"|Environment module name and version to load (space separated) before command execution.
-`mergeSplitByIntervalBams.additionalParams`|String?|None|Additional parameters to pass to GATK MergeSamFiles.
-`mergeSplitByIntervalBams.jobMemory`|Int|24|Memory allocated to job (in GB).
-`mergeSplitByIntervalBams.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
-`mergeSplitByIntervalBams.cores`|Int|1|The number of cores to allocate to the job.
-`mergeSplitByIntervalBams.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
-`mergeSplitByIntervalBams.modules`|String|"gatk/4.1.6.0 python/2.7"|Environment module name and version to load (space separated) before command execution.
+`applyBaseQualityScoreRecalibration.modules`|String|"gatk/4.1.6.0 samtools/1.15"|Environment module name and version to load (space separated) before command execution.
+`recalibratedBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`recalibratedBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`recalibratedBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`recalibratedBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`mergeAcrossIntervals.additionalParams`|String?|None|Additional parameters to pass to GATK MergeSamFiles.
+`mergeAcrossIntervals.jobMemory`|Int|24|Memory allocated to job (in GB).
+`mergeAcrossIntervals.overhead`|Int|6|Java overhead memory (in GB). jobMemory - overhead == java Xmx/heap memory.
+`mergeAcrossIntervals.cores`|Int|1|The number of cores to allocate to the job.
+`mergeAcrossIntervals.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`mergeAcrossIntervals.modules`|String|"gatk/4.1.6.0 samtools/1.15"|Environment module name and version to load (space separated) before command execution.
+`finalBamMetrics.jobMemory`|Int|12|Memory allocated to job (in GB).
+`finalBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`finalBamMetrics.timeout`|Int|6|Maximum amount of time (in hours) the task can run for.
+`finalBamMetrics.modules`|String|"samtools/1.15"|Environment module name and version to load.
+`zippedBamMetrics.jobMemory`|Int|4|Memory allocated to job (in GB).
+`zippedBamMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`zippedBamMetrics.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
+`zippedDupMarkMetrics.jobMemory`|Int|4|Memory allocated to job (in GB).
+`zippedDupMarkMetrics.cores`|Int|1|The number of cores to allocate to the job.
+`zippedDupMarkMetrics.timeout`|Int|1|Maximum amount of time (in hours) the task can run for.
 
 
 ### Outputs
 
 Output | Type | Description | Labels
 ---|---|---|---
-`outputGroups`|Array[OutputGroup]|Array of objects with outputIdentifier (from inputGroups) and the final merged bam and bamIndex.|
-`recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).|vidarr_label: recalibrationReport
-`recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).|vidarr_label: recalibrationTable
+`mergedBam`|File|the final merged bam.|
+`mergedBamIndex`|File|the final merged bam index|
+`recalibrationReport`|File?|Recalibration report pdf (if BQSR enabled).|
+`recalibrationTable`|File?|Recalibration csv that was used by BQSR (if BQSR enabled).|
+`markDuplicateMetricsZip`|File?|A tarball of markDuplicates metrics files across all intervals (if doMarkDuplicates enabled).|
+`bamMetricsZip`|File?|A tarball of samtools stats/flagstat/mapcounts metrics files generated at each processing stage (if doBamMetrics enabled).|
 
 
+./commands.txt found, printing out the content...
 ## Commands
  
  This section lists command(s) run by bamMergePreprocessing
  
  * Running bamMergePreprocessing workflow
  
- ### Parsing Records
+ ### Running samstats on input bam files
+ 
+ ```
+     set -euo pipefail
+     ### pipe the SAM file through flagstat (tee), stats (tee) and a counting operation
+     samtools view -h ~{inputBam} |  tee >(samtools flagstat - > ~{prefix}.flagstats.txt) | tee >(samtools stats - > ~{prefix}.samstats.txt) | samtools view - | cut -f 2,3,7 | sort | uniq -c > ~{prefix}.mapcounts.txt
+ ```
+ 
+ ### Preparing intervals 
  
  ```
      set -euo pipefail
  
-     echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t'
+     ### intervals are separated by line or record separator, 
+     echo "~{str}" | tr '~{lineSeparator}' '\n' | tr '~{recordSeparator}' '\t' > intervals
+     
+     ## this will generate a list of chrosomes or keywords in the intervals, removing any position information
+     cat intervals | sed 's/\t/\n/g' | sed 's/:.*//' | sort -u > interval_contigs
+     
+     ### create a bed file from all contigs in the reference
+     cat ~{refFai} | awk -v OFS="\t" '{ print $1, 1, $2 }' > contigs.bed
+     
+     ### create a file with the allowed keywords 
+     echo -e "NC\nSPLIT\nUNALIGNED" > keywords
+ 
+     ### nc.contigs.bed includes intervals NOT in the interval_contigs.
+     ### this is returned by the task, and is used to subset the bam file with samtools view -L on the NC interval
+     cat contigs.bed | grep "_" > nc.contigs.bed
+     
+     #### the python code block will read in the intervals and determine the size of each based on the contigs
+     python3 <<CODE
+     import re
+     contigs={}
+ 
+     total=0
+     with open("contigs.bed","r") as contigbed:
+         for line in contigbed:
+             contig,start,end=line.strip().split("\t")
+             contigs[contig]=int(end)-int(start)+1
+             total=total + contigs[contig]
+ 
+     cout=open("coefficients.txt","w")
+   
+     with open("intervals","r") as interval_set:
+         for line in interval_set:
+             intervals=line.strip().split(" ")
+             interval_size=0
+             for interval in intervals:
+                 if ":" in interval:
+                     contig,start,end=re.split(r'[:-]',interval)
+                     size=int(end)-int(start)+1
+                     interval_size=interval_size+size
+                 elif interval == "NC":
+                     with open("nc.contigs.bed","r") as ncbed:
+                         for ncline in ncbed:
+                             nc_contig,start,end=ncline.strip().split("\t")
+                             interval_size=interval_size + int(end)-int(start)+1
+                 else:
+                     ## the interval should be a full contig
+                     size=contigs.get(interval,0)
+                     interval_size=interval_size+size
+             coeff=interval_size/total
+             cout.write(line.strip() + "\t" + str(coeff) + "\n")
+     cout.close()
+     CODE
  ```
  
- ### Filtering and marking Duplicates
+ ### Subsetting and filtering bam files, given an interval
  
  ```
      set -euxo pipefail
-     inputBams="~{sep=" " bams}"
-     inputBamIndexes="~{sep=" " bamIndexes}"
+     
+     ### write to local file
+     #### dev fix to get rid of canonical chromosome
  
-     # filter
-     if [ "~{doFilter}" = true ]; then
-       outputBams=()
-       outputBamIndexes=()
-       for inputBam in $inputBams; do
-         filename="$(basename $inputBam ".bam")"
-         outputBam="~{workingDir}${filename}.filtered.bam"
-         outputBamIndex="~{workingDir}${filename}.filtered.bai"
-         samtools view -b \
-         -F ~{filterFlags} \
-         ~{"-q " + minMapQuality} \
-         ~{filterAdditionalParams} \
-         $inputBam \
-         ~{sep=" " intervals} > $outputBam
-         samtools index $outputBam $outputBamIndex
-         outputBams+=("$outputBam")
-         outputBamIndexes+=("$outputBamIndex")
-       done
-       # set inputs for next step
-       inputBams=("${outputBams[@]}")
-       inputBamIndexes=("${outputBamIndexes[@]}")
-     else
-       outputBams=()
-       outputBamIndexes=()
-       for inputBam in $inputBams; do
-         filename="$(basename $inputBam ".bam")"
-         outputBam="~{workingDir}${filename}.bam"
-         outputBamIndex="~{workingDir}${filename}.bai"
-         samtools view -b \
-         $inputBam \
-         ~{sep=" " intervals} > $outputBam
-         samtools index $outputBam $outputBamIndex
-         outputBams+=("$outputBam")
-         outputBamIndexes+=("$outputBamIndex")
-       done
-       # set inputs for next step
-       inputBams=("${outputBams[@]}")
-       inputBamIndexes=("${outputBamIndexes[@]}")
-     fi
- 
-     # mark duplicates
-     if [ "~{doMarkDuplicates}" = true ]; then
-       outputBams=()
-       outputBamIndexes=()
-       gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
-       ${inputBams[@]/#/--INPUT } \
-       --OUTPUT="~{markDuplicatesFilePath}.bam" \
-       --METRICS_FILE="~{outputFileName}.metrics" \
-       --VALIDATION_STRINGENCY=SILENT \
-       --REMOVE_DUPLICATES=~{removeDuplicates} \
-       --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
-       --CREATE_INDEX=true \
-       ~{markDuplicatesAdditionalParams}
-       outputBams+=("~{markDuplicatesFilePath}.bam")
-       outputBamIndexes+=("~{markDuplicatesFilePath}.bai")
-       # set inputs for next step
-       inputBams=("${outputBams[@]}")
-       inputBamIndexes=("${outputBamIndexes[@]}")
-     fi
- 
-     # split N cigar reads
-     if [ "~{doSplitNCigarReads}" = true ]; then
-       outputBams=()
-       outputBamIndexes=()
-       gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
-       ${inputBams[@]/#/--input=} \
-       --output="~{splitNCigarReadsFilePath}.bam" \
-       --reference ~{reference} \
-       ~{sep=" " prefix("--intervals ", intervals)} \
-       ~{sep=" " prefixedReadFilters} \
-       --create-output-bam-index true \
-       --refactor-cigar-string ~{refactorCigarString} \
-       ~{splitNCigarReadsAdditionalParams}
-       outputBams+=("~{splitNCigarReadsFilePath}.bam")
-       outputBamIndexes+=("~{splitNCigarReadsFilePath}.bai")
-       # set inputs for next step
-       inputBams=("${outputBams[@]}")
-       inputBamIndexes=("${outputBamIndexes[@]}")
-     fi
- 
-     # catch all - need to merge filtered+split bams if MarkDuplicates or SplitNCigarReads isn't called
-     if [ "~{doMarkDuplicates}" = false ] && [ "~{doSplitNCigarReads}" = false ]; then
-       gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
-       ${inputBams[@]/#/--INPUT=} \
-       --OUTPUT="~{filteredFileName}.bam" \
-       --CREATE_INDEX=true \
-       --SORT_ORDER=coordinate \
-       --ASSUME_SORTED=false \
-       --USE_THREADING=true \
-       --VALIDATION_STRINGENCY=SILENT
-     fi
+     samtools view -b ~{exprString} ~{filterString} ~{intervalsString} ~{inputBam} ~{samtoolsInterval} > ~{outputFileNamePrefix}.bam
+     samtools index ~{outputFileNamePrefix}.bam ~{outputFileNamePrefix}.bai
  ```
+ 
+ ### Marking Duplicates
+ 
+ ```
+     set -euo pipefail
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" MarkDuplicates \
+     ~{sep=" " prefix("--INPUT=", inputBams)}  \
+     --OUTPUT ~{outputFileNamePrefix}.bam \
+     --METRICS_FILE="~{outputFileNamePrefix}.metrics" \
+     --VALIDATION_STRINGENCY=SILENT \
+     --REMOVE_DUPLICATES=~{removeDuplicates} \
+     --OPTICAL_DUPLICATE_PIXEL_DISTANCE=~{opticalDuplicatePixelDistance} \
+     --CREATE_INDEX=true \
+     ~{markDuplicatesAdditionalParams}
+ 
+ ```
+ 
+ ### Splitting reads based on cigar string
+ 
+ ```
+     set -euo pipefail
+ 
+     gatk --java-options "-Xmx~{jobMemory - overhead}G" SplitNCigarReads \
+     --input ~{inputBam}  \
+     --output ~{outputFileNamePrefix}.bam \
+     --reference ~{reference} \
+     --create-output-bam-index true \
+     --refactor-cigar-string ~{refactorCigarString} \
+     ~{splitNCigarReadsAdditionalParams}
+ 
+ ```
+ 
+ ### Creating a tarball
+ 
+ ```
+     set -euo pipefail
+     mkdir ./files/
+     files="~{sep="," inputFiles}"    
+     IFS=',' read -ra f <<< "$files"
+     for f in ${f[@]}
+     do
+       cp $f ./files/
+     done
+     tar czf  ~{zipName}.tar.gz ./files/*
+ 
+ ```
+ 
  
  ### Merging bam files
  
@@ -254,62 +304,13 @@ Output | Type | Description | Labels
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" MergeSamFiles \
      ~{sep=" " prefix("--INPUT=", bams)} \
-     --OUTPUT="~{outputFileName}~{suffix}.bam" \
+     --OUTPUT="~{outputFileNamePrefix}.bam" \
      --CREATE_INDEX=true \
      --SORT_ORDER=coordinate \
      --ASSUME_SORTED=false \
      --USE_THREADING=true \
+     --COMMENT="'~{comment}'" \
      --VALIDATION_STRINGENCY=SILENT \
-     ~{additionalParams}
- ```
- 
- ### realignerTargetCreator processing
- 
- ```
-     set -euo pipefail
- 
-     java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type RealignerTargetCreator \
-     --reference_sequence ~{reference} \
-     ~{sep=" " prefix("--intervals ", intervals)} \
-     ~{sep=" " prefix("--input_file ", bams)} \
-     ~{sep=" " prefix("--known ", knownIndels)} \
-     --out realignerTargetCreator.intervals \
-     ~{"--downsampling_type " + downsamplingType} \
-     ~{additionalParams}
- ```
- 
- ### 
- 
- ```
-     set -euo pipefail
- 
-     # generate gatk nWayOut file
-     python3 <<CODE
-     import os
-     import csv
- 
-     with open('~{write_lines(bams)}') as f:
-         bamFiles = f.read().splitlines()
- 
-     nWayOut = []
-     for bam in bamFiles:
-         fileName = os.path.basename(bam)
-         realignedFileName = os.path.splitext(fileName)[0] + ".realigned.bam"
-         nWayOut.append([fileName, realignedFileName])
- 
-     with open('input_output.map', 'w') as f:
-         tsv_writer = csv.writer(f, delimiter='\t')
-         tsv_writer.writerows(nWayOut)
-     CODE
- 
-     java -Xmx~{jobMemory - overhead}G -jar ~{gatkJar} --analysis_type IndelRealigner \
-     --reference_sequence ~{reference} \
-     ~{sep=" " prefix("--intervals ", intervals)} \
-     ~{sep=" " prefix("--input_file ", bams)} \
-     --targetIntervals ~{targetIntervals} \
-     ~{sep=" " prefix("--knownAlleles ", knownAlleles)} \
-     --bam_compression 0 \
-     --nWayOut input_output.map \
      ~{additionalParams}
  ```
  
@@ -323,7 +324,7 @@ Output | Type | Description | Labels
      ~{sep=" " prefixedIntervals} \
      ~{sep=" " prefix("--input=", bams)} \
      ~{sep=" " prefix("--known-sites ", knownSites)} \
-     --output=~{outputFileName} \
+     --output=gatk.recalibration.csv \
      ~{additionalParams}
  ```
  
@@ -333,9 +334,9 @@ Output | Type | Description | Labels
      set -euo pipefail
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" GatherBQSRReports \
-     ~{sep=" " prefix("--input=", recalibrationTables)} \
-     --output ~{outputFileName} \
-     ~{additionalParams}
+         ~{sep=" " prefix("--input=", recalibrationTables)} \
+         --output ~{outputFileNamePrefix}.gatk.recalibration.csv \
+         ~{additionalParams}
  ```
  
  ### Analysis of Covariates
@@ -345,7 +346,7 @@ Output | Type | Description | Labels
  
      gatk --java-options "-Xmx~{jobMemory - overhead}G" AnalyzeCovariates \
      --bqsr-recal-file=~{recalibrationTable} \
-     --plots-report-file ~{outputFileName} \
+     --plots-report-file ~{outputFileNamePrefix}.gatk.recalibration.pdf \
      ~{additionalParams}
  ```
  
@@ -357,52 +358,11 @@ Output | Type | Description | Labels
      gatk --java-options "-Xmx~{jobMemory - overhead}G" ApplyBQSR \
      --bqsr-recal-file=~{recalibrationTable} \
      ~{sep=" " prefix("--input=", [bam])} \
-     --output ~{outputFileName}~{suffix}.bam \
+     --output ~{outputFileNamePrefix}.bam \
      ~{additionalParams}
  
  ```
- ### Assemble a list of files by Identifier
  
- ```
-     set -euo pipefail
- 
-     python3 <<CODE
-     import json
-     import os
-     import re
- 
-     with open('~{write_json(wrappedInputGroups)}') as f:
-         inputGroups = json.load(f)
-     with open('~{write_lines(bams)}') as f:
-         bamFiles = f.read().splitlines()
-     with open('~{write_lines(bamIndexes)}') as f:
-         bamIndexFiles = f.read().splitlines()
- 
-     filesByOutputIdentifier = []
-     for outputIdentifier in [inputGroup['outputIdentifier'] for inputGroup in inputGroups['inputGroups']]:
-         # select bams and bamIndexes for outputIdentifier (preprocessBam prefixes the outputIdentifier, so include that too)
-         bams = [bam for bam in bamFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bam))]
-         bais = [bai for bai in bamIndexFiles if re.match("^" + outputIdentifier + "\.", os.path.basename(bai))]
- 
-         fileNames = list(set([os.path.splitext(os.path.basename(f))[0] for f in bams + bais]))
-         if len(fileNames) != 1:
-             raise Exception("Unable to determine unique fileName from fileNames = [" + ','.join(f for f in fileNames) + "]")
-         else:
-             fileName = fileNames[0]
- 
-         filesByOutputIdentifier.append({
-             'outputIdentifier': outputIdentifier,
-             'outputFileName': fileName,
-             'bams': bams,
-             'bamIndexes': bais})
- 
-     # wrap the array into collectionGroups object
-     wrappedFilesByOutputIdentifier = {'collectionGroups': filesByOutputIdentifier}
- 
-     with open('filesByOutputIdentifier.json', 'w') as f:
-         json.dump(wrappedFilesByOutputIdentifier, f, indent=4)
-     CODE
- ```
  ## Support
 
 For support, please file an issue on the [Github project](https://github.com/oicr-gsi) or send an email to gsi@oicr.on.ca .
